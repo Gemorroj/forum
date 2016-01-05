@@ -1,0 +1,25 @@
+{% extends '@ForumBundle/Resources/views/scheme.html.twig' %}
+
+{% block page_contents %}
+    {% block catalog %}
+        <div id="catalog" class="catalog_layer">
+            <div id="catalog" class="catalog">
+                <div id="catalog" class="navigation_layer">
+                    <div id="catalog" class="navigation">
+                        {{ block('navigation') }}
+                    </div>
+                </div>
+                <div id="catalog" class="list_layer">
+                    <div id="catalog" class="list">
+                        {{ block('list') }}
+                    </div>
+                </div>
+                <div id="catalog" class="pagination_layer">
+                    <div id="catalog" class="pagination">
+                        {{ block('pagination') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock catalog %}
+{% endblock page_contents %}
