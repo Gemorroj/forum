@@ -1,0 +1,19 @@
+{% extends '@ForumBundle/Resources/views/layout.html.twig' %}
+
+{% block page_contents %}
+    <div id="page_contents" class="left_layer">
+        <div id="page_contents" class="left">
+            {{ block('left') }}
+        </div>
+    </div>
+    <div id="page_contents" class="center_layer">
+        <div id="page_contents" class="center">
+            {{ block('center') }}
+        </div>
+    </div>
+    <div id="page_contents" class="right_layer">
+        <div id="page_contents" class="right">
+            {{ block('right') }}
+        </div>
+    </div>
+{% endblock %}
