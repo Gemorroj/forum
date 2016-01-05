@@ -10,7 +10,7 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        return $this->render('@ForumBundle/Resources/views/catalog.html.twig', [
+        return $this->render('@ForumBundle/Resources/views/index.html.twig', [
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
             'title' => 'MadCode',
         ]);
