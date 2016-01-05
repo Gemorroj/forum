@@ -1,6 +1,6 @@
 {
     "name": "gemorroj/forum",
-    "license": "proprietary",
+    "license": "GPLv3",
     "type": "project",
     "autoload": {
         "psr-4": {
