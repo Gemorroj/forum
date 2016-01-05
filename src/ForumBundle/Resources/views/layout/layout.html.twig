@@ -1,0 +1,48 @@
+{% set title %}{% block title %}{{ forum_title }}{% endblock %}{% endset %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{{ title == forum_title ? title : forum_title ~ ' - ' ~ title }}</title>
+
+        <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+        {% block styles %}
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <div data-role="page">
+                {% block page %}
+
+                <div data-role="header">
+                    {% block header %}
+                        <h1>{{ title }}</h1>
+                    {% endblock %}
+                </div><!-- /header -->
+
+                <div role="main" class="ui-content">
+                    {% block content %}
+                        <p>Page content goes here.</p>
+                    {% endblock %}
+                </div><!-- /content -->
+
+                <div data-role="footer">
+                    {% block footer %}
+                        <h4>Page Footer</h4>
+                    {% endblock %}
+                </div><!-- /footer -->
+
+                {% endblock %}
+            </div><!-- /page -->
+
+        {% endblock %}
+    </body>
+</html>
