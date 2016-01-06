@@ -3,5 +3,15 @@
 {% block title %}Индекс{% endblock %}
 
 {% block content %}
-    Привет
+<div>
+    <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
+        <li data-role="list-divider">{{ forum_title }}</li>
+        {% for item in items %}
+            <li><a href="#{{ item.id }}">{{ item.name|escape }}<span class="ui-li-count">{{ item.count }}</span></a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% if pagination|default(1) %}
+    {% include '@Forum/pagination.html.twig' %}
+{% endif %}
 {% endblock %}
