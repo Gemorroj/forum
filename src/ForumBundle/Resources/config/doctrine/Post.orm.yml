@@ -1,0 +1,35 @@
+ForumBundle\Entity\Post:
+    type: entity
+    table: post
+    indexes:
+        fk_topic_id:
+            columns:
+                - topic_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        text:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+    manyToOne:
+        topic:
+            targetEntity: Topic
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                topic_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

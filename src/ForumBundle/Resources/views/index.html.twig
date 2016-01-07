@@ -6,7 +6,7 @@
 <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
     <li data-role="list-divider">{{ block('title') }}</li>
     {% for forum in forums %}
-        <li><a href="#{{ forum.getId() }}">{{ forum.getTitle() }}<span class="ui-li-count">{{ forum.getCountTopics() }} / {{ forum.getCountPosts() }}</span></a></li>
+        <li><a href="#{{ forum.id }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
     {% endfor %}
 </ul>
 {% endblock %}
