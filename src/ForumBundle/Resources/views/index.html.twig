@@ -1,17 +1,12 @@
 {% extends '@Forum/layout/layout.html.twig' %}
 
-{% block title %}Индекс{% endblock %}
+{% block title %}Форум{% endblock %}
 
 {% block content %}
-<div>
-    <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
-        <li data-role="list-divider">{{ forum_title }}</li>
-        {% for item in items %}
-            <li><a href="#{{ item.id }}">{{ item.name|escape }}<span class="ui-li-count">{{ item.count }}</span></a></li>
-        {% endfor %}
-    </ul>
-</div>
-{% if pagination|default(1) %}
-    {% include '@Forum/pagination.html.twig' %}
-{% endif %}
+<ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
+    <li data-role="list-divider">{{ block('title') }}</li>
+    {% for forum in forums %}
+        <li><a href="#{{ forum.getId() }}">{{ forum.getTitle() }}<span class="ui-li-count">{{ forum.getCountTopics() }} / {{ forum.getCountPosts() }}</span></a></li>
+    {% endfor %}
+</ul>
 {% endblock %}
