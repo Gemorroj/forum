@@ -5,8 +5,8 @@
 {% block content %}
 <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
     <li data-role="list-divider">{{ title }}</li>
-    {% for forum in forums %}
-        <li><a href="{{ path('forum', {'id': forum.id} ) }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
+    {% for post in posts %}
+        <li>{{ post.text }}</li>
     {% else %}
         <li>Пусто</li>
     {% endfor %}
