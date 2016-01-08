@@ -4,8 +4,15 @@ php:
     - 5.6
     - 7.0
 
+services:
+  - mysql
+
 before_script:
-    - composer self-update && composer install --dev --prefer-source --no-interaction
+  - cp app/config/parameters.yml.travis app/config/parameters.yml
+  - composer self-update && composer install --dev --no-interaction
+  - php app/console doctrine:database:create --env=test
+  - php app/console doctrine:schema:create --env=test
+#  - php app/console doctrine:fixtures:load -n --env=test
 
 script: phpunit --configuration phpunit.xml.dist
 
