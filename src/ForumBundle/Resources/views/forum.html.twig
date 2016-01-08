@@ -4,7 +4,7 @@
 
 {% block content %}
 <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
-    <li data-role="list-divider">{{ title }}</li>
+    <li data-role="list-divider">{{ forum.title }}</li>
     {% for topic in topics %}
         <li><a href="{{ path('topic', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
     {% else %}

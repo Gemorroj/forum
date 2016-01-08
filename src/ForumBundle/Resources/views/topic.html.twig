@@ -4,7 +4,7 @@
 
 {% block content %}
 <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
-    <li data-role="list-divider">{{ title }}</li>
+    <li data-role="list-divider">{{ topic.title }}</li>
     {% for post in posts %}
         <li>{{ post.text }}</li>
     {% else %}
