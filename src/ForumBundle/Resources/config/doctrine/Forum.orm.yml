@@ -1,0 +1,40 @@
+ForumBundle\Entity\Forum:
+    type: entity
+    table: forum
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+        countTopics:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+                default: '0'
+            column: count_topics
+        countPosts:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+                default: '0'
+            column: count_posts
+        position:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+                default: '0'
+    lifecycleCallbacks: {  }
