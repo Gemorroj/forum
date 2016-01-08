@@ -7,6 +7,11 @@ php:
 services:
   - mysql
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache/files
+
 before_script:
   - cp app/config/parameters.yml.travis app/config/parameters.yml
   - composer self-update && composer install --dev --no-interaction
