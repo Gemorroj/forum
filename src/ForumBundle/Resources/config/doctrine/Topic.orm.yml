@@ -2,7 +2,7 @@ ForumBundle\Entity\Topic:
     type: entity
     table: topic
     indexes:
-        fk_forum_id:
+        forum_id:
             columns:
                 - forum_id
     id:
@@ -22,6 +22,11 @@ ForumBundle\Entity\Topic:
             options:
                 fixed: false
         closed:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        fixed:
             type: boolean
             nullable: false
             options:

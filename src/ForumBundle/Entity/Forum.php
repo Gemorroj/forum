@@ -8,6 +8,11 @@ namespace ForumBundle\Entity;
 class Forum
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $title;
@@ -22,16 +27,16 @@ class Forum
      */
     private $countPosts = '0';
 
-    /**
-     * @var integer
-     */
-    private $position = '0';
 
     /**
-     * @var integer
+     * Get id
+     *
+     * @return integer
      */
-    private $id;
-
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set title
@@ -104,39 +109,4 @@ class Forum
     {
         return $this->countPosts;
     }
-
-    /**
-     * Set position
-     *
-     * @param integer $position
-     *
-     * @return Forum
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return integer
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 }
-

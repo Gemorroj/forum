@@ -8,6 +8,11 @@ namespace ForumBundle\Entity;
 class Topic
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $title;
@@ -18,20 +23,30 @@ class Topic
     private $closed = '0';
 
     /**
-     * @var integer
+     * @var boolean
      */
-    private $countPosts = '0';
+    private $fixed = '0';
 
     /**
      * @var integer
      */
-    private $id;
+    private $countPosts = '0';
 
     /**
      * @var \ForumBundle\Entity\Forum
      */
     private $forum;
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set title
@@ -82,6 +97,30 @@ class Topic
     }
 
     /**
+     * Set fixed
+     *
+     * @param boolean $fixed
+     *
+     * @return Topic
+     */
+    public function setFixed($fixed)
+    {
+        $this->fixed = $fixed;
+
+        return $this;
+    }
+
+    /**
+     * Get fixed
+     *
+     * @return boolean
+     */
+    public function getFixed()
+    {
+        return $this->fixed;
+    }
+
+    /**
      * Set countPosts
      *
      * @param integer $countPosts
@@ -103,16 +142,6 @@ class Topic
     public function getCountPosts()
     {
         return $this->countPosts;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -139,4 +168,3 @@ class Topic
         return $this->forum;
     }
 }
-

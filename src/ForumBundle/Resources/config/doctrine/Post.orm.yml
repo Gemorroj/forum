@@ -2,7 +2,7 @@ ForumBundle\Entity\Post:
     type: entity
     table: post
     indexes:
-        fk_topic_id:
+        topic_id:
             columns:
                 - topic_id
     id:

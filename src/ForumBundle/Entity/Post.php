@@ -8,20 +8,30 @@ namespace ForumBundle\Entity;
 class Post
 {
     /**
-     * @var string
-     */
-    private $text;
-
-    /**
      * @var integer
      */
     private $id;
+
+    /**
+     * @var string
+     */
+    private $text;
 
     /**
      * @var \ForumBundle\Entity\Topic
      */
     private $topic;
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set text
@@ -48,16 +58,6 @@ class Post
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set topic
      *
      * @param \ForumBundle\Entity\Topic $topic
@@ -81,4 +81,3 @@ class Post
         return $this->topic;
     }
 }
-

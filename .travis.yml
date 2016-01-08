@@ -4,8 +4,20 @@ php:
     - 5.6
     - 7.0
 
+services:
+  - mysql
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache/files
+
 before_script:
-    - composer self-update && composer install --dev --prefer-source --no-interaction
+  - cp app/config/parameters.yml.travis app/config/parameters.yml
+  - composer self-update && composer install --dev --no-interaction
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
+  - php bin/console doctrine:fixtures:load -n --env=test
 
 script: phpunit --configuration phpunit.xml.dist
 
