@@ -11,12 +11,14 @@
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
+        <script type="text/javascript" src="{{ asset('bundles/forum/js/core.js') }}"></script>
+
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </head>
     <body>
         {% block body %}
-            <div data-role="page">
+            <div data-role="page" id="page">
                 {% block page %}
 
                 <div data-role="header">

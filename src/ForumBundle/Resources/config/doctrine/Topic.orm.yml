@@ -26,6 +26,11 @@ ForumBundle\Entity\Topic:
             nullable: false
             options:
                 default: '0'
+        fixed:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
         countPosts:
             type: integer
             nullable: false

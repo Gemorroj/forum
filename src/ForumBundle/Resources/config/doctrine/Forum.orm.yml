@@ -31,10 +31,4 @@ ForumBundle\Entity\Forum:
                 unsigned: true
                 default: '0'
             column: count_posts
-        position:
-            type: integer
-            nullable: false
-            options:
-                unsigned: true
-                default: '0'
     lifecycleCallbacks: {  }
