@@ -81,4 +81,3 @@ class Post
         return $this->topic;
     }
 }
-

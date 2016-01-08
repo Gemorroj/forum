@@ -139,4 +139,3 @@ class Topic
         return $this->forum;
     }
 }
-

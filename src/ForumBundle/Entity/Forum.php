@@ -139,4 +139,3 @@ class Forum
         return $this->id;
     }
 }
-
