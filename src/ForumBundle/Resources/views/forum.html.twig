@@ -1,0 +1,13 @@
+{% extends '@Forum/layout/layout.html.twig' %}
+
+{% block title %}{{ forum.title }}{% endblock %}
+
+{% block content %}
+<ul data-role="listview" data-inset="true">
+    {% for topic in topics %}
+        <li><a href="{{ path('topic', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
+    {% else %}
+        <li>Пусто</li>
+    {% endfor %}
+</ul>
+{% endblock %}
