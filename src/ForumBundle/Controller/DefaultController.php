@@ -30,7 +30,7 @@ class DefaultController extends Controller
      */
     public function forumAction(Forum $forum)
     {
-        $topics = $this->getDoctrine()->getRepository('ForumBundle:Topic')->findByForum($forum);
+        $topics = $this->getDoctrine()->getRepository('ForumBundle:Topic')->findBy(['forum' => $forum]);
 
         return $this->render('@Forum/forum.html.twig', [
             'forum' => $forum,
@@ -46,7 +46,7 @@ class DefaultController extends Controller
      */
     public function topicAction(Topic $topic)
     {
-        $posts = $this->getDoctrine()->getRepository('ForumBundle:Post')->findByTopic($topic);
+        $posts = $this->getDoctrine()->getRepository('ForumBundle:Post')->findBy(['topic' => $topic]);
         $forum = $topic->getForum();
 
         return $this->render('@Forum/topic.html.twig', [

@@ -4,6 +4,7 @@ namespace Tests\ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -19,9 +20,11 @@ class DefaultControllerTest extends WebTestCase
 
     public function testIndex()
     {
-        $crawler = self::$client->request('GET', '/');
+        $uri = self::$kernel->getContainer()->get('router')->generate('index');
 
-        $this->assertEquals(200, self::$client->getResponse()->getStatusCode());
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $this->assertContains('PHP', $crawler->filter('li > a')->eq(0)->text());
         $this->assertContains('MySQL', $crawler->filter('li > a')->eq(1)->text());
@@ -29,18 +32,22 @@ class DefaultControllerTest extends WebTestCase
 
     public function testTopic()
     {
-        $crawler = self::$client->request('GET', '/forum/1');
+        $uri = self::$kernel->getContainer()->get('router')->generate('forum', ['id' => 1]);
 
-        $this->assertEquals(200, self::$client->getResponse()->getStatusCode());
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $this->assertContains('Test topic', $crawler->filter('li > a')->text());
     }
 
     public function testPost()
     {
-        $crawler = self::$client->request('GET', '/topic/1');
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic', ['id' => 1]);
 
-        $this->assertEquals(200, self::$client->getResponse()->getStatusCode());
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $this->assertContains('Test post', $crawler->filter('li')->eq(0)->text());
     }
