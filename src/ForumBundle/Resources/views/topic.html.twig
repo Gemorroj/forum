@@ -1,6 +1,6 @@
 {% extends '@Forum/layout/layout.html.twig' %}
 
-{% block title %}Форум{% endblock %}
+{% block title %}{{ forum.title }} / {{ topic.title }}{% endblock %}
 
 {% block content %}
 <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="a" data-count-theme="a">
