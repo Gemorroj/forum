@@ -42,6 +42,6 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(200, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post', $crawler->filter('li')->eq(1)->text());
+        $this->assertContains('Test post', $crawler->filter('li')->eq(0)->text());
     }
 }

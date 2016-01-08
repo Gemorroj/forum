@@ -21,7 +21,7 @@
             <div data-role="page" id="page">
                 {% block page %}
 
-                <div data-role="header">
+                <div data-theme="b" data-role="header" data-position="fixed">
                     {% block header %}
                         <h1>{{ title }}</h1>
                     {% endblock %}
@@ -29,11 +29,11 @@
 
                 <div role="main" class="ui-content">
                     {% block content %}
-                        <p>Page content goes here.</p>
+                        <p></p>
                     {% endblock %}
                 </div><!-- /content -->
 
-                <div data-role="footer">
+                <div data-theme="b" data-role="footer" data-position="fixed">
                     {% block footer %}
                         <h4>Page Footer</h4>
                     {% endblock %}
