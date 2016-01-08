@@ -3,6 +3,7 @@
 namespace ForumBundle\Controller;
 
 use ForumBundle\Entity\Forum;
+use ForumBundle\Entity\Topic;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
@@ -16,10 +17,9 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function forumAction($id)
+    public function forumAction(Forum $forum)
     {
-        $forum = $this->getDoctrine()->getRepository('ForumBundle:Forum')->find($id);
-        $topics = $this->getDoctrine()->getRepository('ForumBundle:Topic')->findByForum($id);
+        $topics = $this->getDoctrine()->getRepository('ForumBundle:Topic')->findByForum($forum->getId());
 
         return $this->render('@Forum/forum.html.twig', [
             'forum' => $forum,
@@ -27,10 +27,9 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function topicAction($id)
+    public function topicAction(Topic $topic)
     {
-        $topic = $this->getDoctrine()->getRepository('ForumBundle:Topic')->find($id);
-        $posts = $this->getDoctrine()->getRepository('ForumBundle:Post')->findByTopic($id);
+        $posts = $this->getDoctrine()->getRepository('ForumBundle:Post')->findByTopic($topic->getId());
 
         return $this->render('@Forum/topic.html.twig', [
             'topic' => $topic,
