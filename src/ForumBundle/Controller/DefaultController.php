@@ -2,14 +2,13 @@
 
 namespace ForumBundle\Controller;
 
-use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
-use ForumBundle\Entity\Post;
 
 use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
 
 class DefaultController extends Controller
 {
@@ -52,7 +51,7 @@ class DefaultController extends Controller
     public function topicAction(Topic $topic, $page)
     {
         $qb = $this->getDoctrine()
-            ->getEntityManager()
+            ->getManager()
             ->createQueryBuilder()
             ->select('p')
             ->from('ForumBundle:Post', 'p');

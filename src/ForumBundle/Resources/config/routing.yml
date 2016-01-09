@@ -5,14 +5,12 @@ index:
 forum:
     path:  /forum{id}
     defaults: { _controller: ForumBundle:Default:forum }
+    requirements:
+        id:       \d+
+
 topic:
     path:  /topic{id}/page{page}
     defaults: { _controller: ForumBundle:Default:topic, page: 1 }
     requirements:
-        methods:  GET
+        id:       \d+
         page:     \d+
-#pager:
-#    path: page{page}
-#    defaults: { page: 1 }
-#    requirements:
-#        page: \d+
