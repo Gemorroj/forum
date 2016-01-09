@@ -3,8 +3,14 @@ index:
     defaults: { _controller: ForumBundle:Default:index }
 
 forum:
-    path:  /forum/{id}
+    path:  /forum{id}
     defaults: { _controller: ForumBundle:Default:forum }
+    requirements:
+        id:       \d+
+
 topic:
-    path:  /topic/{id}
-    defaults: { _controller: ForumBundle:Default:topic }
+    path:  /topic{id}/page{page}
+    defaults: { _controller: ForumBundle:Default:topic, page: 1 }
+    requirements:
+        id:       \d+
+        page:     \d+

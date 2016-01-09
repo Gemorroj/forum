@@ -38,17 +38,17 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test topic', $crawler->filter('li > a')->text());
+        $this->assertContains('Test topic 1 in PHP forum', $crawler->filter('li > a')->text());
     }
 
     public function testPost()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic', ['id' => 1]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic', ['id' => 1, 'page' => 2]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post', $crawler->filter('li')->eq(0)->text());
+        $this->assertContains('Test post 15', $crawler->filter('li')->eq(4)->text());
     }
 }
