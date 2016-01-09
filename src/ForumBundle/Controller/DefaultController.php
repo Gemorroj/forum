@@ -2,9 +2,14 @@
 
 namespace ForumBundle\Controller;
 
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ForumBundle\Entity\Post;
+
+use Pagerfanta\Pagerfanta;
 
 class DefaultController extends Controller
 {
@@ -34,7 +39,7 @@ class DefaultController extends Controller
 
         return $this->render('@Forum/forum.html.twig', [
             'forum' => $forum,
-            'topics' => $topics
+            'topics' => $topics,
         ]);
     }
 
@@ -44,15 +49,26 @@ class DefaultController extends Controller
      * @param Topic $topic
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function topicAction(Topic $topic)
+    public function topicAction(Topic $topic, $page)
     {
-        $posts = $this->getDoctrine()->getRepository('ForumBundle:Post')->findBy(['topic' => $topic]);
-        $forum = $topic->getForum();
+        $qb = $this->getDoctrine()
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p')
+            ->from('ForumBundle:Post', 'p');
+
+        $adapter = new DoctrineORMAdapter($qb);
+        $pager = new Pagerfanta($adapter);
+
+        $pager->setAllowOutOfRangePages(true)
+            ->setCurrentPage($page);
 
         return $this->render('@Forum/topic.html.twig', [
-            'forum' => $forum,
+            'forum' => $topic->getForum(),
             'topic' => $topic,
-            'posts' => $posts
+            'posts' => $pager,
+
+            'pager' => $pager,
         ]);
     }
 }
