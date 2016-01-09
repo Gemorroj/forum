@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 class PostRepository extends EntityRepository
 {
     /**
+     * @param Topic $topic
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery(Topic $topic)
@@ -14,7 +15,7 @@ class PostRepository extends EntityRepository
             ->getRepository('ForumBundle:Post')
             ->createQueryBuilder('p')
             ->where('p.topic = :topic')
-                ->setParameter('topic', $topic)
+            ->setParameter('topic', $topic)
             ->orderBy('p.id', 'DESC')
             ->getQuery();
     }
