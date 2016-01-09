@@ -30,15 +30,22 @@ class DefaultController extends Controller
      * Список топиков в форуме
      *
      * @param Forum $forum
+     * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function forumAction(Forum $forum)
+    public function forumAction(Forum $forum, $page)
     {
-        $topics = $this->getDoctrine()->getRepository('ForumBundle:Topic')->findBy(['forum' => $forum]);
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery();
+
+        $adapter = new DoctrineORMAdapter($q);
+        $pager = new Pagerfanta($adapter);
+
+        $pager->setAllowOutOfRangePages(true)
+            ->setCurrentPage($page);
 
         return $this->render('@Forum/forum.html.twig', [
             'forum' => $forum,
-            'topics' => $topics,
+            'topics' => $pager,
         ]);
     }
 
@@ -46,28 +53,22 @@ class DefaultController extends Controller
      * Сообщения в топике
      *
      * @param Topic $topic
+     * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function topicAction(Topic $topic, $page)
     {
-        $qb = $this->getDoctrine()
-            ->getManager()
-            ->createQueryBuilder()
-            ->select('p')
-            ->from('ForumBundle:Post', 'p');
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery();
 
-        $adapter = new DoctrineORMAdapter($qb);
+        $adapter = new DoctrineORMAdapter($q);
         $pager = new Pagerfanta($adapter);
 
         $pager->setAllowOutOfRangePages(true)
             ->setCurrentPage($page);
 
         return $this->render('@Forum/topic.html.twig', [
-            'forum' => $topic->getForum(),
             'topic' => $topic,
             'posts' => $pager,
-
-            'pager' => $pager,
         ]);
     }
 }

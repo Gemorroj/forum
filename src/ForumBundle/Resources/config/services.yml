@@ -1,0 +1,4 @@
+services:
+    pagerfanta.view.default:
+        class: ForumBundle\Pagerfanta\View
+        tags: [{ name: pagerfanta.view, alias: default }]

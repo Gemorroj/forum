@@ -1,4 +1,5 @@
 ForumBundle\Entity\Post:
+    repositoryClass: ForumBundle\Entity\PostRepository
     type: entity
     table: post
     indexes:
