@@ -37,11 +37,7 @@ class DefaultController extends Controller
     {
         $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery();
 
-        $adapter = new DoctrineORMAdapter($q);
-        $pager = new Pagerfanta($adapter);
-
-        $pager->setAllowOutOfRangePages(true)
-            ->setCurrentPage($page);
+        $pager = $this->get('paginate')->paginate($q, $page);
 
         return $this->render('@Forum/forum.html.twig', [
             'forum' => $forum,
@@ -60,11 +56,7 @@ class DefaultController extends Controller
     {
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery();
 
-        $adapter = new DoctrineORMAdapter($q);
-        $pager = new Pagerfanta($adapter);
-
-        $pager->setAllowOutOfRangePages(true)
-            ->setCurrentPage($page);
+        $pager = $this->get('paginate')->paginate($q, $page);
 
         return $this->render('@Forum/topic.html.twig', [
             'topic' => $topic,

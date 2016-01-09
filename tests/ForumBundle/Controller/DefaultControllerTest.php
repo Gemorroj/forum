@@ -38,7 +38,7 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test topic 1 in PHP forum', $crawler->filter('li > a')->text());
+        $this->assertContains('Test topic 2 in PHP forum', $crawler->filter('li > a')->text());
     }
 
     public function testPost()
@@ -49,6 +49,6 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post 15', $crawler->filter('li')->eq(4)->text());
+        $this->assertContains('Test post 11', $crawler->filter('li')->eq(4)->text());
     }
 }
