@@ -20,3 +20,6 @@ parameters:
 
     # Forum title
     forum_title: "Forum"
+
+    # Paginate
+    paginate_maxperpage: 10

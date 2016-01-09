@@ -1,0 +1,8 @@
+services:
+    pagerfanta.view.default:
+        class: ForumBundle\Pagerfanta\View
+        tags: [{ name: pagerfanta.view, alias: default }]
+
+    paginate:
+        class: ForumBundle\Helper\Paginate
+        arguments: ["@service_container"]

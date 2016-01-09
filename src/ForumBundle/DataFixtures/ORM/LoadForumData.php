@@ -12,11 +12,11 @@ class LoadForumData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $posts = 25;
+        $countPosts = 25;
 
         $forumPhp = new Forum();
         $forumPhp->setTitle('PHP');
-        $forumPhp->setCountPosts($posts);
+        $forumPhp->setCountPosts($countPosts);
         $forumPhp->setCountTopics(1);
         $manager->persist($forumPhp);
 
@@ -26,15 +26,21 @@ class LoadForumData implements FixtureInterface
         $forumMysql->setCountTopics(0);
         $manager->persist($forumMysql);
 
-        $topic = new Topic();
-        $topic->setTitle('Test topic 1 in PHP forum');
-        $topic->setForum($forumPhp);
-        $topic->setCountPosts($posts);
-        $manager->persist($topic);
+        $topic1 = new Topic();
+        $topic1->setTitle('Test topic 1 in PHP forum');
+        $topic1->setForum($forumPhp);
+        $topic1->setCountPosts($countPosts);
+        $manager->persist($topic1);
 
-        for($i = 1; $posts >= $i; $i++) {
+        $topic2 = new Topic();
+        $topic2->setTitle('Test topic 2 in PHP forum');
+        $topic2->setForum($forumPhp);
+        $topic2->setCountPosts(0);
+        $manager->persist($topic2);
+
+        for ($i = 1; $i <= $countPosts; $i++) {
             $post = new Post();
-            $post->setTopic($topic);
+            $post->setTopic($topic1);
             $post->setText('Test post ' . $i);
             $manager->persist($post);
         }
