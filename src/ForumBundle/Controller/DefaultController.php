@@ -7,9 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
 
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-
 class DefaultController extends Controller
 {
     /**
@@ -35,7 +32,7 @@ class DefaultController extends Controller
      */
     public function forumAction(Forum $forum, $page)
     {
-        $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery();
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery($forum);
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
@@ -54,7 +51,7 @@ class DefaultController extends Controller
      */
     public function topicAction(Topic $topic, $page)
     {
-        $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery();
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
 

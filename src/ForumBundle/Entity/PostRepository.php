@@ -8,8 +8,14 @@ class PostRepository extends EntityRepository
     /**
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery()
+    public function getListQuery($topic)
     {
-        return $this->getEntityManager()->createQuery('SELECT p FROM ForumBundle\Entity\Post p ORDER BY p.id DESC');
+        return $this->getEntityManager()
+            ->getRepository('ForumBundle:Post')
+            ->createQueryBuilder('p')
+            ->where('p.topic = :topic')
+            ->setParameter('topic', $topic)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery();
     }
 }
