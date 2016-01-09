@@ -8,13 +8,13 @@ class TopicRepository extends EntityRepository
     /**
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($forum)
+    public function getListQuery(Forum $forum)
     {
         return $this->getEntityManager()
             ->getRepository('ForumBundle:Topic')
             ->createQueryBuilder('t')
             ->where('t.forum = :forum')
-            ->setParameter('forum', $forum)
+                ->setParameter('forum', $forum)
             ->orderBy('t.id', 'DESC')
             ->getQuery();
     }
