@@ -32,12 +32,6 @@ class LoadForumData implements FixtureInterface
         $topic->setCountPosts($posts);
         $manager->persist($topic);
 
-        $topic = new Topic();
-        $topic->setTitle('Test topic 2 in PHP forum');
-        $topic->setForum($forumPhp);
-        $topic->setCountPosts(0);
-        $manager->persist($topic);
-
         for($i = 1; $posts >= $i; $i++) {
             $post = new Post();
             $post->setTopic($topic);
