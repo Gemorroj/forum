@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
+use ForumBundle\Entity\Post;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -49,15 +51,28 @@ class DefaultController extends Controller
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function topicAction(Topic $topic, $page)
+    public function topicAction(Request $request, Topic $topic, $page)
     {
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
+        $post = new Post();
+        $post->setTopic($topic);
+
+        $form = $this->createForm('ForumBundle\Form\PostType', $post);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($post);
+            $em->flush();
+        }
+
         return $this->render('@Forum/topic.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
+
+            'form' => $form->createView(),
         ]);
     }
 }
