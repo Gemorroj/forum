@@ -3,7 +3,7 @@
 {% block content %}
 <ul data-role="listview" data-inset="true">
     {% for forum in forums %}
-        <li><a href="{{ path('forum', {'id': forum.id} ) }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
+        <li><a href="{{ path('forum_show', {'id': forum.id} ) }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
     {% else %}
         <li>Пусто</li>
     {% endfor %}
