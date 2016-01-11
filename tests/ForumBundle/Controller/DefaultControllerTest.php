@@ -43,13 +43,13 @@ class DefaultControllerTest extends WebTestCase
 
     public function testPost()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => 4]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post 1', $crawler->filter('li')->eq(4)->text());
+        $this->assertContains('Test post 1', $crawler->filter('li')->last()->text());
     }
 
     public function testPostNew()
