@@ -29,16 +29,6 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $topic->setCountPosts(
-                $topic->getCountPosts() +1
-            );
-
-            $forum = $topic->getForum();
-            $forum->setCountPosts(
-                $forum->getCountPosts() +1
-            );
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
