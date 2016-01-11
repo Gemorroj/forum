@@ -32,7 +32,7 @@ class DefaultControllerTest extends WebTestCase
 
     public function testTopic()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum', ['id' => 1]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
@@ -43,7 +43,7 @@ class DefaultControllerTest extends WebTestCase
 
     public function testPost()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic', ['id' => 1, 'page' => 2]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => 2]);
 
         $crawler = self::$client->request('GET', $uri);
 
