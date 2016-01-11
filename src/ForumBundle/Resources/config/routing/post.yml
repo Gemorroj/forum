@@ -1,7 +1,7 @@
-#post_new:
-#    path:     /new
-#    defaults: { _controller: "ForumBundle:Post:new" }
-#    methods:  [GET, POST]
+post_new:
+    path:     /{id}/new
+    defaults: { _controller: "ForumBundle:Post:new" }
+    methods:  [GET, POST]
 
 #post_edit:
 #    path:     /{id}/edit

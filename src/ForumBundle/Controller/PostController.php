@@ -4,6 +4,8 @@ namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 
@@ -36,9 +38,10 @@ class PostController extends Controller
      * Creates a new Post entity.
      *
      */
-    /*public function newAction(Request $request)
+    public function newAction(Request $request, Topic $topic)
     {
         $post = new Post();
+        $post->setTopic($topic);
         $form = $this->createForm('ForumBundle\Form\PostType', $post);
         $form->handleRequest($request);
 
@@ -47,14 +50,14 @@ class PostController extends Controller
             $em->persist($post);
             $em->flush();
 
-            return $this->redirectToRoute('post_show', array('id' => $post->getId()));
+            return $this->redirectToRoute('topic_show', array('id' => $topic->getId()));
         }
 
         return $this->render('@Forum/post/new.html.twig', array(
             'post' => $post,
             'form' => $form->createView(),
         ));
-    }*/
+    }
 
     /**
      * Finds and displays a Post entity.

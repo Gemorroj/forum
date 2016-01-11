@@ -11,9 +11,5 @@
     {% endfor %}
 </ul>
 {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
-
-{#{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }#}
-
+<a class="ui-btn" href="{{ path('post_new', {'id': topic.id}) }}">Ответить</a>
 {% endblock %}
