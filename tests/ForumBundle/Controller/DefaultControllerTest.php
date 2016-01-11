@@ -32,13 +32,13 @@ class DefaultControllerTest extends WebTestCase
 
     public function testTopic()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test topic 2 in PHP forum', $crawler->filter('li > a')->text());
+        $this->assertContains('Test topic 1 in PHP forum', $crawler->filter('li > a')->last()->text());
     }
 
     public function testPost()
@@ -62,6 +62,6 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Текст', $crawler->filter('label')->text());
+        $this->assertContains('Текст', $crawler->filter('label')->first()->text());
     }
 }

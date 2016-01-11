@@ -2,6 +2,8 @@ post_new:
     path:     /{id}/new
     defaults: { _controller: "ForumBundle:Post:new" }
     methods:  [GET, POST]
+    requirements:
+        id:   \d+
 
 #post_edit:
 #    path:     /{id}/edit

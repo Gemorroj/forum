@@ -4,7 +4,6 @@ namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
 
 /**
@@ -14,21 +13,21 @@ use ForumBundle\Entity\Topic;
 class TopicController extends Controller
 {
     /**
-     * Список топиков в форуме
+     * Сообщения в топике
      *
-     * @param Forum $forum
+     * @param Topic $topic
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Forum $forum, $page)
+    public function indexAction(Topic $topic, $page)
     {
-        $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery($forum);
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        return $this->render('@Forum/topic/index.html.twig', [
-            'forum' => $forum,
-            'topics' => $pager,
+        return $this->render('@Forum/post/index.html.twig', [
+            'topic' => $topic,
+            'posts' => $pager,
         ]);
     }
 

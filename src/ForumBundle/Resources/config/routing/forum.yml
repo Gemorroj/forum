@@ -1,6 +1,6 @@
 forum_show:
     path:     /{id}/{page}
-    defaults: { _controller: "ForumBundle:Topic:index", page: 1 }
+    defaults: { _controller: "ForumBundle:Forum:index", page: 1 }
     requirements:
         id:   \d+
         page: \d+

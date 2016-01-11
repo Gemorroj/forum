@@ -9,31 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 
+use ForumBundle\Form\PostType;
+
 /**
  * Post controller.
  *
  */
 class PostController extends Controller
 {
-    /**
-     * Сообщения в топике
-     *
-     * @param Topic $topic
-     * @param int $page
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function indexAction(Topic $topic, $page)
-    {
-        $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
-
-        $pager = $this->get('paginate')->paginate($q, $page);
-
-        return $this->render('@Forum/post/index.html.twig', [
-            'topic' => $topic,
-            'posts' => $pager,
-        ]);
-    }
-
     /**
      * Creates a new Post entity.
      *
@@ -42,10 +25,20 @@ class PostController extends Controller
     {
         $post = new Post();
         $post->setTopic($topic);
-        $form = $this->createForm('ForumBundle\Form\PostType', $post);
+        $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $topic->setCountPosts(
+                $topic->getCountPosts() +1
+            );
+
+            $forum = $topic->getForum();
+            $forum->setCountPosts(
+                $forum->getCountPosts() +1
+            );
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();

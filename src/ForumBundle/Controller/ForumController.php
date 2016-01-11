@@ -13,17 +13,21 @@ use ForumBundle\Entity\Forum;
 class ForumController extends Controller
 {
     /**
-     * Lists all Forum entities.
+     * Список топиков в форуме
      *
+     * @param Forum $forum
+     * @param int $page
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Forum $forum, $page)
     {
-        $em = $this->getDoctrine()->getManager();
+        $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery($forum);
 
-        $forums = $em->getRepository('ForumBundle:Forum')->findAll();
+        $pager = $this->get('paginate')->paginate($q, $page);
 
-        return $this->render('@Forum/forum/index.html.twig', array(
-            'forums' => $forums,
-        ));
+        return $this->render('@Forum/topic/index.html.twig', [
+            'forum' => $forum,
+            'topics' => $pager,
+        ]);
     }
 }

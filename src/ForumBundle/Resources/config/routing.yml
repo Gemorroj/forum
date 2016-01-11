@@ -1,6 +1,6 @@
 index:
     path:  /
-    defaults: { _controller: ForumBundle:Forum:index }
+    defaults: { _controller: ForumBundle:Default:index }
 
 forum:
     resource: "@ForumBundle/Resources/config/routing/forum.yml"

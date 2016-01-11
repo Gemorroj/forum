@@ -17,7 +17,7 @@ class LoadForumData implements FixtureInterface
         $forumPhp = new Forum();
         $forumPhp->setTitle('PHP');
         $forumPhp->setCountPosts($countPosts);
-        $forumPhp->setCountTopics(1);
+        $forumPhp->setCountTopics(2);
         $manager->persist($forumPhp);
 
         $forumMysql = new Forum();
