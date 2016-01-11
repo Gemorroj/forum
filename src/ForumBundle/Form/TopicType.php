@@ -17,12 +17,7 @@ class TopicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            //->add('closed')
-            //->add('fixed')
-            //->add('countPosts')
-            //->add('forum')
-        ;
+            ->add('title');
     }
 
     /**
