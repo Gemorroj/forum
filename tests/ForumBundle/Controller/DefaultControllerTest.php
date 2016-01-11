@@ -49,7 +49,7 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post 1', $crawler->filter('li')->eq(8)->text());
+        $this->assertContains('Test post 1', $crawler->filter('li')->eq(4)->text());
     }
 
     public function testPostNew()
@@ -58,7 +58,7 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = self::$client->request('GET', $uri);
 
-        //self::$client->request('POST', 'post_new', ['id' => 1, 'text' => __FILE__, 'submit' => 'submit']);
+        // self::$client->request('POST', 'post_new', ['id' => 1, 'text' => __FILE__, 'submit' => 'submit']);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
