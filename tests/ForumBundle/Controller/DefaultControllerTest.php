@@ -59,10 +59,27 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = self::$client->request('GET', $uri);
 
-        // self::$client->request('POST', 'post_new', ['id' => 1, 'text' => __FILE__, 'submit' => 'submit']);
-
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $this->assertContains('Текст', $crawler->filter('label')->first()->text());
+    }
+
+    public function testPostNewAdd()
+    {
+        $text = 'тест пост';
+
+        $uri = self::$kernel->getContainer()->get('router')->generate('post_new', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $form = $crawler->selectButton('post_submit')->form(['post[text]' => $text]);
+
+        self::$client->submit($form);
+
+        $this->assertTrue(self::$client->getResponse()->isRedirection());
+
+        $crawler = self::$client->followRedirect();
+
+        $this->assertContains($text, $crawler->filter('ul > li')->first()->text());
     }
 }
