@@ -20,6 +20,9 @@ class PostController extends Controller
     /**
      * Creates a new Post entity.
      *
+     * @param Request $request
+     * @param Topic $topic
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request, Topic $topic)
     {
@@ -28,18 +31,20 @@ class PostController extends Controller
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) { //TODO: catch error
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($post);
+                $em->flush();
 
-            return $this->redirectToRoute('topic_show', array('id' => $topic->getId()));
+                return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
+            }
         }
 
-        return $this->render('@Forum/post/new.html.twig', array(
+        return $this->render('@Forum/post/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     /**

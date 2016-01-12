@@ -12,6 +12,7 @@ class DefaultControllerTest extends WebTestCase
      * @var Client
      */
     protected static $client;
+
     protected function setUp()
     {
         self::$client = static::createClient();
