@@ -5,11 +5,11 @@
 {% block content %}
 <ul data-role="listview" data-inset="true">
     {% for topic in topics %}
-        <li><a href="{{ path('topic_show', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
+        <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('topic_show', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
     {% else %}
         <li>Пусто</li>
     {% endfor %}
 </ul>
 {% include 'ForumBundle:layout:paginate.html.twig' with {'data': topics} %}
-<a class="ui-btn" href="{{ path('topic_new', {'id': forum.id}) }}">Создать топик</a>
+<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" href="{{ path('topic_new', {'id': forum.id}) }}">Создать топик</a>
 {% endblock %}
