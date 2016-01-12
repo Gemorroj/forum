@@ -1,0 +1,25 @@
+topic_show:
+    path:     /{id}/{page}
+    defaults: { _controller: "ForumBundle:Topic:index", page: 1 }
+    requirements:
+        id:   \d+
+        page: \d+
+
+#topic_new:
+#    path:     /new
+#    defaults: { _controller: "ForumBundle:Topic:new" }
+#    methods:  [GET, POST]
+
+#topic_edit:
+#    path:     /{id}/edit
+#    defaults: { _controller: "ForumBundle:Topic:edit" }
+#   methods:  [GET, POST]
+#   requirements:
+#        id:   \d+
+
+#topic_delete:
+#    path:     /{id}/delete
+#    defaults: { _controller: "ForumBundle:Topic:delete" }
+#   methods:  DELETE
+#    requirements:
+#        id:   \d+

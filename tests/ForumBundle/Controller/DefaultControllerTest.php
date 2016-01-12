@@ -32,23 +32,36 @@ class DefaultControllerTest extends WebTestCase
 
     public function testTopic()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum', ['id' => 1]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test topic 2 in PHP forum', $crawler->filter('li > a')->text());
+        $this->assertContains('Test topic 1 in PHP forum', $crawler->filter('li > a')->last()->text());
     }
 
     public function testPost()
     {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic', ['id' => 1, 'page' => 2]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains('Test post 11', $crawler->filter('li')->eq(4)->text());
+        $this->assertContains('Test post 1', $crawler->filter('li')->last()->text());
+    }
+
+    public function testPostNew()
+    {
+        $uri = self::$kernel->getContainer()->get('router')->generate('post_new', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        // self::$client->request('POST', 'post_new', ['id' => 1, 'text' => __FILE__, 'submit' => 'submit']);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $this->assertContains('Текст', $crawler->filter('label')->first()->text());
     }
 }

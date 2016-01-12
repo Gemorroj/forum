@@ -5,7 +5,7 @@
 {% block content %}
 <ul data-role="listview" data-inset="true">
     {% for topic in topics %}
-        <li><a href="{{ path('topic', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
+        <li><a href="{{ path('topic_show', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
     {% else %}
         <li>Пусто</li>
     {% endfor %}

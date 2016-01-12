@@ -11,4 +11,5 @@
     {% endfor %}
 </ul>
 {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
+<a class="ui-btn" href="{{ path('post_new', {'id': topic.id}) }}">Ответить</a>
 {% endblock %}
