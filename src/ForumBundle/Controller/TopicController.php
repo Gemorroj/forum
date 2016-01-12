@@ -15,7 +15,7 @@ use ForumBundle\Entity\Post;
 class TopicController extends Controller
 {
     /**
-     * Сообщения в топике
+     * Сообщения в топике.
      *
      * @param Topic $topic
      * @param int $page
