@@ -6,7 +6,7 @@ use Pagerfanta\View\Template\DefaultTemplate;
 
 class Template extends DefaultTemplate
 {
-    static protected $defaultOptions = array(
+    static protected $defaultOptions = [
         'previous_message'   => 'Пред.',
         'next_message'       => 'След.',
         'css_disabled_class' => '',
@@ -16,5 +16,5 @@ class Template extends DefaultTemplate
         'container_template' => '<nav data-role="controlgroup" data-type="horizontal">%pages%</nav>',
         'page_template'      => '<a href="%href%" data-role="button">%text%</a>',
         'span_template'      => '<a href="#" class="ui-disabled %class%" data-role="button">%text%</a>'
-    );
+    ];
 }

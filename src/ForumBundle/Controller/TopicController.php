@@ -50,14 +50,16 @@ class TopicController extends Controller
                 $em->persist($topic);
                 $em->flush();
 
-                return $this->redirectToRoute('forum_show', array('id' => $forum->getId()));
+                return $this->redirectToRoute('forum_show', [
+                    'id' => $forum->getId()
+                ]);
             }
         }
 
-        return $this->render('@Forum/topic/new.html.twig', array(
+        return $this->render('@Forum/topic/new.html.twig', [
             'topic' => $topic,
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     /**
