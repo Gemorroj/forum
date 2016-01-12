@@ -28,8 +28,8 @@ class ForumType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Forum::class
-        ));
+        ]);
     }
 }
