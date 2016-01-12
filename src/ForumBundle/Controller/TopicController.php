@@ -3,8 +3,13 @@
 namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
+use ForumBundle\Form\TopicType;
+
+use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
+use ForumBundle\Entity\Post;
 
 /**
  * Topic controller.
@@ -35,10 +40,11 @@ class TopicController extends Controller
      * Creates a new Topic entity.
      *
      */
-    /*public function newAction(Request $request)
+    public function newAction(Request $request, Forum $forum)
     {
         $topic = new Topic();
-        $form = $this->createForm('ForumBundle\Form\TopicType', $topic);
+        $topic->setForum($forum);
+        $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -46,14 +52,14 @@ class TopicController extends Controller
             $em->persist($topic);
             $em->flush();
 
-            return $this->redirectToRoute('topic_show', array('id' => $topic->getId()));
+            return $this->redirectToRoute('forum_show', array('id' => $forum->getId()));
         }
 
         return $this->render('@Forum/topic/new.html.twig', array(
             'topic' => $topic,
             'form' => $form->createView(),
         ));
-    }*/
+    }
 
     /**
      * Finds and displays a Topic entity.

@@ -1,0 +1,10 @@
+{% extends '@Forum/layout/layout.html.twig' %}
+
+{% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <a class="ui-btn ui-btn-inline" href="{{ path('forum_show', {'id': topic.forum.id}) }}">Вернуться</a>
+{% endblock %}

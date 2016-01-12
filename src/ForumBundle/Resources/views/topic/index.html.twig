@@ -11,4 +11,5 @@
     {% endfor %}
 </ul>
 {% include 'ForumBundle:layout:paginate.html.twig' with {'data': topics} %}
+<a class="ui-btn" href="{{ path('topic_new', {'id': forum.id}) }}">Создать топик</a>
 {% endblock %}

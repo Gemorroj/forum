@@ -2,9 +2,12 @@
 
 namespace ForumBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use ForumBundle\Entity\Topic;
 
@@ -17,7 +20,9 @@ class TopicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title');
+            ->add('title', TextType::class, ['label' => 'Название топика'])
+            ->add('submit', SubmitType::class, ['label' => 'Создать'])
+        ;
     }
 
     /**

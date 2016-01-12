@@ -5,10 +5,12 @@ topic_show:
         id:   \d+
         page: \d+
 
-#topic_new:
-#    path:     /new
-#    defaults: { _controller: "ForumBundle:Topic:new" }
-#    methods:  [GET, POST]
+topic_new:
+    path:     /{id}/new
+    defaults: { _controller: "ForumBundle:Topic:new" }
+    methods:  [GET, POST]
+    requirements:
+        id:   \d+
 
 #topic_edit:
 #    path:     /{id}/edit
