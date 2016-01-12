@@ -44,12 +44,14 @@ class TopicController extends Controller
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($topic);
-            $em->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($topic);
+                $em->flush();
 
-            return $this->redirectToRoute('forum_show', array('id' => $forum->getId()));
+                return $this->redirectToRoute('forum_show', array('id' => $forum->getId()));
+            }
         }
 
         return $this->render('@Forum/topic/new.html.twig', array(
