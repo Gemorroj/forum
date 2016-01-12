@@ -11,10 +11,7 @@ use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 
-/**
- * Topic controller.
- *
- */
+
 class TopicController extends Controller
 {
     /**

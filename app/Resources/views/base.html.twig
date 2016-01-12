@@ -1,13 +1,56 @@
+{% set title %}{% block title %}{{ forum_title }}{% endblock %}{% endset %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <title>{{ title == forum_title ? title : forum_title ~ ' - ' ~ title }}</title>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {# jquery #}
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    {# jquery mobile #}
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/forum/css/core.css') }}" />
+    <script type="text/javascript" src="{{ asset('bundles/forum/js/core.js') }}"></script>
+
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</head>
+<body>
+{% block body %}
+    <div data-role="page" id="page">
+        {% block page %}
+
+            <div data-theme="b" data-role="header" data-position="fixed">
+                {% block header %}
+                    <h1>{{ title }}</h1>
+                {% endblock %}
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content center-container">
+                {% block logo %}<div class="forum-logo"><a href="{{ path('index') }}"><img src="{{ asset('/bundles/forum/images/georg_lent_200.png') }}" alt=""/></a></div>{% endblock %}
+                {% block breadcrumbs %}{% endblock %}
+                <fieldset>
+                    {% block content %}{% endblock %}
+                </fieldset>
+            </div><!-- /content -->
+
+            <div data-theme="b" data-role="footer" data-position="fixed">
+                {% block footer %}
+                    <h4>Page Footer</h4>
+                {% endblock %}
+            </div><!-- /footer -->
+
+        {% endblock %}
+    </div><!-- /page -->
+
+{% endblock %}
+</body>
 </html>

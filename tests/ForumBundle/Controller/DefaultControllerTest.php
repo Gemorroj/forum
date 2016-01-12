@@ -2,22 +2,11 @@
 
 namespace Tests\ForumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Tests\ForumBundle\ForumWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends ForumWebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected static $client;
-    protected function setUp()
-    {
-        self::$client = static::createClient();
-    }
-
-
     public function testIndex()
     {
         $uri = self::$kernel->getContainer()->get('router')->generate('index');
@@ -28,40 +17,5 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertContains('PHP', $crawler->filter('li > a')->eq(0)->text());
         $this->assertContains('MySQL', $crawler->filter('li > a')->eq(1)->text());
-    }
-
-    public function testTopic()
-    {
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains('Test topic 1 in PHP forum', $crawler->filter('li > a')->last()->text());
-    }
-
-    public function testPost()
-    {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains('Test post 1', $crawler->filter('li')->last()->text());
-    }
-
-    public function testPostNew()
-    {
-        $uri = self::$kernel->getContainer()->get('router')->generate('post_new', ['id' => 1]);
-
-        $crawler = self::$client->request('GET', $uri);
-
-        // self::$client->request('POST', 'post_new', ['id' => 1, 'text' => __FILE__, 'submit' => 'submit']);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains('Текст', $crawler->filter('label')->first()->text());
     }
 }

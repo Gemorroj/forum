@@ -1,0 +1,16 @@
+@media (min-width: 800px) {
+    div.forum-logo {
+        padding: 2%;
+    }
+}
+
+div.forum-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+div.center-container {
+    max-width: 800px;
+    margin: 0 auto;
+}

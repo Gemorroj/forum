@@ -3,13 +3,13 @@
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
 {% block content %}
-<ul data-role="listview" data-inset="true">
-    {% for post in posts %}
-        <li>{{ post.text }}</li>
-    {% else %}
-        <li>Пусто</li>
-    {% endfor %}
-</ul>
-{% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
-<a class="ui-btn" href="{{ path('post_new', {'id': topic.id}) }}">Ответить</a>
+    <ul data-role="listview" data-inset="true">
+        {% for post in posts %}
+            <li>{{ post.text }}</li>
+        {% else %}
+            <li>Пусто</li>
+        {% endfor %}
+    </ul>
+    {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
+    <a class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-left" href="{{ path('post_new', {'id': topic.id}) }}">Ответить</a>
 {% endblock %}

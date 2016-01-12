@@ -6,10 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use ForumBundle\Entity\Forum;
 
-/**
- * Forum controller.
- *
- */
+
 class ForumController extends Controller
 {
     /**

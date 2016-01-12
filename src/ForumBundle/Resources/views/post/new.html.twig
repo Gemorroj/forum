@@ -6,5 +6,5 @@
     {{ form_start(form) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
-    <a class="ui-btn ui-btn-inline" href="{{ path('topic_show', {'id': post.topic.id}) }}">Вернуться</a>
+    <a class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left" href="{{ path('topic_show', {'id': post.topic.id}) }}">Вернуться</a>
 {% endblock %}
