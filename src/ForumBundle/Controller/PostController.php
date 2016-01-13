@@ -3,7 +3,6 @@
 namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\Request;
 
 use ForumBundle\Entity\Topic;
@@ -24,27 +23,20 @@ class PostController extends Controller
      * @param Topic $topic
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request, Topic $topic)
-    {
-        $post = new Post();
-        $post->setTopic($topic);
-        $form = $this->createForm(PostType::class, $post);
+    public function newAction(Request $request, Topic $topic) {
+        $form = $this->createForm(PostType::class);
         $form->handleRequest($request);
-
+        $post = $form->getData();
+        $post->setTopic($topic);
         if ($form->isSubmitted()) {
             if ($form->isValid()) { //TODO: catch error
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
-
-                return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             }
         }
 
-        return $this->render('@Forum/post/new.html.twig', [
-            'post' => $post,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('topic_show', ['id' => 1]);
     }
 
     /**

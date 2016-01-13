@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use ForumBundle\Form\TopicType;
+use ForumBundle\Form\PostType;
 
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
@@ -26,10 +27,17 @@ class TopicController extends Controller
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
+        $form = $this->createForm(PostType::class, null, [
+            'action' => $this->generateUrl('post_new', [
+                'id' => $topic->getId(),
+            ]),
+        ]);
 
         return $this->render('@Forum/post/index.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
+
+            'form' => $form->createView(),
         ]);
     }
 
