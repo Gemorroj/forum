@@ -5,7 +5,10 @@
 {% block content %}
     <ul data-role="listview" data-inset="true">
         {% for post in posts %}
-            <li>{{ post.text }}</li>
+            <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">AbstractUser: {{ post.createdDate|date }}</li>
+            <li>
+                <span>{{ post.text }}</span>
+            </li>
         {% else %}
             <li>Пусто</li>
         {% endfor %}

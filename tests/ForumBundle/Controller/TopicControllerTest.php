@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TopicControllerTest extends ForumWebTestCase
 {
-    public function testTopicNew()
+    public function testNew()
     {
         $text = sprintf('Тест топика #%d', rand());
 
@@ -26,11 +26,11 @@ class TopicControllerTest extends ForumWebTestCase
         $this->assertContains($text, $crawler->filter('ul > li')->first()->text());
     }
 
-    public function testTopic()
+    public function testShow()
     {
-        $text = 'Test topic 1 in PHP forum';
+        $text = 'Test post 1';
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 

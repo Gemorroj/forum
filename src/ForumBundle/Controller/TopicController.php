@@ -31,7 +31,7 @@ class TopicController extends Controller
             ]),
         ]);
 
-        return $this->render('@Forum/post/index.html.twig', [
+        return $this->render('@Forum/topic/show.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
             'form' => $form->createView(),

@@ -34,7 +34,7 @@ class ForumController extends Controller
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        return $this->render('@Forum/topic/index.html.twig', [
+        return $this->render('@Forum/forum/show.html.twig', [
             'forum' => $forum,
             'topics' => $pager,
         ]);
