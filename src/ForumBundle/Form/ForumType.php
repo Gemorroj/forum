@@ -5,7 +5,6 @@ namespace ForumBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use ForumBundle\Entity\Forum;
 
 class ForumType extends AbstractType
@@ -18,8 +17,6 @@ class ForumType extends AbstractType
     {
         $builder
             ->add('title')
-            //->add('countTopics')
-            //->add('countPosts')
         ;
     }
 

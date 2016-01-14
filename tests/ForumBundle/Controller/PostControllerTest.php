@@ -7,22 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostControllerTest extends ForumWebTestCase
 {
-    public function testPost()
-    {
-        $uri = self::$kernel->getContainer()->get('router')->generate('post_new', ['id' => 1]);
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains('Текст', $crawler->filter('label')->first()->text());
-    }
-
     public function testPostNew()
     {
-        $text = 'тест пост';
+        $text = sprintf('Тест поста #%d', rand());
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('post_new', ['id' => 1]);
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
@@ -35,5 +24,18 @@ class PostControllerTest extends ForumWebTestCase
         $crawler = self::$client->followRedirect();
 
         $this->assertContains($text, $crawler->filter('ul > li')->first()->text());
+    }
+
+    public function testPost()
+    {
+        $text = 'Test post 1';
+
+        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $this->assertContains($text, $crawler->filter('ul > li')->last()->text());
     }
 }

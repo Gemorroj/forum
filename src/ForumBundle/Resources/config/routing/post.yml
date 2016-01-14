@@ -1,5 +1,5 @@
 post_new:
-    path:     /{id}/new
+    path:     /topic/{id}
     defaults: { _controller: "ForumBundle:Post:new" }
     methods:  [GET, POST]
     requirements:

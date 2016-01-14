@@ -1,12 +1,12 @@
 topic_show:
-    path:     /{id}/{page}
-    defaults: { _controller: "ForumBundle:Topic:index", page: 1 }
+    path:     /{id}/show/{page}
+    defaults: { _controller: "ForumBundle:Topic:show", page: 1 }
     requirements:
         id:   \d+
         page: \d+
 
 topic_new:
-    path:     /{id}/new
+    path:     /forum/{id}
     defaults: { _controller: "ForumBundle:Topic:new" }
     methods:  [GET, POST]
     requirements:

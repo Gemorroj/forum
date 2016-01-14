@@ -7,20 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TopicControllerTest extends ForumWebTestCase
 {
-    public function testTopic()
-    {
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains('Test post 1', $crawler->filter('li')->last()->text());
-    }
-
     public function testTopicNew()
     {
-        $text = 'тест топик';
+        $text = sprintf('Тест топика #%d', rand());
 
         $uri = self::$kernel->getContainer()->get('router')->generate('topic_new', ['id' => 1]);
 
@@ -35,5 +24,18 @@ class TopicControllerTest extends ForumWebTestCase
         $crawler = self::$client->followRedirect();
 
         $this->assertContains($text, $crawler->filter('ul > li')->first()->text());
+    }
+
+    public function testTopic()
+    {
+        $text = 'Test topic 1 in PHP forum';
+
+        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $this->assertContains($text, $crawler->filter('li')->last()->text());
     }
 }

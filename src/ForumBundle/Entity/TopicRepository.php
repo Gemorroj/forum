@@ -1,4 +1,5 @@
 <?php
+
 namespace ForumBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
