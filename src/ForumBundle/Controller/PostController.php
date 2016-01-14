@@ -25,6 +25,7 @@ class PostController extends Controller
     {
         $post = new Post();
         $post->setTopic($topic);
+        $post->setCreatedDate(new \DateTime());
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {

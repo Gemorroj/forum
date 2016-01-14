@@ -48,7 +48,6 @@ class TopicController extends Controller
         $topic->setForum($forum);
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
-
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
