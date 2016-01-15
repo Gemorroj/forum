@@ -27,6 +27,14 @@ class Forum
      */
     private $countPosts = '0';
 
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+    /**
+     * @var \ForumBundle\Entity\User
+     */
+    private $user;
 
     /**
      * Get id
@@ -108,5 +116,66 @@ class Forum
     public function getCountPosts()
     {
         return $this->countPosts;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @return Forum
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime
+     *
+     * @return Forum
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+
+    /**
+     * Set user
+     *
+     * @param \ForumBundle\Entity\User $user
+     *
+     * @return Forum
+     */
+    public function setUser(\ForumBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \ForumBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

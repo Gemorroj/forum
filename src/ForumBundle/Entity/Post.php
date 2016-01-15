@@ -25,7 +25,11 @@ class Post
     /**
      * @var \DateTime
      */
-    private $createdDate;
+    private $createdAt;
+    /**
+     * @var \ForumBundle\Entity\User
+     */
+    private $user;
 
     /**
      * Get id
@@ -86,26 +90,63 @@ class Post
     }
 
     /**
-     * Set createdDate
-     *
-     * @param \DateTime $createdDate
+     * Set createdAt
      *
      * @return Post
      */
-    public function setCreatedDate($createdDate)
+    public function setCreatedAtValue()
     {
-        $this->createdDate = $createdDate;
+        $this->createdAt = new \DateTime();
 
         return $this;
     }
 
     /**
-     * Get createdDate
+     * Set createdAt
+     *
+     * @param \DateTime
+     *
+     * @return Post
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
      *
      * @return \DateTime
      */
-    public function getCreatedDate()
+    public function getCreatedAt()
     {
-        return $this->createdDate;
+        return $this->createdAt;
+    }
+
+
+    /**
+     * Set user
+     *
+     * @param \ForumBundle\Entity\User $user
+     *
+     * @return Post
+     */
+    public function setUser(\ForumBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \ForumBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

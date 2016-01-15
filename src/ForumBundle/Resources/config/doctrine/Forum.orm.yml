@@ -1,6 +1,10 @@
 ForumBundle\Entity\Forum:
     type: entity
     table: forum
+    indexes:
+        user_id:
+            columns:
+                - user_id
     id:
         id:
             type: integer
@@ -31,4 +35,22 @@ ForumBundle\Entity\Forum:
                 unsigned: true
                 default: '0'
             column: count_posts
-    lifecycleCallbacks: {  }
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+    manyToOne:
+        user:
+            targetEntity: User
+            cascade: { remove, persist }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+                onUpdate: CASCADE
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: { prePersist: [ setCreatedAtValue ] }

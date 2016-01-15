@@ -6,10 +6,11 @@ forum:
     resource: "@ForumBundle/Resources/config/routing/forum.yml"
     prefix:   /forum
 
-topic:
-    resource: "@ForumBundle/Resources/config/routing/topic.yml"
-    prefix:   /topic
 
-post:
-    resource: "@ForumBundle/Resources/config/routing/post.yml"
-    prefix:   /post
+# Login
+login_route:
+    path:     /login
+    defaults: { _controller: ForumBundle:Security:login }
+
+login_check:
+    path: /login_check

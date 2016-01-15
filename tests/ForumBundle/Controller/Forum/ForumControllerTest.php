@@ -11,7 +11,7 @@ class ForumControllerTest extends ForumWebTestCase
     {
         $text = 'Test topic 1 in PHP forum';
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
+        $uri = self::$container->get('router')->generate('forum_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 

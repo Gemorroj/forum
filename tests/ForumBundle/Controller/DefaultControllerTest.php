@@ -10,7 +10,7 @@ class DefaultControllerTest extends ForumWebTestCase
     public function testIndex()
     {
         $text = ['PHP', 'MySQL'];
-        $uri = self::$kernel->getContainer()->get('router')->generate('index');
+        $uri = self::$container->get('router')->generate('index');
 
         $crawler = self::$client->request('GET', $uri);
 

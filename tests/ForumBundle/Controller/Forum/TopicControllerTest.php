@@ -7,15 +7,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TopicControllerTest extends ForumWebTestCase
 {
-    public function testNew()
+    public function testAdd()
     {
-        $text = sprintf('Тест топика #%d', rand());
+        $title = sprintf('Тест топика #%d', rand());
+        $message = sprintf('Тест сообщения #%d', rand());
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_new', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('forum_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
-        $form = $crawler->selectButton('topic_submit')->form(['topic[title]' => $text]);
+        $form = $crawler->selectButton('topic_post_submit')->form(['topic[topic-title]' => $title, 'topic[post][text]' => $message]);
 
         self::$client->submit($form);
 
@@ -23,14 +24,15 @@ class TopicControllerTest extends ForumWebTestCase
 
         $crawler = self::$client->followRedirect();
 
-        $this->assertContains($text, $crawler->filter('ul > li')->first()->text());
+        $this->assertContains($title, $crawler->filter('title')->text());
+        $this->assertContains($message, $crawler->filter('ul li > span')->text());
     }
 
     public function testShow()
     {
         $text = 'Test post 1';
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
+        $uri = self::$container->get('router')->generate('topic_show', ['id' => 1, 'page' => PHP_INT_MAX]);
 
         $crawler = self::$client->request('GET', $uri);
 

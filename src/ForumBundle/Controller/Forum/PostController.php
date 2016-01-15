@@ -1,6 +1,6 @@
 <?php
 
-namespace ForumBundle\Controller;
+namespace ForumBundle\Controller\Forum;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +23,22 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
-        $post = new Post();
-        $post->setTopic($topic);
-        $post->setCreatedDate(new \DateTime());
-        $form = $this->createForm(PostType::class, $post);
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_USER', $user)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления сообщений.');
+        }
+
+        $form = $this->createForm(PostType::class);
+
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) { //TODO: catch error
+
+                /** @var Post $post */
+                $post = $form->getData();
+                $post->setTopic($topic);
+                $post->setUser($user);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
