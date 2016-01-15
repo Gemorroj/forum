@@ -154,21 +154,6 @@ class Forum
         return $this->createdAt;
     }
 
-
-    /**
-     * Set user
-     *
-     * @param \ForumBundle\Entity\User $user
-     *
-     * @return Forum
-     */
-    public function setUser(\ForumBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * Get user
      *
@@ -177,5 +162,19 @@ class Forum
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \ForumBundle\Entity\User $user
+     *
+     * @return Forum
+     */
+    public function setUser(\ForumBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

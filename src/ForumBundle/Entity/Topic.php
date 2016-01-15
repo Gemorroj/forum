@@ -153,20 +153,6 @@ class Topic
     }
 
     /**
-     * Set forum
-     *
-     * @param \ForumBundle\Entity\Forum $forum
-     *
-     * @return Topic
-     */
-    public function setForum(\ForumBundle\Entity\Forum $forum = null)
-    {
-        $this->forum = $forum;
-
-        return $this;
-    }
-
-    /**
      * Get forum
      *
      * @return \ForumBundle\Entity\Forum
@@ -213,20 +199,6 @@ class Topic
     }
 
     /**
-     * Set user
-     *
-     * @param \ForumBundle\Entity\User $user
-     *
-     * @return Topic
-     */
-    public function setUser(\ForumBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * Get user
      *
      * @return \ForumBundle\Entity\User
@@ -234,5 +206,33 @@ class Topic
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set forum
+     *
+     * @param \ForumBundle\Entity\Forum $forum
+     *
+     * @return Topic
+     */
+    public function setForum(\ForumBundle\Entity\Forum $forum)
+    {
+        $this->forum = $forum;
+
+        return $this;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \ForumBundle\Entity\User $user
+     *
+     * @return Topic
+     */
+    public function setUser(\ForumBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
