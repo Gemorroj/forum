@@ -5,11 +5,16 @@
 {% block content %}
     <ul data-role="listview" data-inset="true">
         {% for post in posts %}
-            <li>{{ post.text }}</li>
+            <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">AbstractUser: {{ post.createdDate|date }}</li>
+            <li>
+                <span>{{ post.text }}</span>
+            </li>
         {% else %}
             <li>Пусто</li>
         {% endfor %}
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
-    <a class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-left" href="{{ path('post_new', {'id': topic.id}) }}">Ответить</a>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+{{ form_end(form) }}
 {% endblock %}

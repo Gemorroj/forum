@@ -3,12 +3,9 @@
 namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\Request;
-
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
-
 use ForumBundle\Form\PostType;
 
 /**
@@ -28,23 +25,18 @@ class PostController extends Controller
     {
         $post = new Post();
         $post->setTopic($topic);
+        $post->setCreatedDate(new \DateTime());
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
-
         if ($form->isSubmitted()) {
             if ($form->isValid()) { //TODO: catch error
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
-
-                return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             }
         }
 
-        return $this->render('@Forum/post/new.html.twig', [
-            'post' => $post,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
     }
 
     /**

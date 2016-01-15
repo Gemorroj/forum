@@ -22,6 +22,10 @@ class Post
      */
     private $topic;
 
+    /**
+     * @var \DateTime
+     */
+    private $createdDate;
 
     /**
      * Get id
@@ -79,5 +83,29 @@ class Post
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * Set createdDate
+     *
+     * @param \DateTime $createdDate
+     *
+     * @return Post
+     */
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createdDate
+     *
+     * @return \DateTime
+     */
+    public function getCreatedDate()
+    {
+        return $this->createdDate;
     }
 }

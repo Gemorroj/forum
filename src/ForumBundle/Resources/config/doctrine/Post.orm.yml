@@ -22,6 +22,10 @@ ForumBundle\Entity\Post:
             length: 65535
             options:
                 fixed: false
+        createdDate:
+            type: datetime
+            nullable: false
+            column: created_date
     manyToOne:
         topic:
             targetEntity: Topic

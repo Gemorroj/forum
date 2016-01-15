@@ -1,9 +1,9 @@
 <?php
+
 namespace Tests\ForumBundle;
 
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 
 abstract class ForumWebTestCase extends WebTestCase
 {

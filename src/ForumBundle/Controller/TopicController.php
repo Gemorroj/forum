@@ -4,13 +4,11 @@ namespace ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use ForumBundle\Form\TopicType;
-
+use ForumBundle\Form\PostType;
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
-
 
 class TopicController extends Controller
 {
@@ -21,15 +19,22 @@ class TopicController extends Controller
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Topic $topic, $page)
+    public function showAction(Topic $topic, $page)
     {
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        return $this->render('@Forum/post/index.html.twig', [
+        $form = $this->createForm(PostType::class, null, [
+            'action' => $this->generateUrl('post_new', [
+                'id' => $topic->getId(),
+            ]),
+        ]);
+
+        return $this->render('@Forum/topic/show.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -43,7 +48,6 @@ class TopicController extends Controller
         $topic->setForum($forum);
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
-
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();

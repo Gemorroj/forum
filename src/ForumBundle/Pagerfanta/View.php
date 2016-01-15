@@ -1,4 +1,5 @@
 <?php
+
 namespace ForumBundle\Pagerfanta;
 
 use Pagerfanta\View\DefaultView;
