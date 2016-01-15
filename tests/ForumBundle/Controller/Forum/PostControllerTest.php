@@ -6,11 +6,11 @@ use Tests\ForumBundle\ForumWebTestCase;
 
 class PostControllerTest extends ForumWebTestCase
 {
-    public function testNew()
+    public function testAdd()
     {
         $text = sprintf('Тест поста #%d', rand());
 
-        $uri = self::$kernel->getContainer()->get('router')->generate('topic_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('topic_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 

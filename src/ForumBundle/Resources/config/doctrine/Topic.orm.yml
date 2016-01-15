@@ -6,6 +6,9 @@ ForumBundle\Entity\Topic:
         forum_id:
             columns:
                 - forum_id
+        user_id:
+            columns:
+                - user_id
     id:
         id:
             type: integer
@@ -46,12 +49,28 @@ ForumBundle\Entity\Topic:
     manyToOne:
         forum:
             targetEntity: Forum
-            cascade: {  }
+            cascade: { remove, persist }
             fetch: LAZY
             mappedBy: null
             inversedBy: null
-            joinColumns:
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+                onUpdate: CASCADE
                 forum_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: User
+            cascade: { remove, persist }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+                onUpdate: CASCADE
+                user_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: { prePersist: [ setCreatedAtValue ] }

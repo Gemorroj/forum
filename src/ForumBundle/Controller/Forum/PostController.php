@@ -23,14 +23,21 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_USER', $user)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления сообщений.');
+        }
+
         $form = $this->createForm(PostType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) { //TODO: catch error
 
+                /** @var Post $post */
                 $post = $form->getData();
                 $post->setTopic($topic);
+                $post->setUser($user);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);

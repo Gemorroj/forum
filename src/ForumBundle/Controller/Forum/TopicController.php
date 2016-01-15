@@ -47,6 +47,11 @@ class TopicController extends Controller
      */
     public function newAction(Request $request, ForumEntity $forum)
     {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_USER', $user)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления новых тем.');
+        }
+
         $form = $this->createForm(TopicType::class);
 
         $form->handleRequest($request);
@@ -57,9 +62,12 @@ class TopicController extends Controller
                 $topic = new Topic();
                 $topic->setForum($forum);
                 $topic->setTitle($data['topic-title']);
+                $topic->setUser($user);
 
+                /** @var Post $post */
                 $post = $data['post'];
                 $post->setTopic($topic);
+                $post->setUser($user);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);

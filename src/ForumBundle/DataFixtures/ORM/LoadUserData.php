@@ -2,13 +2,14 @@
 
 namespace ForumBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData implements FixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -34,5 +35,12 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($user);
 
         $manager->flush();
+
+        $this->addReference('user', $user);
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

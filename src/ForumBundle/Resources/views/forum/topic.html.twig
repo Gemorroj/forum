@@ -5,7 +5,7 @@
 {% block content %}
     <ul data-role="listview" data-inset="true">
         {% for post in posts %}
-            <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">AbstractUser: {{ post.createdAt|date }}</li>
+            <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
             <li>
                 <span>{{ post.text }}</span>
             </li>

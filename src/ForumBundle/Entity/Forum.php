@@ -31,6 +31,10 @@ class Forum
      * @var \DateTime
      */
     private $createdAt;
+    /**
+     * @var \ForumBundle\Entity\User
+     */
+    private $user;
 
     /**
      * Get id
@@ -148,5 +152,30 @@ class Forum
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+
+    /**
+     * Set user
+     *
+     * @param \ForumBundle\Entity\User $user
+     *
+     * @return Forum
+     */
+    public function setUser(\ForumBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \ForumBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
