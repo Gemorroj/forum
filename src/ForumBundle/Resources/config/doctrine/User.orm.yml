@@ -1,6 +1,10 @@
-ForumBundle\Entity\Forum:
+ForumBundle\Entity\User:
     type: entity
-    table: forum
+    table: user
+    uniqueConstraints:
+        username:
+            columns:
+                - username
     id:
         id:
             type: integer
@@ -11,26 +15,24 @@ ForumBundle\Entity\Forum:
             generator:
                 strategy: IDENTITY
     fields:
-        title:
-            type: text
+        username:
+            type: string
             nullable: false
-            length: 65535
+            length: 255
             options:
                 fixed: false
-        countTopics:
-            type: integer
+        password:
+            type: string
             nullable: false
+            length: 255
             options:
-                unsigned: true
-                default: '0'
-            column: count_topics
-        countPosts:
-            type: integer
-            nullable: false
+                fixed: false
+        salt:
+            type: string
+            nullable: true
+            length: 255
             options:
-                unsigned: true
-                default: '0'
-            column: count_posts
+                fixed: false
         createdAt:
             type: datetime
             nullable: false

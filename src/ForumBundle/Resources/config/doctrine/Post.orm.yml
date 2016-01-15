@@ -37,5 +37,4 @@ ForumBundle\Entity\Post:
                 topic_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks:
-        prePersist: [ setCreatedAtValue ]
+    lifecycleCallbacks: { prePersist: [ setCreatedAtValue ] }

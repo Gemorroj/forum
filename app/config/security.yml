@@ -4,15 +4,15 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory:
-                users:
-                    admin:
-                        password: admin
-                        roles: 'ROLE_ADMIN'
+        forum_provider:
+            entity:
+                class: ForumBundle:User
+                property: username
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        ForumBundle\Entity\User:
+            algorithm: bcrypt
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
