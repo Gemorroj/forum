@@ -42,7 +42,6 @@ class LoadForumData implements FixtureInterface
             $post = new Post();
             $post->setTopic($topic1);
             $post->setText('Test post ' . $i);
-            $post->setCreatedDate(new \DateTime());
             $manager->persist($post);
         }
 

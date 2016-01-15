@@ -1,6 +1,6 @@
 <?php
 
-namespace ForumBundle\Controller;
+namespace ForumBundle\Controller\Forum;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +23,15 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
-        $post = new Post();
-        $post->setTopic($topic);
-        $post->setCreatedDate(new \DateTime());
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(PostType::class);
+
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) { //TODO: catch error
+
+                $post = $form->getData();
+                $post->setTopic($topic);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();

@@ -37,6 +37,11 @@ class Topic
      */
     private $forum;
 
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
 
     /**
      * Get id
@@ -166,5 +171,41 @@ class Topic
     public function getForum()
     {
         return $this->forum;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @return Topic
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime
+     *
+     * @return Topic
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

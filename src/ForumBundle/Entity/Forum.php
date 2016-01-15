@@ -27,6 +27,10 @@ class Forum
      */
     private $countPosts = '0';
 
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
 
     /**
      * Get id
@@ -108,5 +112,41 @@ class Forum
     public function getCountPosts()
     {
         return $this->countPosts;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @return Forum
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime
+     *
+     * @return Forum
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

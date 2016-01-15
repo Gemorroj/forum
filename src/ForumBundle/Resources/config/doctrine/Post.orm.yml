@@ -22,10 +22,10 @@ ForumBundle\Entity\Post:
             length: 65535
             options:
                 fixed: false
-        createdDate:
+        createdAt:
             type: datetime
             nullable: false
-            column: created_date
+            column: created_at
     manyToOne:
         topic:
             targetEntity: Topic
@@ -37,4 +37,5 @@ ForumBundle\Entity\Post:
                 topic_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [ setCreatedAtValue ]

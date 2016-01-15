@@ -39,6 +39,10 @@ ForumBundle\Entity\Topic:
                 unsigned: true
                 default: '0'
             column: count_posts
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
     manyToOne:
         forum:
             targetEntity: Forum
@@ -50,4 +54,5 @@ ForumBundle\Entity\Topic:
                 forum_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [ setCreatedAtValue ]

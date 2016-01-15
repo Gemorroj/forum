@@ -31,4 +31,9 @@ ForumBundle\Entity\Forum:
                 unsigned: true
                 default: '0'
             column: count_posts
-    lifecycleCallbacks: {  }
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+    lifecycleCallbacks:
+        prePersist: [ setCreatedAtValue ]

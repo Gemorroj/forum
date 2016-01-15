@@ -1,12 +1,12 @@
 <?php
 
-namespace ForumBundle\Controller;
+namespace ForumBundle\Controller\Forum;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
 use ForumBundle\Form\PostType;
-use ForumBundle\Entity\Forum;
+use ForumBundle\Entity\Forum as ForumEntity;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 
@@ -26,12 +26,12 @@ class TopicController extends Controller
         $pager = $this->get('paginate')->paginate($q, $page);
 
         $form = $this->createForm(PostType::class, null, [
-            'action' => $this->generateUrl('post_new', [
+            'action' => $this->generateUrl('post_add', [
                 'id' => $topic->getId(),
             ]),
         ]);
 
-        return $this->render('@Forum/topic/show.html.twig', [
+        return $this->render('@Forum/forum/topic.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
             'form' => $form->createView(),
@@ -41,29 +41,34 @@ class TopicController extends Controller
     /**
      * Creates a new Topic entity.
      *
+     * @param Request $request
+     * @param ForumEntity $forum
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function newAction(Request $request, Forum $forum)
+    public function newAction(Request $request, ForumEntity $forum)
     {
-        $topic = new Topic();
-        $topic->setForum($forum);
-        $form = $this->createForm(TopicType::class, $topic);
+        $form = $this->createForm(TopicType::class);
+
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            if ($form->isValid()) {
+            if ($form->isValid()) { //TODO: catch error
+
+                $data = $form->getData();
+                $topic = new Topic();
+                $topic->setForum($forum);
+                $topic->setTitle($data['topic-title']);
+
+                $post = $data['post'];
+                $post->setTopic($topic);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);
+                $em->persist($post);
                 $em->flush();
-
-                return $this->redirectToRoute('forum_show', [
-                    'id' => $forum->getId()
-                ]);
             }
         }
 
-        return $this->render('@Forum/topic/new.html.twig', [
-            'topic' => $topic,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
     }
 
     /**
@@ -74,7 +79,7 @@ class TopicController extends Controller
     {
         $deleteForm = $this->createDeleteForm($topic);
 
-        return $this->render('@Forum/topic/show.html.twig', array(
+        return $this->render('@Forum/forum/topic.html.twig', array(
             'topic' => $topic,
             'delete_form' => $deleteForm->createView(),
         ));
