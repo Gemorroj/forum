@@ -1,0 +1,20 @@
+ForumBundle\Entity\Forum:
+    properties:
+        title:
+            - NotBlank: ~
+            - Length:
+                min: 2
+
+ForumBundle\Entity\Topic:
+    properties:
+        title:
+            - NotBlank: ~
+            - Length:
+                min: 2
+
+ForumBundle\Entity\Post:
+    properties:
+        text:
+            - NotBlank: ~
+            - Length:
+                min: 2
