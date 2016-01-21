@@ -42,6 +42,11 @@ class PostController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
+            } else {
+                // TODO: Выводить сообщения ошибок из $form->getErrors().
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add('error', 'Сообщение слишком короткое');
             }
         }
 

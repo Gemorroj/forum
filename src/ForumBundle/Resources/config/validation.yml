@@ -4,6 +4,7 @@ ForumBundle\Entity\Forum:
             - NotBlank: ~
             - Length:
                 min: 2
+                minMessage: 'FMin {{ limit }} symbols'
 
 ForumBundle\Entity\Topic:
     properties:
@@ -11,6 +12,7 @@ ForumBundle\Entity\Topic:
             - NotBlank: ~
             - Length:
                 min: 2
+                minMessage: 'TMin {{ limit }} symbols'
 
 ForumBundle\Entity\Post:
     properties:
@@ -18,3 +20,4 @@ ForumBundle\Entity\Post:
             - NotBlank: ~
             - Length:
                 min: 2
+                minMessage: 'PMin {{ limit }} symbols'
