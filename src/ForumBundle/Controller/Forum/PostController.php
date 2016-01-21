@@ -44,9 +44,17 @@ class PostController extends Controller
                 $em->flush();
             } else {
                 // TODO: Выводить сообщения ошибок из $form->getErrors().
-                $this->get('session')
-                    ->getFlashBag()
-                    ->add('error', 'Сообщение слишком короткое');
+                $m = [];
+                $errors = $form->getErrors(true);
+                if (0 < $errors->count()) {
+                    foreach ($errors as $e) {
+                        $m[] = $e->getMessage();
+                    }
+
+                    $this->get('session')
+                        ->getFlashBag()
+                        ->set('error', $m);
+                }
             }
         }
 
