@@ -6,6 +6,7 @@ use Symfony\Component\Form\Form;
 
 class FormHelper
 {
+    // [!] Выводит только 1 сообщение
     public static function getErrors(Form $form)
     {
         $messages = [];

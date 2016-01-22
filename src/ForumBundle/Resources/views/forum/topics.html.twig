@@ -12,6 +12,7 @@
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': topics} %}
 
+    {% include 'ForumBundle:layout:errors.html.twig' %}
     {{ form_start(form) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}

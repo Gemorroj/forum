@@ -5,7 +5,7 @@ ForumBundle\Entity\Forum:
                 message: 'Название форума не должно быть пустым'
             - Length:
                 min: 2
-                minMessage: 'Минимально {{ limit }} символа(ов)'
+                minMessage: 'Название форума должно содержать не менее {{ limit }} символа(ов)'
 
 ForumBundle\Entity\Topic:
     properties:
@@ -14,7 +14,7 @@ ForumBundle\Entity\Topic:
                 message: 'Название топика не должно быть пустым'
             - Length:
                 min: 2
-                minMessage: 'Минимально {{ limit }} символа(ов)'
+                minMessage: 'Название топика должно содержать не менее {{ limit }} символа(ов)'
 
 ForumBundle\Entity\Post:
     properties:
@@ -23,4 +23,4 @@ ForumBundle\Entity\Post:
                 message: 'Сообщение не должно быть пустым'
             - Length:
                 min: 2
-                minMessage: 'Минимально {{ limit }} символа(ов)'
+                minMessage: 'Сообщение должно содержать не менее {{ limit }} символа(ов)'
