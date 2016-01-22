@@ -2,6 +2,7 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Helper\FormHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
@@ -73,10 +74,16 @@ class TopicController extends Controller
                 $em->persist($topic);
                 $em->persist($post);
                 $em->flush();
+
+                return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
+            } else {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->set('errors', FormHelper::getErrors($form));
             }
         }
 
-        return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
+        return $this->redirectToRoute('forum_show', ['id' => $forum->getId()]);
     }
 
     /**

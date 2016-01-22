@@ -1,20 +1,26 @@
 ForumBundle\Entity\Forum:
     properties:
         title:
-            - NotBlank: ~
+            - NotBlank:
+                message: 'Название форума не должно быть пустым'
             - Length:
                 min: 2
+                minMessage: 'Название форума должно содержать не менее {{ limit }} символа(ов)'
 
 ForumBundle\Entity\Topic:
     properties:
         title:
-            - NotBlank: ~
+            - NotBlank:
+                message: 'Название топика не должно быть пустым'
             - Length:
                 min: 2
+                minMessage: 'Название топика должно содержать не менее {{ limit }} символа(ов)'
 
 ForumBundle\Entity\Post:
     properties:
         text:
-            - NotBlank: ~
+            - NotBlank:
+                message: 'Сообщение не должно быть пустым'
             - Length:
                 min: 2
+                minMessage: 'Сообщение должно содержать не менее {{ limit }} символа(ов)'

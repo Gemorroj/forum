@@ -1,0 +1,5 @@
+{% if app.session.flashBag.has('errors') %}
+    {% for message in app.session.flashbag.get('errors') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}

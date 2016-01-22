@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
+use ForumBundle\Helper\FormHelper;
 
 /**
  * Post controller.
@@ -42,6 +43,10 @@ class PostController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
+            } else {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->set('errors', FormHelper::getErrors($form));
             }
         }
 

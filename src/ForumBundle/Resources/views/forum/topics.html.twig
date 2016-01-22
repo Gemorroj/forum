@@ -3,6 +3,7 @@
 {% block title %}{{ forum.title }}{% endblock %}
 
 {% block content %}
+    {{ parent() }}
     <ul data-role="listview" data-inset="true">
         {% for topic in topics %}
             <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('topic_show', {'id': topic.id} ) }}">{{ topic.title }}<span class="ui-li-count">{{ topic.countPosts }}</span></a></li>
