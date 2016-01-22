@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
+use ForumBundle\Helper\FormHelper;
 
 /**
  * Post controller.
@@ -43,18 +44,9 @@ class PostController extends Controller
                 $em->persist($post);
                 $em->flush();
             } else {
-                // TODO: Выводить сообщения ошибок из $form->getErrors().
-                $m = [];
-                $errors = $form->getErrors(true);
-                if (0 < $errors->count()) {
-                    foreach ($errors as $e) {
-                        $m[] = $e->getMessage();
-                    }
-
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->set('error', $m);
-                }
+                $this->get('session')
+                    ->getFlashBag()
+                    ->set('errors', FormHelper::getErrors($form));
             }
         }
 
