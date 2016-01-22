@@ -1,0 +1,11 @@
+{% for error in app.session.flashBag.get('error') %}
+    <p class="ui-bar-b flash flash-error">{{ error }}</p>
+{% endfor %}
+
+{% for warning in app.session.flashBag.get('warning') %}
+    <p class="ui-bar-a flash flash-warning">{{ warning }}</p>
+{% endfor %}
+
+{% for notice in app.session.flashBag.get('notice') %}
+    <p class="ui-bar-a flash flash-notice">{{ flash_message }}</p>
+{% endfor %}

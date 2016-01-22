@@ -14,3 +14,17 @@ div.center-container {
     max-width: 800px;
     margin: 0 auto;
 }
+
+.flash {
+    border-radius: 4px;
+    padding: 4px;
+}
+.flash-error {
+    background-color: #b00;
+}
+.flash-warning {
+    background-color: #ff0;
+}
+.flash-notice {
+    background-color: #bbb;
+}

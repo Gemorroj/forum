@@ -57,7 +57,7 @@ class TopicController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            if ($form->isValid()) { //TODO: catch error
+            if ($form->isValid()) {
 
                 $data = $form->getData();
                 $topic = new Topic();
@@ -77,9 +77,9 @@ class TopicController extends Controller
 
                 return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             } else {
-                $this->get('session')
-                    ->getFlashBag()
-                    ->set('errors', FormHelper::getErrors($form));
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
             }
         }
 

@@ -33,7 +33,7 @@ class PostController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            if ($form->isValid()) { //TODO: catch error
+            if ($form->isValid()) {
 
                 /** @var Post $post */
                 $post = $form->getData();
@@ -44,9 +44,9 @@ class PostController extends Controller
                 $em->persist($post);
                 $em->flush();
             } else {
-                $this->get('session')
-                    ->getFlashBag()
-                    ->set('errors', FormHelper::getErrors($form));
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
             }
         }
 
