@@ -3,6 +3,7 @@
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
 {% block content %}
+    {{ parent() }}
     <ul data-role="listview" data-inset="true">
         {% for post in posts %}
             <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
@@ -15,7 +16,6 @@
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
 
-    {% include 'ForumBundle:layout:errors.html.twig' %}
     {{ form_start(form) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
