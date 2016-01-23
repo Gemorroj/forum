@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
-use ForumBundle\Helper\FormHelper;
 
 /**
  * Post controller.
@@ -96,19 +95,23 @@ class PostController extends Controller
      * Deletes a Post entity.
      *
      */
-    /*public function deleteAction(Request $request, Post $post)
+    public function deleteAction(Post $post)
     {
-        $form = $this->createDeleteForm($post);
-        $form->handleRequest($request);
+        $user = $this->getUser();
+        if (! $this->isGranted('ROLE_USER', $user)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления новых тем.');
+        }
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($user->getId() == $post->getUser()->getId()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($post);
             $em->flush();
+        } else {
+            $this->addFlash('error', 'Вы не автор данного поста.');
         }
 
-        return $this->redirectToRoute('post_index');
-    }*/
+        return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
+    }
 
     /**
      * Creates a form to delete a Post entity.

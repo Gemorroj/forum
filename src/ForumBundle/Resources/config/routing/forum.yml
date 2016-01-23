@@ -26,3 +26,10 @@ post_add:
     requirements:
         id:   \d+
 
+post_delete:
+    path:     /post{id}/delete
+    defaults: { _controller: ForumBundle:Forum/Post:delete }
+    methods:  [POST, GET]
+    requirements:
+        id:   \d+
+

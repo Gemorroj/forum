@@ -8,6 +8,11 @@
             <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
             <li>
                 <span>{{ post.text }}</span>
+                {% if app.user.id is defined and app.user.id == post.user.id %}
+                    <p>{# Набросок #}
+                        <a href="{{ path('post_delete', {'id': post.id}) }}">Del.</a>
+                    </p>
+                {% endif %}
             </li>
         {% else %}
             <li>Пусто</li>
