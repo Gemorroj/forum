@@ -3,16 +3,13 @@
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
 {% block content %}
-    <ul data-role="listview" data-inset="true">
+    <ul data-role="listview" data-inset="true" data-split-icon="edit" data-split-theme="a">
         {% for post in posts %}
             <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
             <li>
-                <span>{{ post.text }}</span>
+                <a>{{ post.text }}</a>
                 {% if app.user.id is defined and app.user.id == post.user.id %}
-                    <p>{# Набросок #}
-                        <a href="{{ path('post_edit', {'id': post.id}) }}">Edit</a> |
-                        <a href="{{ path('post_delete', {'id': post.id}) }}">Del.</a>
-                    </p>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}">Edit</a>
                 {% endif %}
             </li>
         {% else %}
@@ -24,4 +21,15 @@
     {{ form_start(form) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
+
+    {% if app.user.id is defined and app.user.id == topic.user.id %}
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit" href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a>
+            </div>
+            <div class="ui-block-b">
+                <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

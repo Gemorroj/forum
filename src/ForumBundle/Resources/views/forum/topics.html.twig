@@ -10,10 +10,6 @@
                     {{ topic.title }}
                     <span class="ui-li-count">{{ topic.countPosts }}</span>
                 </a>
-                <p>{# Набросок #}
-                    <a href="{{ path('topic_edit', {'id': topic.id}) }}">Edit</a> |
-                    <a href="{{ path('topic_delete', {'id': topic.id}) }}">Del.</a>
-                </p>
             </li>
         {% else %}
             <li>Пусто</li>
