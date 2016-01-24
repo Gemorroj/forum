@@ -70,26 +70,38 @@ class PostController extends Controller
      * Displays a form to edit an existing Post entity.
      *
      */
-    /*public function editAction(Request $request, Post $post)
+    public function editAction(Request $request, Post $post)
     {
-        $deleteForm = $this->createDeleteForm($post);
-        $editForm = $this->createForm('ForumBundle\Form\PostType', $post);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
-
-            return $this->redirectToRoute('post_edit', array('id' => $post->getId()));
+        $user = $this->getUser();
+        if (! ($this->isGranted('ROLE_USER', $user)
+            && $user->getId() == $post->getUser()->getId()
+        )) {
+            $this->addFlash('error', 'Вы не автор данного поста.');
+            return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
         }
 
-        return $this->render('@Forum/post/edit.html.twig', array(
-            'post' => $post,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }*/
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($post);
+                $em->flush();
+
+                return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * Deletes a Post entity.
@@ -98,11 +110,9 @@ class PostController extends Controller
     public function deleteAction(Post $post)
     {
         $user = $this->getUser();
-        if (! $this->isGranted('ROLE_USER', $user)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления новых тем.');
-        }
-
-        if ($user->getId() == $post->getUser()->getId()) {
+        if ($this->isGranted('ROLE_USER', $user)
+            && $user->getId() == $post->getUser()->getId()
+        ) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($post);
             $em->flush();

@@ -2,8 +2,9 @@
 
 namespace ForumBundle\Controller\Forum;
 
-use ForumBundle\Helper\FormHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
 use ForumBundle\Form\PostType;
@@ -104,44 +105,61 @@ class TopicController extends Controller
      * Displays a form to edit an existing Topic entity.
      *
      */
-    /*public function editAction(Request $request, Topic $topic)
+    public function editAction(Request $request, Topic $topic)
     {
-        $deleteForm = $this->createDeleteForm($topic);
-        $editForm = $this->createForm('ForumBundle\Form\TopicType', $topic);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($topic);
-            $em->flush();
-
-            return $this->redirectToRoute('topic_edit', array('id' => $topic->getId()));
+        $user = $this->getUser();
+        if (! ($this->isGranted('ROLE_USER', $user)
+            && $user->getId() == $topic->getUser()->getId()
+        )) {
+            $this->addFlash('error', 'Вы не автор данного поста.');
+            return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
         }
 
-        return $this->render('@Forum/topic/edit.html.twig', array(
-            'topic' => $topic,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }*/
+        $form = $this->createFormBuilder($topic)
+            ->add('title', TextType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($topic);
+                $em->flush();
+
+                return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * Deletes a Topic entity.
      *
      */
-    /*public function deleteAction(Request $request, Topic $topic)
+    public function deleteAction(Topic $topic)
     {
-        $form = $this->createDeleteForm($topic);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $user = $this->getUser();
+        if ($this->isGranted('ROLE_USER', $user)
+            && $user->getId() == $topic->getUser()->getId()
+        ) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($topic);
             $em->flush();
+        } else {
+            $this->addFlash('error', 'Вы не автор данного топика.');
         }
 
-        return $this->redirectToRoute('topic_index');
-    }*/
+        return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
+    }
 
     /**
      * Creates a form to delete a Topic entity.
