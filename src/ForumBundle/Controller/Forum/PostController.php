@@ -98,7 +98,8 @@ class PostController extends Controller
             }
         }
 
-        return $this->render('@Forum/forum/edit.html.twig', [
+        return $this->render('@Forum/forum/post.edit.html.twig', [
+            'post' => $post,
             'form' => $form->createView(),
         ]);
     }

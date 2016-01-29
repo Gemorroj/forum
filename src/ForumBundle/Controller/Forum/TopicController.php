@@ -136,7 +136,7 @@ class TopicController extends Controller
             }
         }
 
-        return $this->render('@Forum/forum/edit.html.twig', [
+        return $this->render('@Forum/forum/topic.edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
