@@ -7,6 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Post controller.
@@ -42,6 +46,20 @@ class PostController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
+
+                // creating the ACL
+                $aclProvider = $this->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($post);
+                $acl = $aclProvider->createAcl($objectIdentity);
+
+                // retrieving the security identity of the currently logged-in user
+                $tokenStorage = $this->get('security.token_storage');
+                $user = $tokenStorage->getToken()->getUser();
+                $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+                // grant owner access
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
@@ -72,12 +90,11 @@ class PostController extends Controller
      */
     public function editAction(Request $request, Post $post)
     {
-        $user = $this->getUser();
-        if (! ($this->isGranted('ROLE_USER', $user)
-            && $user->getId() == $post->getUser()->getId()
-        )) {
-            $this->addFlash('error', 'Вы не автор данного поста.');
-            return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
+        $authorizationChecker = $this->get('security.authorization_checker');
+
+        // check for edit access
+        if (false === $authorizationChecker->isGranted('EDIT', $post)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения сообщений.');
         }
 
         $form = $this->createForm(PostType::class, $post);
@@ -110,16 +127,16 @@ class PostController extends Controller
      */
     public function deleteAction(Post $post)
     {
-        $user = $this->getUser();
-        if ($this->isGranted('ROLE_USER', $user)
-            && $user->getId() == $post->getUser()->getId()
-        ) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($post);
-            $em->flush();
-        } else {
-            $this->addFlash('error', 'Вы не автор данного поста.');
+        $authorizationChecker = $this->get('security.authorization_checker');
+
+        // check for edit access
+        if (false === $authorizationChecker->isGranted('EDIT', $post)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления сообщений.');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
 
         return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
     }

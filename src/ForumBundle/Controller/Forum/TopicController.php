@@ -11,6 +11,9 @@ use ForumBundle\Form\PostType;
 use ForumBundle\Entity\Forum as ForumEntity;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class TopicController extends Controller
 {
@@ -76,6 +79,24 @@ class TopicController extends Controller
                 $em->persist($post);
                 $em->flush();
 
+                // creating the ACL
+                $aclProvider = $this->get('security.acl.provider');
+                $topicIdentity = ObjectIdentity::fromDomainObject($topic);
+                $postIdentity = ObjectIdentity::fromDomainObject($post);
+                $aclTopic = $aclProvider->createAcl($topicIdentity);
+                $aclPost = $aclProvider->createAcl($postIdentity);
+
+                // retrieving the security identity of the currently logged-in user
+                $tokenStorage = $this->get('security.token_storage');
+                $user = $tokenStorage->getToken()->getUser();
+                $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+                // grant owner access
+                $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($aclTopic);
+                $aclProvider->updateAcl($aclPost);
+
                 return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
@@ -107,12 +128,11 @@ class TopicController extends Controller
      */
     public function editAction(Request $request, Topic $topic)
     {
-        $user = $this->getUser();
-        if (! ($this->isGranted('ROLE_USER', $user)
-            && $user->getId() == $topic->getUser()->getId()
-        )) {
-            $this->addFlash('error', 'Вы не автор данного поста.');
-            return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
+        $authorizationChecker = $this->get('security.authorization_checker');
+
+        // check for edit access
+        if (false === $authorizationChecker->isGranted('EDIT', $topic)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения тем.');
         }
 
         $form = $this->createFormBuilder($topic)
@@ -147,16 +167,16 @@ class TopicController extends Controller
      */
     public function deleteAction(Topic $topic)
     {
-        $user = $this->getUser();
-        if ($this->isGranted('ROLE_USER', $user)
-            && $user->getId() == $topic->getUser()->getId()
-        ) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($topic);
-            $em->flush();
-        } else {
-            $this->addFlash('error', 'Вы не автор данного топика.');
+        $authorizationChecker = $this->get('security.authorization_checker');
+
+        // check for edit access
+        if (false === $authorizationChecker->isGranted('EDIT', $topic)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления тем.');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($topic);
+        $em->flush();
 
         return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
     }
