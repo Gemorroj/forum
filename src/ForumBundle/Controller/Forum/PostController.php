@@ -53,9 +53,7 @@ class PostController extends Controller
                 $acl = $aclProvider->createAcl($objectIdentity);
 
                 // retrieving the security identity of the currently logged-in user
-                $tokenStorage = $this->get('security.token_storage');
-                $user = $tokenStorage->getToken()->getUser();
-                $securityIdentity = UserSecurityIdentity::fromAccount($user);
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
 
                 // grant owner access
                 $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
@@ -90,10 +88,7 @@ class PostController extends Controller
      */
     public function editAction(Request $request, Post $post)
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-
-        // check for edit access
-        if (false === $authorizationChecker->isGranted('EDIT', $post)) {
+        if (! $this->isGranted('EDIT', $post)) {
             throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения сообщений.');
         }
 
@@ -127,10 +122,7 @@ class PostController extends Controller
      */
     public function deleteAction(Post $post)
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-
-        // check for edit access
-        if (false === $authorizationChecker->isGranted('EDIT', $post)) {
+        if (! $this->isGranted('EDIT', $post)) {
             throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления сообщений.');
         }
 

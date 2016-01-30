@@ -87,9 +87,7 @@ class TopicController extends Controller
                 $aclPost = $aclProvider->createAcl($postIdentity);
 
                 // retrieving the security identity of the currently logged-in user
-                $tokenStorage = $this->get('security.token_storage');
-                $user = $tokenStorage->getToken()->getUser();
-                $securityIdentity = UserSecurityIdentity::fromAccount($user);
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
 
                 // grant owner access
                 $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
@@ -128,10 +126,7 @@ class TopicController extends Controller
      */
     public function editAction(Request $request, Topic $topic)
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-
-        // check for edit access
-        if (false === $authorizationChecker->isGranted('EDIT', $topic)) {
+        if (! $this->isGranted('EDIT', $topic)) {
             throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения тем.');
         }
 
@@ -167,10 +162,7 @@ class TopicController extends Controller
      */
     public function deleteAction(Topic $topic)
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-
-        // check for edit access
-        if (false === $authorizationChecker->isGranted('EDIT', $topic)) {
+        if (! $this->isGranted('EDIT', $topic)) {
             throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления тем.');
         }
 
