@@ -7,7 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
-use ForumBundle\Helper\FormHelper;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Post controller.
@@ -43,6 +46,18 @@ class PostController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
+
+                // creating the ACL
+                $aclProvider = $this->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($post);
+                $acl = $aclProvider->createAcl($objectIdentity);
+
+                // retrieving the security identity of the currently logged-in user
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
+
+                // grant owner access
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
@@ -71,44 +86,52 @@ class PostController extends Controller
      * Displays a form to edit an existing Post entity.
      *
      */
-    /*public function editAction(Request $request, Post $post)
+    public function editAction(Request $request, Post $post)
     {
-        $deleteForm = $this->createDeleteForm($post);
-        $editForm = $this->createForm('ForumBundle\Form\PostType', $post);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
-
-            return $this->redirectToRoute('post_edit', array('id' => $post->getId()));
+        if (! $this->isGranted('EDIT', $post)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения сообщений.');
         }
 
-        return $this->render('@Forum/post/edit.html.twig', array(
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($post);
+                $em->flush();
+
+                return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/post.edit.html.twig', [
             'post' => $post,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }*/
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * Deletes a Post entity.
      *
      */
-    /*public function deleteAction(Request $request, Post $post)
+    public function deleteAction(Post $post)
     {
-        $form = $this->createDeleteForm($post);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($post);
-            $em->flush();
+        if (! $this->isGranted('EDIT', $post)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления сообщений.');
         }
 
-        return $this->redirectToRoute('post_index');
-    }*/
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+
+        return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
+    }
 
     /**
      * Creates a form to delete a Post entity.

@@ -2,14 +2,18 @@
 
 namespace ForumBundle\Controller\Forum;
 
-use ForumBundle\Helper\FormHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
 use ForumBundle\Form\PostType;
 use ForumBundle\Entity\Forum as ForumEntity;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class TopicController extends Controller
 {
@@ -75,6 +79,22 @@ class TopicController extends Controller
                 $em->persist($post);
                 $em->flush();
 
+                // creating the ACL
+                $aclProvider = $this->get('security.acl.provider');
+                $topicIdentity = ObjectIdentity::fromDomainObject($topic);
+                $postIdentity = ObjectIdentity::fromDomainObject($post);
+                $aclTopic = $aclProvider->createAcl($topicIdentity);
+                $aclPost = $aclProvider->createAcl($postIdentity);
+
+                // retrieving the security identity of the currently logged-in user
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
+
+                // grant owner access
+                $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($aclTopic);
+                $aclProvider->updateAcl($aclPost);
+
                 return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
@@ -104,44 +124,54 @@ class TopicController extends Controller
      * Displays a form to edit an existing Topic entity.
      *
      */
-    /*public function editAction(Request $request, Topic $topic)
+    public function editAction(Request $request, Topic $topic)
     {
-        $deleteForm = $this->createDeleteForm($topic);
-        $editForm = $this->createForm('ForumBundle\Form\TopicType', $topic);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($topic);
-            $em->flush();
-
-            return $this->redirectToRoute('topic_edit', array('id' => $topic->getId()));
+        if (! $this->isGranted('EDIT', $topic)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения тем.');
         }
 
-        return $this->render('@Forum/topic/edit.html.twig', array(
-            'topic' => $topic,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }*/
+        $form = $this->createFormBuilder($topic)
+            ->add('title', TextType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($topic);
+                $em->flush();
+
+                return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/topic.edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * Deletes a Topic entity.
      *
      */
-    /*public function deleteAction(Request $request, Topic $topic)
+    public function deleteAction(Topic $topic)
     {
-        $form = $this->createDeleteForm($topic);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($topic);
-            $em->flush();
+        if (! $this->isGranted('EDIT', $topic)) {
+            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления тем.');
         }
 
-        return $this->redirectToRoute('topic_index');
-    }*/
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($topic);
+        $em->flush();
+
+        return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
+    }
 
     /**
      * Creates a form to delete a Topic entity.

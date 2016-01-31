@@ -19,6 +19,20 @@ topic_add:
     requirements:
         id:   \d+
 
+topic_edit:
+    path:     /topic{id}/edit
+    defaults: { _controller: ForumBundle:Forum/Topic:edit }
+    methods:  [POST, GET]
+    requirements:
+        id:   \d+
+
+topic_delete:
+    path:     /topic{id}/delete
+    defaults: { _controller: ForumBundle:Forum/Topic:delete }
+    methods:  [GET]
+    requirements:
+        id:   \d+
+
 post_add:
     path:     /topic{id}/add_post
     defaults: { _controller: ForumBundle:Forum/Post:new }
@@ -26,3 +40,16 @@ post_add:
     requirements:
         id:   \d+
 
+post_edit:
+    path:     /post{id}/edit
+    defaults: { _controller: ForumBundle:Forum/Post:edit }
+    methods:  [POST, GET]
+    requirements:
+        id:   \d+
+
+post_delete:
+    path:     /post{id}/delete
+    defaults: { _controller: ForumBundle:Forum/Post:delete }
+    methods:  [GET]
+    requirements:
+        id:   \d+

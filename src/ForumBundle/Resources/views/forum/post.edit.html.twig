@@ -1,0 +1,10 @@
+{% extends '@Forum/layout/layout.html.twig' %}
+
+{% block title %}Редактирование{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <a class="ui-btn" href="{{ path('post_delete', {'id': post.id}) }}">Удалить</a>
+{% endblock %}
