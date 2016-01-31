@@ -2,14 +2,36 @@
 
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
+{% block header %}
+    {{ parent() }}
+    <a href="#topic{{ topic.id }}" data-rel="popup" data-transition="slideup"  class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-gear">Управление</a>
+    <div data-role="popup" id="topic{{ topic.id }}" data-theme="b">
+        <ul data-role="listview" data-inset="true" style="min-width:210px;">
+            <li data-role="list-divider">Действие</li>
+            <li><a href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a></li>
+            <li><a href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
 {% block content %}
     <ul data-role="listview" data-inset="true" data-split-icon="edit" data-split-theme="a">
         {% for post in posts %}
             <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
             <li>
-                <a>{{ post.text }}</a>
+                <a>
+                    <p>{{ post.text }}</p>
+                </a>
                 {% if app.user and is_granted('EDIT', post) %}
-                    <a href="{{ path('post_edit', {'id': post.id}) }}">Редактировать</a>
+                    {# {{ path('post_edit', {'id': post.id}) }} #}
+                    <a href="#post{{ post.id }}" data-rel="popup" data-transition="slideup" class="ui-btn ui-icon-gear ui-btn-icon-left ui-btn-a">Управление</a>
+                    <div data-role="popup" id="post{{ post.id }}" data-theme="b">
+                        <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                            <li data-role="list-divider">Действие</li>
+                            <li><a href="{{ path('post_edit', {'id': post.id}) }}">Редактировать</a></li>
+                            <li><a href="{{ path('post_delete', {'id': post.id}) }}">Удалить</a></li>
+                        </ul>
+                    </div>
                 {% endif %}
             </li>
         {% else %}
