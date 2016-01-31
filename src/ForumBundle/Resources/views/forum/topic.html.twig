@@ -4,14 +4,20 @@
 
 {% block header %}
     {{ parent() }}
-    <a href="#topic{{ topic.id }}" data-rel="popup" data-transition="slideup"  class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-gear">Управление</a>
-    <div data-role="popup" id="topic{{ topic.id }}" data-theme="b">
-        <ul data-role="listview" data-inset="true" style="min-width:210px;">
-            <li data-role="list-divider">Действие</li>
-            <li><a href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a></li>
-            <li><a href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a></li>
-        </ul>
-    </div>
+    {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
+        <a href="#topic{{ topic.id }}" data-rel="popup" data-transition="slideup" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-gear">Управление</a>
+        <div data-role="popup" id="topic{{ topic.id }}" data-theme="b">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                <li data-role="list-divider">Действие</li>
+                {% if is_granted('EDIT', topic) %}
+                    <li><a href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a></li>
+                {% endif %}
+                {% if is_granted('DELETE', topic) %}
+                    <li><a href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -44,18 +50,4 @@
         {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
-        <div class="ui-grid-a">
-            {% if is_granted('EDIT', topic) %}
-                <div class="ui-block-a">
-                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit" href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a>
-                </div>
-            {% endif %}
-            {% if is_granted('DELETE', topic) %}
-                <div class="ui-block-b">
-                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a>
-                </div>
-            {% endif %}
-        </div>
-    {% endif %}
 {% endblock %}
