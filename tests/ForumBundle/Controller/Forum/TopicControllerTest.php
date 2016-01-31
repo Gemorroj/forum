@@ -25,7 +25,7 @@ class TopicControllerTest extends ForumWebTestCase
         $crawler = self::$client->followRedirect();
 
         $this->assertContains($title, $crawler->filter('title')->text());
-        $this->assertContains($message, $crawler->filter('li > a')->text());
+        $this->assertContains($message, $crawler->filter('a > p')->text());
     }
 
     public function testShow()
@@ -38,6 +38,6 @@ class TopicControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains($text, $crawler->filter('li')->last()->text());
+        $this->assertContains($text, $crawler->filter('a > p')->last()->text());
     }
 }

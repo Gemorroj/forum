@@ -22,6 +22,6 @@ class PostControllerTest extends ForumWebTestCase
 
         $crawler = self::$client->followRedirect();
 
-        $this->assertContains($text, $crawler->filter('li > a')->first()->text());
+        $this->assertContains($text, $crawler->filter('a > p')->first()->text());
     }
 }
