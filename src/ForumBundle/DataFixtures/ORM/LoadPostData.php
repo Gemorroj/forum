@@ -6,9 +6,24 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\Post;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-class LoadPostData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPostData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
     public function load(ObjectManager $manager)
     {
         $user = $this->getReference('user');
@@ -22,9 +37,15 @@ class LoadPostData extends AbstractFixture implements OrderedFixtureInterface
             $post->setText('Test post ' . $i);
             $post->setUser($user);
             $manager->persist($post);
-        }
+            $manager->flush();
 
-        $manager->flush();
+            $aclProvider = $this->container->get('security.acl.provider');
+            $postIdentity = ObjectIdentity::fromDomainObject($post);
+            $aclPost = $aclProvider->createAcl($postIdentity);
+            $securityIdentity = UserSecurityIdentity::fromAccount($user);
+            $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+            $aclProvider->updateAcl($aclPost);
+        }
     }
 
     public function getOrder()

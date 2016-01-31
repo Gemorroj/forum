@@ -8,8 +8,8 @@
             <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
             <li>
                 <a>{{ post.text }}</a>
-                {% if app.user.id is defined and app.user.id == post.user.id %}
-                    <a href="{{ path('post_edit', {'id': post.id}) }}">Edit</a>
+                {% if app.user and is_granted('EDIT', post) %}
+                    <a href="{{ path('post_edit', {'id': post.id}) }}">Редактировать</a>
                 {% endif %}
             </li>
         {% else %}
@@ -22,14 +22,18 @@
         {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    {% if app.user.id is defined and app.user.id == topic.user.id %}
+    {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
         <div class="ui-grid-a">
-            <div class="ui-block-a">
-                <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit" href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a>
-            </div>
-            <div class="ui-block-b">
-                <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a>
-            </div>
+            {% if is_granted('EDIT', topic) %}
+                <div class="ui-block-a">
+                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit" href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a>
+                </div>
+            {% endif %}
+            {% if is_granted('DELETE', topic) %}
+                <div class="ui-block-b">
+                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a>
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 {% endblock %}

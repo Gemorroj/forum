@@ -10,7 +10,6 @@ use ForumBundle\Form\PostType;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Post controller.
@@ -45,6 +44,7 @@ class PostController extends Controller
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
+
                 $em->flush();
 
                 // creating the ACL
@@ -84,13 +84,13 @@ class PostController extends Controller
 
     /**
      * Displays a form to edit an existing Post entity.
-     *
+     * @param Request $request
+     * @param Post $post
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request, Post $post)
     {
-        if (! $this->isGranted('EDIT', $post)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения сообщений.');
-        }
+        $this->denyAccessUnlessGranted('EDIT', $post, 'Доступ запрещен. Авторизуйтесь для изменения сообщений.');
 
         $form = $this->createForm(PostType::class, $post);
 
@@ -118,13 +118,12 @@ class PostController extends Controller
 
     /**
      * Deletes a Post entity.
-     *
+     * @param Post $post
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Post $post)
     {
-        if (! $this->isGranted('EDIT', $post)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления сообщений.');
-        }
+        $this->denyAccessUnlessGranted('DELETE', $post, 'Доступ запрещен. Авторизуйтесь для удаления сообщений.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);

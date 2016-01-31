@@ -77,6 +77,7 @@ class TopicController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);
                 $em->persist($post);
+
                 $em->flush();
 
                 // creating the ACL
@@ -122,13 +123,13 @@ class TopicController extends Controller
 
     /**
      * Displays a form to edit an existing Topic entity.
-     *
+     * @param Request $request
+     * @param Topic $topic
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request, Topic $topic)
     {
-        if (! $this->isGranted('EDIT', $topic)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для изменения тем.');
-        }
+        $this->denyAccessUnlessGranted('EDIT', $topic, 'Доступ запрещен. Авторизуйтесь для изменения тем.');
 
         $form = $this->createFormBuilder($topic)
             ->add('title', TextType::class)
@@ -158,13 +159,12 @@ class TopicController extends Controller
 
     /**
      * Deletes a Topic entity.
-     *
+     * @param Topic $topic
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Topic $topic)
     {
-        if (! $this->isGranted('EDIT', $topic)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для удаления тем.');
-        }
+        $this->denyAccessUnlessGranted('DELETE', $topic, 'Доступ запрещен. Авторизуйтесь для удаления тем.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($topic);
