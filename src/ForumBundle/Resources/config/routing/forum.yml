@@ -50,6 +50,6 @@ post_edit:
 post_delete:
     path:     /post{id}/delete
     defaults: { _controller: ForumBundle:Forum/Post:delete }
-    methods:  [GET]
+    methods:  [POST]
     requirements:
         id:   \d+
