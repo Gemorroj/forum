@@ -5,11 +5,15 @@
 {% block javascripts %}
     <script type="text/javascript">
         $( document ).ready(function() {
-            $('#post_delete_button').click(function (event) {
-                $('#post_delete_form').attr({
+            $('a#post_delete_button').click(function () {
+                $('form#post_delete_form').attr({
                     action: $(this).attr('data-url')
                 });
-            })
+            });
+
+            $('button#form_cancel').click(function () {
+                $('div#confirm').popup('close');
+            });
         });
     </script>
 {% endblock %}
@@ -21,12 +25,9 @@
                 <h1>Удалить?</h1>
             </div>
             <div role="main" class="ui-content">
-                <!-- \Custom post delete form -->
-                <form id="post_delete_form" action="" method="post">
-                    <input type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" value="Отмена" />
-                    <input type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow" value="Удалить"/>
-                </form>
-                <!-- /Custom post delete form -->
+                {{ form_start(postDeleteForm) }}
+                    {{ form_widget(postDeleteForm) }}
+                {{ form_end(postDeleteForm) }}
             </div>
         </div>
     {% endblock %}
@@ -36,7 +37,7 @@
                 <p>{{ post.user.username }}: {{ post.createdAt|date }}</p>
                 {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
                     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-                        <a id="post_edit_button" data-url="{{ path('post_delete', {'id': post.id}) }}" href="{{ path('post_edit', {'id': post.id}) }}" class="ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
+                        <a href="{{ path('post_edit', {'id': post.id}) }}" class="ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
                         <a id="post_delete_button" data-url="{{ path('post_delete', {'id': post.id}) }}" href="#confirm" data-rel="popup" data-transition="slideup" class="ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
                     </div>
                 {% endif %}
@@ -48,8 +49,8 @@
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-    {{ form_end(form) }}
+    {{ form_start(postCreateForm) }}
+        {{ form_widget(postCreateForm) }}
+    {{ form_end(postCreateForm) }}
 
 {% endblock %}

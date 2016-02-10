@@ -3,6 +3,7 @@
 namespace ForumBundle\Controller\Forum;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,16 +31,33 @@ class TopicController extends Controller
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        $form = $this->createForm(PostType::class, null, [
+        $postCreateForm = $this->createForm(PostType::class, null, [
             'action' => $this->generateUrl('post_add', [
                 'id' => $topic->getId(),
             ]),
         ]);
 
+        $postDeleteForm = $this->createFormBuilder(null, [
+            'attr' => [
+                'action' => '',
+                'id' => 'post_delete_form',
+            ]
+        ])->add('cancel', ButtonType::class, [
+            'attr' => [
+                'data-rel' => 'back',
+            ]
+        ])->add('delete', SubmitType::class, [
+            'attr' => [
+                'data-rel' => 'back',
+                'data-transition' => 'flow',
+            ]
+        ])->getForm();
+
         return $this->render('@Forum/forum/topic.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
-            'form' => $form->createView(),
+            'postCreateForm' => $postCreateForm->createView(),
+            'postDeleteForm' => $postDeleteForm->createView(),
         ]);
     }
 
