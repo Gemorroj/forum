@@ -2,8 +2,8 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Form\PostDeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,21 +37,7 @@ class TopicController extends Controller
             ]),
         ]);
 
-        $postDeleteForm = $this->createFormBuilder(null, [
-            'attr' => [
-                'action' => '',
-                'id' => 'post_delete_form',
-            ]
-        ])->add('cancel', ButtonType::class, [
-            'attr' => [
-                'data-rel' => 'back',
-            ]
-        ])->add('delete', SubmitType::class, [
-            'attr' => [
-                'data-rel' => 'back',
-                'data-transition' => 'flow',
-            ]
-        ])->getForm();
+        $postDeleteForm = $this->createForm(PostDeleteType::class);
 
         return $this->render('@Forum/forum/topic.html.twig', [
             'topic' => $topic,
