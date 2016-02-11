@@ -5,7 +5,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         $( document ).ready(function() {
-            $('a#post_delete_button').click(function () {
+            $('a.post_delete_button').click(function () {
                 $('form#post_delete_form').attr({
                     action: $(this).attr('data-url')
                 });
@@ -38,7 +38,7 @@
                 {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
                     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
                         <a href="{{ path('post_edit', {'id': post.id}) }}" class="ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
-                        <a id="post_delete_button" data-url="{{ path('post_delete', {'id': post.id}) }}" href="#confirm" data-rel="popup" data-transition="slideup" class="ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
+                        <a id="{{ postDeleteForm.delete.vars.id }}" data-url="{{ path('post_delete', {'id': post.id}) }}" href="#confirm" data-rel="popup" data-transition="slideup" class="post_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
                     </div>
                 {% endif %}
             </li>
