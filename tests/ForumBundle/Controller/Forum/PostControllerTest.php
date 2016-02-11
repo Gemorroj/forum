@@ -37,7 +37,7 @@ class PostControllerTest extends ForumWebTestCase
         $postText = $crawler->filter('li')->eq(3)->text(); // Second post in list on first page
         $action = $crawler->filter('a.post_delete_button')->eq(1)->attr('data-url'); // Second post in list on first page
 
-        $form = $crawler->selectButton('form_delete')->form();
+        $form = $crawler->selectButton('post_delete_delete')->form();
 
         $form->getNode()->setAttribute('action', $action);
 
