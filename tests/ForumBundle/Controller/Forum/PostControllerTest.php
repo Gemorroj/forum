@@ -35,7 +35,7 @@ class PostControllerTest extends ForumWebTestCase
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $postText = $crawler->filter('li')->eq(3)->text(); // Second post in list on first page
-        $action = $crawler->filter('#post_delete_button')->eq(1)->attr('data-url'); // Second post in list on first page
+        $action = $crawler->filter('a.post_delete_button')->eq(1)->attr('data-url'); // Second post in list on first page
 
         $form = $crawler->selectButton('form_delete')->form();
 
