@@ -43,7 +43,7 @@ post_add:
 post_edit:
     path:     /post{id}/edit
     defaults: { _controller: ForumBundle:Forum/Post:edit }
-    methods:  [POST, GET]
+    methods:  [POST]
     requirements:
         id:   \d+
 

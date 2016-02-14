@@ -2,14 +2,15 @@
 
 namespace ForumBundle\Form;
 
+use ForumBundle\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use ForumBundle\Entity\Forum;
 
-class PostDeleteType extends AbstractType
+class PostEditType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,13 +19,19 @@ class PostDeleteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('text', TextareaType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Сообщение',
+                ]
+            ])
             ->add('cancel', ButtonType::class, [
-                'label' => 'Нет',
+                'label' => 'Отмена',
                 'attr' => [
                     'data-rel' => 'back',
                 ],
-            ])->add('delete', SubmitType::class, [
-                'label' => 'Да',
+            ])->add('edit', SubmitType::class, [
+                'label' => 'Готово',
                 'attr' => [
                     'data-rel' => 'back',
                     'data-transition' => 'flow',
@@ -39,10 +46,10 @@ class PostDeleteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Forum::class,
+            'data_class' => Post::class,
             'attr' => [
                 'action' => '',
-                'id' => 'post_delete_form',
+                'id' => 'post_edit_form',
             ],
         ]);
     }

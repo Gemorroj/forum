@@ -14,6 +14,20 @@
             $('button#post_delete_cancel').click(function () {
                 $('div#confirm').popup('close');
             });
+
+            $('a.post_edit_button').click(function () {
+                $('form#post_edit_form').attr({
+                    action: $(this).attr('data-url')
+                });
+
+                $('textarea#post_edit_text').val(
+                    $('li#' + $(this).attr('data-id')).text()
+                );
+            });
+
+            $('button#post_edit_cancel').click(function () {
+                $('div#edit').popup('close');
+            });
         });
     </script>
 {% endblock %}
@@ -30,6 +44,15 @@
                 {{ form_end(postDeleteForm) }}
             </div>
         </div>
+
+        <div data-role="popup" id="edit" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="width:400px;">
+            <div data-role="header" data-theme="a">
+                <h1>Редактирование</h1>
+            </div>
+            {{ form_start(postEditForm) }}
+                {{ form_widget(postEditForm) }}
+            {{ form_end(postEditForm) }}
+        </div>
     {% endblock %}
     <ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="a">
         {% for post in posts %}
@@ -37,12 +60,12 @@
                 <p>{{ post.user.username }}: {{ post.createdAt|date }}</p>
                 {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
                     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-                        <a href="{{ path('post_edit', {'id': post.id}) }}" class="ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
+                        <a data-id="post{{ post.id }}" data-url="{{ path('post_edit', {'id': post.id}) }}" href="#edit" data-rel="popup" data-transition="slideup" class="post_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
                         <a data-url="{{ path('post_delete', {'id': post.id}) }}" href="#confirm" data-rel="popup" data-transition="slideup" class="post_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
                     </div>
                 {% endif %}
             </li>
-            <li>{{ post.text }}</li>
+            <li id="post{{ post.id }}">{{ post.text }}</li>
         {% else %}
             <li>Пусто</li>
         {% endfor %}
