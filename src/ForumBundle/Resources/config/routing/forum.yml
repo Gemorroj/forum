@@ -43,13 +43,13 @@ post_add:
 post_edit:
     path:     /post{id}/edit
     defaults: { _controller: ForumBundle:Forum/Post:edit }
-    methods:  [POST, GET]
+    methods:  [POST]
     requirements:
         id:   \d+
 
 post_delete:
     path:     /post{id}/delete
     defaults: { _controller: ForumBundle:Forum/Post:delete }
-    methods:  [GET]
+    methods:  [POST]
     requirements:
         id:   \d+

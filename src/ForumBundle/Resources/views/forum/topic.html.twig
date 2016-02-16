@@ -2,38 +2,78 @@
 
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
+{% block javascripts %}
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $('a.post_delete_button').click(function () {
+                $('form#post_delete_form').attr({
+                    action: $(this).attr('data-url')
+                });
+            });
+
+            $('button#post_delete_cancel').click(function () {
+                $('div#confirm').popup('close');
+            });
+
+            $('a.post_edit_button').click(function () {
+                $('form#post_edit_form').attr({
+                    action: $(this).attr('data-url')
+                });
+
+                $('textarea#post_edit_text').val(
+                    $('li#' + $(this).attr('data-id')).text()
+                );
+            });
+
+            $('button#post_edit_cancel').click(function () {
+                $('div#edit').popup('close');
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
-    <ul data-role="listview" data-inset="true" data-split-icon="edit" data-split-theme="a">
+    {% block popup %}
+        <div data-role="popup" id="confirm" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="a">
+                <h1>Удалить?</h1>
+            </div>
+            <div role="main" class="ui-content">
+                {{ form_start(postDeleteForm) }}
+                    {{ form_widget(postDeleteForm) }}
+                {{ form_end(postDeleteForm) }}
+            </div>
+        </div>
+
+        <div data-role="popup" id="edit" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="width:400px;">
+            <div data-role="header" data-theme="a">
+                <h1>Редактирование</h1>
+            </div>
+            {{ form_start(postEditForm) }}
+                {{ form_widget(postEditForm) }}
+            {{ form_end(postEditForm) }}
+        </div>
+    {% endblock %}
+    <ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="a">
         {% for post in posts %}
-            <li class="ui-li-divider ui-bar-inherit ui-first-child" data-role="list-divider">{{ post.user.username }}: {{ post.createdAt|date }}</li>
-            <li>
-                <a>{{ post.text }}</a>
-                {% if app.user and is_granted('EDIT', post) %}
-                    <a href="{{ path('post_edit', {'id': post.id}) }}">Редактировать</a>
+            <li data-role="list-divider">
+                <p>{{ post.user.username }}: {{ post.createdAt|date }}</p>
+                {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
+                    <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+                        <a data-id="post{{ post.id }}" data-url="{{ path('post_edit', {'id': post.id}) }}" href="#edit" data-rel="popup" data-transition="slideup" class="post_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
+                        <a data-url="{{ path('post_delete', {'id': post.id}) }}" href="#confirm" data-rel="popup" data-transition="slideup" class="post_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
+                    </div>
                 {% endif %}
             </li>
+            <li id="post{{ post.id }}">{{ post.text }}</li>
         {% else %}
             <li>Пусто</li>
         {% endfor %}
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': posts} %}
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-    {{ form_end(form) }}
+    {{ form_start(postCreateForm) }}
+        {{ form_widget(postCreateForm) }}
+    {{ form_end(postCreateForm) }}
 
-    {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
-        <div class="ui-grid-a">
-            {% if is_granted('EDIT', topic) %}
-                <div class="ui-block-a">
-                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit" href="{{ path('topic_edit', {'id': topic.id}) }}">Редактировать</a>
-                </div>
-            {% endif %}
-            {% if is_granted('DELETE', topic) %}
-                <div class="ui-block-b">
-                    <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" href="{{ path('topic_delete', {'id': topic.id}) }}">Удалить</a>
-                </div>
-            {% endif %}
-        </div>
-    {% endif %}
 {% endblock %}

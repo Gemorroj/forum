@@ -25,7 +25,7 @@ class TopicControllerTest extends ForumWebTestCase
         $crawler = self::$client->followRedirect();
 
         $this->assertContains($title, $crawler->filter('title')->text());
-        $this->assertContains($message, $crawler->filter('li > a')->text());
+        $this->assertContains($message, $crawler->filter('li')->eq(1)->text());
     }
 
     public function testShow()

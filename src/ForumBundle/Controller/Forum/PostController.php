@@ -2,6 +2,7 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Form\PostEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
@@ -92,7 +93,7 @@ class PostController extends Controller
     {
         $this->denyAccessUnlessGranted('EDIT', $post, 'Доступ запрещен. Авторизуйтесь для изменения сообщений.');
 
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(PostEditType::class, $post);
 
         $form->handleRequest($request);
 
@@ -101,8 +102,6 @@ class PostController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
-
-                return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
@@ -110,10 +109,7 @@ class PostController extends Controller
             }
         }
 
-        return $this->render('@Forum/forum/post.edit.html.twig', [
-            'post' => $post,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('topic_show', ['id' => $post->getTopic()->getId()]);
     }
 
     /**

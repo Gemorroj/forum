@@ -2,6 +2,8 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Form\PostDeleteType;
+use ForumBundle\Form\PostEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,16 +32,21 @@ class TopicController extends Controller
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        $form = $this->createForm(PostType::class, null, [
+        $postCreateForm = $this->createForm(PostType::class, null, [
             'action' => $this->generateUrl('post_add', [
                 'id' => $topic->getId(),
             ]),
         ]);
 
+        $postDeleteForm = $this->createForm(PostDeleteType::class);
+        $postEditForm = $this->createForm(PostEditType::class);
+
         return $this->render('@Forum/forum/topic.html.twig', [
             'topic' => $topic,
             'posts' => $pager,
-            'form' => $form->createView(),
+            'postCreateForm' => $postCreateForm->createView(),
+            'postEditForm' => $postEditForm->createView(),
+            'postDeleteForm' => $postDeleteForm->createView(),
         ]);
     }
 
