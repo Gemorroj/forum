@@ -28,14 +28,10 @@ class PostEditType extends AbstractType
             ->add('cancel', ButtonType::class, [
                 'label' => 'Отмена',
                 'attr' => [
-                    'data-rel' => 'back',
+                    'data-id' => 'post_edit_cancel',
                 ],
             ])->add('edit', SubmitType::class, [
                 'label' => 'Готово',
-                'attr' => [
-                    'data-rel' => 'back',
-                    'data-transition' => 'flow',
-                ],
             ])
         ;
     }
@@ -47,10 +43,6 @@ class PostEditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Post::class,
-            'attr' => [
-                'action' => '',
-                'id' => 'post_edit_form',
-            ],
         ]);
     }
 }

@@ -21,14 +21,10 @@ class PostDeleteType extends AbstractType
             ->add('cancel', ButtonType::class, [
                 'label' => 'Нет',
                 'attr' => [
-                    'data-rel' => 'back',
+                    'data-id' => 'post_delete_cancel',
                 ],
             ])->add('delete', SubmitType::class, [
                 'label' => 'Да',
-                'attr' => [
-                    'data-rel' => 'back',
-                    'data-transition' => 'flow',
-                ],
             ])
         ;
     }
@@ -40,10 +36,6 @@ class PostDeleteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Forum::class,
-            'attr' => [
-                'action' => '',
-                'id' => 'post_delete_form',
-            ],
         ]);
     }
 }
