@@ -2,6 +2,8 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Form\TopicDeleteType;
+use ForumBundle\Form\TopicEditType;
 use ForumBundle\Form\TopicType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ForumBundle\Entity\Forum as ForumEntity;
@@ -21,16 +23,20 @@ class ForumController extends Controller
 
         $pager = $this->get('paginate')->paginate($q, $page);
 
-        $form = $this->createForm(TopicType::class, null, [
+        $topicCreateForm = $this->createForm(TopicType::class, null, [
             'action' => $this->generateUrl('topic_add', [
                 'id' => $forum->getId(),
             ]),
         ]);
+        $topicEditForm = $this->createForm(TopicEditType::class);
+        $topicDeleteForm = $this->createForm(TopicDeleteType::class);
 
         return $this->render('@Forum/forum/topics.html.twig', [
             'forum' => $forum,
             'topics' => $pager,
-            'form' => $form->createView(),
+            'topicCreateForm' => $topicCreateForm->createView(),
+            'topicEditForm' => $topicEditForm->createView(),
+            'topicDeleteForm' => $topicDeleteForm->createView(),
         ]);
     }
 }
