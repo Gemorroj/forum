@@ -4,9 +4,8 @@ namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Form\PostDeleteType;
 use ForumBundle\Form\PostEditType;
+use ForumBundle\Form\TopicEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
 use ForumBundle\Form\PostType;
@@ -37,9 +36,8 @@ class TopicController extends Controller
                 'id' => $topic->getId(),
             ]),
         ]);
-
-        $postDeleteForm = $this->createForm(PostDeleteType::class);
         $postEditForm = $this->createForm(PostEditType::class);
+        $postDeleteForm = $this->createForm(PostDeleteType::class);
 
         return $this->render('@Forum/forum/topic.html.twig', [
             'topic' => $topic,
@@ -138,10 +136,7 @@ class TopicController extends Controller
     {
         $this->denyAccessUnlessGranted('EDIT', $topic, 'Доступ запрещен. Авторизуйтесь для изменения тем.');
 
-        $form = $this->createFormBuilder($topic)
-            ->add('title', TextType::class)
-            ->add('submit', SubmitType::class)
-            ->getForm();
+        $form = $this->createForm(TopicEditType::class, $topic);
 
         $form->handleRequest($request);
 
@@ -150,8 +145,6 @@ class TopicController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);
                 $em->flush();
-
-                return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
@@ -159,9 +152,7 @@ class TopicController extends Controller
             }
         }
 
-        return $this->render('@Forum/forum/topic.edit.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('forum_show', ['id' => $topic->getForum()->getId()]);
     }
 
     /**
