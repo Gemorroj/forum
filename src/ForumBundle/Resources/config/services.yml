@@ -6,3 +6,9 @@ services:
     paginate:
         class: ForumBundle\Helper\Paginate
         arguments: ["@service_container"]
+
+    forumlistener:
+        class: ForumBundle\EventListener\ForumSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, event: postPersist }
+
