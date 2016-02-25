@@ -13,6 +13,7 @@ class ForumSubscriber implements EventSubscriber
     {
         return array(
             'postPersist',
+            'postRemove',
         );
     }
 
@@ -43,6 +44,7 @@ class ForumSubscriber implements EventSubscriber
                 $this->updateNumberOfPostsOnForum($args, -1);
                 break;
             case $entity instanceof Topic:
+                $this->resetNumberOfPostsOnForum($args);
                 $this->updateNumberOfTopicsOnForum($args, -1);
                 break;
         }
@@ -50,34 +52,46 @@ class ForumSubscriber implements EventSubscriber
         return;
     }
 
-    public function updateNumberOfPostsOnTopic(LifecycleEventArgs $args, $quantity)
+    public function resetNumberOfPostsOnForum(LifecycleEventArgs $args)
     {
         $em = $args->getEntityManager();
 
-        $topic = $args->getEntity()->getTopic();
-        $topic->setCountPosts($topic->getCountPosts() + $quantity);
-
-        $em->persist($topic);
-        $em->flush();
-    }
-
-    public function updateNumberOfPostsOnForum(LifecycleEventArgs $args, $quantity)
-    {
-        $em = $args->getEntityManager();
-
-        $forum = $args->getEntity()->getTopic()->getForum();
-        $forum->setCountPosts($forum->getCountPosts() + $quantity);
+        $topic = $args->getEntity();
+        $forum = $topic->getForum();
+        $forum->setCountPosts($forum->getCountPosts() - $topic->getCountPosts());
 
         $em->persist($forum);
         $em->flush();
     }
 
-    public function updateNumberOfTopicsOnForum(LifecycleEventArgs $args, $quantity)
+    public function updateNumberOfPostsOnTopic(LifecycleEventArgs $args, $shift)
+    {
+        $em = $args->getEntityManager();
+
+        $topic = $args->getEntity()->getTopic();
+        $topic->setCountPosts($topic->getCountPosts() + $shift);
+
+        $em->persist($topic);
+        $em->flush();
+    }
+
+    public function updateNumberOfPostsOnForum(LifecycleEventArgs $args, $shift)
+    {
+        $em = $args->getEntityManager();
+
+        $forum = $args->getEntity()->getTopic()->getForum();
+        $forum->setCountPosts($forum->getCountPosts() + $shift);
+
+        $em->persist($forum);
+        $em->flush();
+    }
+
+    public function updateNumberOfTopicsOnForum(LifecycleEventArgs $args, $shift)
     {
         $em = $args->getEntityManager();
 
         $forum = $args->getEntity()->getForum();
-        $forum->setCountTopics($forum->getCountTopics() + $quantity);
+        $forum->setCountTopics($forum->getCountTopics() + $shift);
 
         $em->persist($forum);
         $em->flush();
