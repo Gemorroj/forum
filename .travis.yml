@@ -7,21 +7,23 @@ php:
 env: SYMFONY_ENV=test
 
 services:
-  - mysql
+    - mysql
 
 cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache/files
+    directories:
+        - vendor
+        - $HOME/.composer/cache/files
 
 before_script:
-  - cp app/config/parameters.yml.travis app/config/parameters.yml
-  - composer self-update && composer install --no-interaction
-  - php bin/console doctrine:database:create --env=test
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console doctrine:fixtures:load -n --env=test
+    - cp app/config/parameters.yml.travis app/config/parameters.yml
+    - composer self-update && composer install --no-interaction
+    - php bin/console doctrine:database:create --env=test
+    - php bin/console doctrine:schema:create --env=test
+    - php bin/console doctrine:fixtures:load -n --env=test
 
-script: phpunit --configuration phpunit.xml.dist
+script:
+    - phpunit --version
+    - phpunit --configuration phpunit.xml.dist
 
 notifications:
     email:
