@@ -10,5 +10,5 @@ services:
     forumlistener:
         class: ForumBundle\EventListener\ForumSubscriber
         tags:
-            - { name: doctrine.event_subscriber, event: postPersist }
+            - { name: doctrine.event_subscriber }
 
