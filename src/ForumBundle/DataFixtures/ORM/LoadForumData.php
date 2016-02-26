@@ -11,14 +11,14 @@ class LoadForumData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $countPosts = 25;
+        $countPosts = 0;
 
         $user = $this->getReference('user');
 
         $forumPhp = new Forum();
         $forumPhp->setTitle('PHP');
         $forumPhp->setCountPosts($countPosts);
-        $forumPhp->setCountTopics(2);
+        $forumPhp->setCountTopics(0);
         $forumPhp->setUser($user);
         $manager->persist($forumPhp);
 
