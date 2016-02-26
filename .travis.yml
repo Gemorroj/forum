@@ -6,7 +6,10 @@ php:
     - hhvm
     - nightly
 
-env: SYMFONY_ENV=test
+env:
+    global:
+        - MIN_PHP=5.6.5
+        - SYMFONY_ENV=test
 
 services:
     - mysql
@@ -15,11 +18,13 @@ cache:
     directories:
         - vendor
         - $HOME/.composer/cache/files
+        - php-$MIN_PHP
+
+before_install:
+  - composer self-update
 
 install:
-    - phpunit --self-update
-    - composer self-update
-    - composer install --no-interaction --prefer-dist
+  - travis_retry composer install --no-interaction --prefer-source
 
 before_script:
     - cp app/config/parameters.yml.travis app/config/parameters.yml
@@ -28,8 +33,7 @@ before_script:
     - php bin/console doctrine:fixtures:load -n --env=test
 
 script:
-    - phpunit --version
-    - phpunit --configuration phpunit.xml.dist
+    - bin/phpunit --configuration phpunit.xml.dist
 
 notifications:
     email:
