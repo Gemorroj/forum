@@ -52,7 +52,7 @@ class ForumSubscriber implements EventSubscriber
         return;
     }
 
-    public function resetNumberOfPostsOnForum(LifecycleEventArgs $args)
+    private function resetNumberOfPostsOnForum(LifecycleEventArgs $args)
     {
         $em = $args->getEntityManager();
 
@@ -64,7 +64,7 @@ class ForumSubscriber implements EventSubscriber
         $em->flush();
     }
 
-    public function updateNumberOfPostsOnTopic(LifecycleEventArgs $args, $shift)
+    private function updateNumberOfPostsOnTopic(LifecycleEventArgs $args, $shift)
     {
         $em = $args->getEntityManager();
 
@@ -75,7 +75,7 @@ class ForumSubscriber implements EventSubscriber
         $em->flush();
     }
 
-    public function updateNumberOfPostsOnForum(LifecycleEventArgs $args, $shift)
+    private function updateNumberOfPostsOnForum(LifecycleEventArgs $args, $shift)
     {
         $em = $args->getEntityManager();
 
@@ -86,7 +86,7 @@ class ForumSubscriber implements EventSubscriber
         $em->flush();
     }
 
-    public function updateNumberOfTopicsOnForum(LifecycleEventArgs $args, $shift)
+    private function updateNumberOfTopicsOnForum(LifecycleEventArgs $args, $shift)
     {
         $em = $args->getEntityManager();
 
