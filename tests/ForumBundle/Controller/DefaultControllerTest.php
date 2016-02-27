@@ -23,6 +23,7 @@ class DefaultControllerTest extends ForumWebTestCase
     public function testCountersOnAddTopicAndPost()
     {
         $text = ['0 / 0', '1 / 1'];
+
         $title = sprintf('Тест топика #%d', rand());
         $message = sprintf('Тест сообщения #%d', rand());
 
