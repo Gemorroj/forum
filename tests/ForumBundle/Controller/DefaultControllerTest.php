@@ -22,18 +22,26 @@ class DefaultControllerTest extends ForumWebTestCase
 
     public function testCountersOnAddTopicAndPost()
     {
-        $text = ['0 / 0', '1 / 1'];
+        $text = ['0 / 0', '1 / 2'];
 
+        $testForumCounter = function($text) {
+            $uri = self::$container->get('router')->generate('index');
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($text, $crawler->filter('a > span')->eq(1)->text());
+        };
+
+        $testTopicCounter = function($text) {
+            $uri = self::$container->get('router')->generate('forum_show', ['id' => 2, 'page' => PHP_INT_MAX]);
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($text, $crawler->filter('span')->eq(1)->text());
+        };
+
+        $testForumCounter($text[0]);
+        //\Add
         $title = sprintf('Тест топика #%d', rand());
         $message = sprintf('Тест сообщения #%d', rand());
-
-        $uri = self::$container->get('router')->generate('index');
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[0], $crawler->filter('a > span')->eq(1)->text());
 
         $uri = self::$container->get('router')->generate('forum_show', ['id' => 2]);
 
@@ -49,28 +57,39 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $this->assertContains($title, $crawler->filter('title')->text());
         $this->assertContains($message, $crawler->filter('li')->eq(1)->text());
-
-        $uri = self::$container->get('router')->generate('index');
-
+        //~Additional
+        $additionalPost = sprintf('Тест поста #%d', rand());
+        $uri = self::$container->get('router')->generate('topic_show', ['id' => 3]);
         $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[1], $crawler->filter('a > span')->eq(1)->text());
+        $form = $crawler->selectButton('post_submit')->form(['post[text]' => $additionalPost]);
+        self::$client->submit($form);
+        $this->assertTrue(self::$client->getResponse()->isRedirection());
+        $crawler = self::$client->followRedirect();
+        $this->assertContains($additionalPost, $crawler->filter('li')->eq(1)->text());
+        ///Add
+        $testForumCounter($text[1]);
+        $testTopicCounter('2');
     }
 
     public function testCountersOnDeletePost()
     {
-        $text = ['1 / 1', '1 / 0'];
+        $text = ['1 / 2', '1 / 1'];
 
-        $uri = self::$container->get('router')->generate('index');
+        $testForumCounter = function($text) {
+            $uri = self::$container->get('router')->generate('index');
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($text, $crawler->filter('a > span')->eq(1)->text());
+        };
 
-        $crawler = self::$client->request('GET', $uri);
+        $testTopicCounter = function($text) {
+            $uri = self::$container->get('router')->generate('forum_show', ['id' => 2, 'page' => PHP_INT_MAX]);
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($text, $crawler->filter('span')->eq(1)->text());
+        };
 
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[0], $crawler->filter('a > span')->eq(1)->text());
-
+        $testForumCounter($text[0]);
         //\Delete
         $uri = self::$container->get('router')->generate('topic_show', ['id' => 3, 'page' => 1]);
 
@@ -78,7 +97,6 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $crawler->filter('li')->eq(1)->text(); // First post in list on first page
         $action = $crawler->filter('a.post_delete_button')->eq(0)->attr('data-url'); // First post...
 
         $form = $crawler->selectButton('post_delete_delete')->form();
@@ -91,30 +109,24 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $crawler = self::$client->followRedirect();
 
-        $this->assertContains('Пусто', $del = $crawler->filter('li')->text()); // First post...
+        $this->assertContains('Тест сообщения #', $crawler->filter('li')->eq(1)->text()); // First post...
         ///Delete
-
-        $uri = self::$container->get('router')->generate('index');
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[1], $crawler->filter('a > span')->eq(1)->text());
+        $testForumCounter($text[1]);
+        $testTopicCounter('1');
     }
 
     public function testCountersOnDeleteTopic()
     {
-        $text = ['1 / 0', '0 / 0'];
+        $text = ['1 / 1', '0 / 0'];
 
-        $uri = self::$container->get('router')->generate('index');
+        $testForumCounter = function($text) {
+            $uri = self::$container->get('router')->generate('index');
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($text, $crawler->filter('a > span')->eq(1)->text());
+        };
 
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[0], $crawler->filter('a > span')->eq(1)->text());
-
+        $testForumCounter($text[0]);
         //\Delete
         $uri = self::$container->get('router')->generate('forum_show', ['id' => 2, 'page' => 1]);
 
@@ -122,7 +134,6 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $crawler->filter('span')->eq(0)->text(); // First topic in list on first page
         $action = $crawler->filter('a.topic_delete_button')->eq(0)->attr('data-url'); // First topic...
 
         $form = $crawler->selectButton('topic_delete_delete')->form();
@@ -135,15 +146,8 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $crawler = self::$client->followRedirect();
 
-        $this->assertContains('Пусто', $del = $crawler->filter('li')->text()); // First topic...
+        $this->assertContains('Пусто', $crawler->filter('li')->text()); // First topic...
         ///Delete
-
-        $uri = self::$container->get('router')->generate('index');
-
-        $crawler = self::$client->request('GET', $uri);
-
-        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-
-        $this->assertContains($text[1], $crawler->filter('a > span')->eq(1)->text());
+        $testForumCounter($text[1]);
     }
 }
