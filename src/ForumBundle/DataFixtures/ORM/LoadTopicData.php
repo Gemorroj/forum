@@ -28,7 +28,7 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $forum = $this->getReference('forum');
         $user = $this->getReference('user');
-        $countPosts = 25;
+        $countPosts = 0;
 
 
         $topic1 = new Topic();
