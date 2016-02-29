@@ -24,14 +24,14 @@ class DefaultControllerTest extends ForumWebTestCase
     {
         $text = ['0 / 0', '1 / 2'];
 
-        $testForumCounter = function($text) {
+        $testForumCounter = function ($text) {
             $uri = self::$container->get('router')->generate('index');
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
             $this->assertEquals($text, $crawler->filter('a > span')->eq(1)->text());
         };
 
-        $testTopicCounter = function($text) {
+        $testTopicCounter = function ($text) {
             $uri = self::$container->get('router')->generate('forum_show', ['id' => 2, 'page' => PHP_INT_MAX]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
@@ -40,8 +40,8 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $testForumCounter($text[0]);
         //\Add
-        $title = sprintf('Тест топика #%d', rand());
-        $message = sprintf('Тест сообщения #%d', rand());
+        $title = sprintf('Тест топика #%d', mt_rand());
+        $message = sprintf('Тест сообщения #%d', mt_rand());
 
         $uri = self::$container->get('router')->generate('forum_show', ['id' => 2]);
 
@@ -75,14 +75,14 @@ class DefaultControllerTest extends ForumWebTestCase
     {
         $text = ['1 / 2', '1 / 1'];
 
-        $testForumCounter = function($text) {
+        $testForumCounter = function ($text) {
             $uri = self::$container->get('router')->generate('index');
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
             $this->assertEquals($text, $crawler->filter('a > span')->eq(1)->text());
         };
 
-        $testTopicCounter = function($text) {
+        $testTopicCounter = function ($text) {
             $uri = self::$container->get('router')->generate('forum_show', ['id' => 2, 'page' => PHP_INT_MAX]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
@@ -119,7 +119,7 @@ class DefaultControllerTest extends ForumWebTestCase
     {
         $text = ['1 / 1', '0 / 0'];
 
-        $testForumCounter = function($text) {
+        $testForumCounter = function ($text) {
             $uri = self::$container->get('router')->generate('index');
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());

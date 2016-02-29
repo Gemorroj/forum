@@ -11,4 +11,3 @@ services:
         class: ForumBundle\EventListener\ForumSubscriber
         tags:
             - { name: doctrine.event_subscriber }
-
