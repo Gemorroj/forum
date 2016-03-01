@@ -53,3 +53,9 @@ post_delete:
     methods:  [POST]
     requirements:
         id:   \d+
+
+user_profile:
+    path:     /user{id}
+    defaults: { _controller: ForumBundle:Forum/User:show }
+    requirements:
+        id:   \d+
