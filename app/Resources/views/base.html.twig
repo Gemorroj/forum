@@ -37,6 +37,7 @@
             <div role="main" class="ui-content center-container">
                 {% block logo %}<div class="forum-logo"><a href="{{ path('index') }}"><img src="{{ asset('bundles/forum/images/georg_lent_200.png') }}" alt=""/></a></div>{% endblock %}
                 {% block breadcrumbs %}{% endblock %}
+                {% block messages %}{% endblock %}
                 <fieldset>
                     {% block content %}{% endblock %}
                 </fieldset>
