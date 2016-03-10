@@ -8,6 +8,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -35,6 +38,18 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $manager->persist($user);
 
         $manager->flush();
+
+        // creating the ACL
+        $aclProvider = $this->container->get('security.acl.provider');
+        $userIdentity = ObjectIdentity::fromDomainObject($user);
+        $aclUser = $aclProvider->createAcl($userIdentity);
+
+        // retrieving the security identity of the currently logged-in user
+        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+        // grant owner access
+        $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+        $aclProvider->updateAcl($aclUser);
 
         $this->addReference('user', $user);
     }

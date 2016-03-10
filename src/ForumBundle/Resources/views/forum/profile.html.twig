@@ -6,11 +6,17 @@
 <div class="ui-grid-a ui-corner-all">
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Логин</div></div>
     <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.username }}</div></div>
-    {% if app.user and app.user.id == user.id %}
-        <div class="ui-block-a"><div class="ui-bar ui-bar-a">@Редактируемое поле@</div></div>
-        <div class="ui-block-b"><div class="ui-bar ui-bar-a">@Значение поля@</div></div>
+    {% if app.user and is_granted('EDIT', user) %}
+        {{ form_start(userEditForm) }}
+            {# form_widget(userEditForm) #}
+        {# form_end(userEditForm) #}
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пароль</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ form_row(userEditForm.password) }}</div></div>
     {% endif %}
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Дата регистрации</div></div>
     <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>
+    {% if app.user and is_granted('EDIT', user)  %}
+        {{ form_end(userEditForm) }}
+    {% endif %}
 </div>
 {% endblock %}
