@@ -11,7 +11,7 @@
             {# form_widget(userEditForm) #}
         {# form_end(userEditForm) #}
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пароль</div></div>
-        <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ form_row(userEditForm.password) }}</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ form_row(userEditForm.plainPassword) }}</div></div>
     {% endif %}
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Дата регистрации</div></div>
     <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>

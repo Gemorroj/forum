@@ -17,7 +17,11 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        $userEditForm = $this->createForm(UserEditType::class, $user);
+        $userEditForm = $this->createForm(UserEditType::class, $user, [
+            'action' => $this->generateUrl('user_edit', [
+                'id' => $user->getId(),
+            ]),
+        ]);
 
         return $this->render('@Forum/forum/profile.html.twig', [
             'user' => $user,
@@ -35,6 +39,14 @@ class UserController extends Controller
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                // \ Encode the password (you could also do this via Doctrine listener)
+                $password = $this->get('security.password_encoder')
+                    ->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+                // /
+
+                $user->eraseCredentials();
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
@@ -45,6 +57,6 @@ class UserController extends Controller
             }
         }
 
-        return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
+        return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
     }
 }

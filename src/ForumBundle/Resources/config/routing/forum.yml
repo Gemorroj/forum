@@ -54,8 +54,20 @@ post_delete:
     requirements:
         id:   \d+
 
-user_profile:
+user_show:
     path:     /user{id}
     defaults: { _controller: ForumBundle:Forum/User:show }
+    requirements:
+        id:   \d+
+
+user_edit:
+    path:     /user{id}/edit
+    defaults: { _controller: ForumBundle:Forum/User:edit }
+    requirements:
+        id:   \d+
+
+user_delete:
+    path:     /user{id}/delete
+    defaults: { _controller: ForumBundle:Forum/User:delete }
     requirements:
         id:   \d+

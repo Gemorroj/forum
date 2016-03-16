@@ -27,6 +27,11 @@ class User implements UserInterface
     /**
      * @var string
      */
+    private $plainPassword;
+
+    /**
+     * @var string
+     */
     private $salt;
 
     /**
@@ -75,7 +80,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set password
+     * Set encoded password
      *
      * @param string $password
      *
@@ -89,13 +94,37 @@ class User implements UserInterface
     }
 
     /**
-     * Get password
+     * Get encoded password
      *
      * @return string
      */
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Set plain password
+     *
+     * @param string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get plain password
+     *
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
 
     /**
@@ -164,8 +193,8 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+        $this->plainPassword = null;
     }
-
 
     public function __toString()
     {
