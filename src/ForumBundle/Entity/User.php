@@ -114,6 +114,9 @@ class User implements UserInterface
     {
         $this->plainPassword = $plainPassword;
 
+        // Change some mapped values so preUpdate will get called.
+        $this->setPassword(null); // Just blank it out
+
         return $this;
     }
 

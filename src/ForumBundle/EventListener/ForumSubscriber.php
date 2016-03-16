@@ -4,21 +4,48 @@ namespace ForumBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Entity\Forum;
+use ForumBundle\Entity\User;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 
 class ForumSubscriber implements EventSubscriber
 {
+    protected $passwordEncoder;
+
+    public function __construct(UserPasswordEncoder $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {
         return array(
+            'preUpdate',
             'postPersist',
             'postRemove',
         );
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param PreUpdateEventArgs $args
+     */
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        switch (true) {
+            case $entity instanceof User:
+                $this->encodePlainPassword($args);
+                break;
+        }
     }
 
     /**
@@ -56,6 +83,20 @@ class ForumSubscriber implements EventSubscriber
                 $this->updateNumberOfTopicsOnForum($args, -1);
                 break;
         }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param PreUpdateEventArgs $args
+     */
+    private function encodePlainPassword(PreUpdateEventArgs $args)
+    {
+        /** @var User $user */
+        $user = $args->getEntity();
+        $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+        $user->eraseCredentials();
+        $args->setNewValue('password', $password);
     }
 
     /**

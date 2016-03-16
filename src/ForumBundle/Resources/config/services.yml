@@ -9,5 +9,7 @@ services:
 
     forumlistener:
         class: ForumBundle\EventListener\ForumSubscriber
+        arguments:
+                    ["@security.password_encoder"]
         tags:
             - { name: doctrine.event_subscriber }
