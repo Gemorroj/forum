@@ -9,16 +9,21 @@ use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Entity\Forum;
 use ForumBundle\Entity\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ForumSubscriber implements EventSubscriber
 {
-    protected $passwordEncoder;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
-    public function __construct(UserPasswordEncoder $passwordEncoder)
+    public function __construct(ContainerInterface $container)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->container = $container;
     }
+
+////////////////////////////////////////////////////////////////////////////////
 
     /**
      * {@inheritdoc}
@@ -26,9 +31,24 @@ class ForumSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
-            'preUpdate',
-            'postPersist',
+            //'preRemove',
             'postRemove',
+
+            //'prePersist',
+            'postPersist',
+
+            'preUpdate',
+            //'postUpdate',
+
+            //'postLoad',
+            //'loadClassMetadata',
+            //'onClassMetadataNotFound',
+
+            //'preFlush',
+            //'onFlush',
+            //'postFlush',
+
+            //'onClear',
         );
     }
 
@@ -43,7 +63,10 @@ class ForumSubscriber implements EventSubscriber
 
         switch (true) {
             case $entity instanceof User:
-                $this->encodePlainPassword($args);
+                if ($entity->getPlainPassword()) {
+                    $this->encodePlainPassword($args);
+                    //$entity->setPlainPassword(null);
+                }
                 break;
         }
     }
@@ -94,8 +117,8 @@ class ForumSubscriber implements EventSubscriber
     {
         /** @var User $user */
         $user = $args->getEntity();
-        $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
-        $user->eraseCredentials();
+        $password = $this->container->get('security.password_encoder')
+            ->encodePassword($user, $user->getPlainPassword());
         $args->setNewValue('password', $password);
     }
 

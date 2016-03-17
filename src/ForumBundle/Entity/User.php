@@ -195,9 +195,7 @@ class User implements UserInterface
      * {@inheritdoc}
      */
     public function eraseCredentials()
-    {
-        $this->plainPassword = null;
-    }
+    {}
 
     public function __toString()
     {
