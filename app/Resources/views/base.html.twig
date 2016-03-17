@@ -32,6 +32,11 @@
                 {% block header %}
                     <h1>{{ title }}</h1>
                 {% endblock %}
+                {% if app.user %}
+                    <a href="{{ path('user_show', {'id': app.user.id}) }}" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-user ui-btn-icon-left ui-btn-a">{{ app.user.username }}</a>
+                {% else %}
+                    <a href="#popupAuthorization" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Авторизация</a>
+                {% endif %}
             </div><!-- /header -->
 
             <div role="main" class="ui-content center-container">
@@ -49,6 +54,16 @@
                 {% endblock %}
             </div><!-- /footer -->
 
+            <div data-role="popup" id="popupAuthorization" data-theme="a" class="ui-corner-all">
+                <form action="{{ path('login_check') }}" method="post">
+                    <div style="text-align: center; padding:10px 20px;">
+                        <h3>Авторизация</h3>
+                        <input type="text" id="username" name="_username" placeholder="Пользователь" data-theme="a">
+                        <input type="password" id="password" name="_password" placeholder="Пароль" data-theme="a">
+                        <button id="login_btn" type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Готово</button>
+                    </div>
+                </form>
+            </div><!-- /popupAuthorization -->
         {% endblock %}
     </div><!-- /page -->
 
