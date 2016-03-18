@@ -23,8 +23,17 @@ class UserController extends Controller
             ]),
         ]);
 
+        $countUserTopics = $this->getDoctrine()
+            ->getRepository('ForumBundle:Topic')
+            ->getCountUserTopics($user);
+        $countUserPosts = $this->getDoctrine()
+            ->getRepository('ForumBundle:Post')
+            ->getCountUserPosts($user);
+
         return $this->render('@Forum/forum/profile.html.twig', [
             'user' => $user,
+            'countUserTopics' => $countUserTopics,
+            'countUserPosts' => $countUserPosts,
             'userEditForm' => $userEditForm->createView(),
         ]);
     }
