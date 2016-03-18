@@ -6,7 +6,7 @@
 <div class="ui-grid-a ui-corner-all">
 
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Логин</div></div>
-    <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.username }}</div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="profile_owner">{{ user.username }}</div></div>
 
     {% if app.user and is_granted('EDIT', user) %}
         {{ form_start(userEditForm) }}
@@ -20,10 +20,10 @@
     <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>
 
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Открыто тем</div></div>
-    <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ countUserTopics }}</div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="count_user_topics">{{ countUserTopics }}</div></div>
 
     <div class="ui-block-a"><div class="ui-bar ui-bar-a">Написано сообщений</div></div>
-    <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ countUserPosts }}</div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="count_user_posts">{{ countUserPosts }}</div></div>
 
     {% if app.user and is_granted('EDIT', user)  %}
         {{ form_end(userEditForm) }}
