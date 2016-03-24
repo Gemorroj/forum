@@ -26,32 +26,54 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function load(ObjectManager $manager)
     {
-        $user = new User();
-        $user->setUsername('test');
-
-        $plainPassword = '1234';
-        $encoder = $this->container->get('security.password_encoder');
-        $encodedPassword = $encoder->encodePassword($user, $plainPassword);
-
-        $user->setPassword($encodedPassword);
-
-        $manager->persist($user);
-
-        $manager->flush();
-
-        // creating the ACL
         $aclProvider = $this->container->get('security.acl.provider');
-        $userIdentity = ObjectIdentity::fromDomainObject($user);
-        $aclUser = $aclProvider->createAcl($userIdentity);
+        $encoder = $this->container->get('security.password_encoder');
 
-        // retrieving the security identity of the currently logged-in user
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+        $users = [
+            'test' => [
+                'plainPassword' => '1234',
+                'sex' => null,
+            ],
+            'aaaa' => [
+                'plainPassword' => '1111',
+                'sex' => 'm',
+            ],
+            'bbbb' => [
+                'plainPassword' => '2222',
+                'sex' => 'm',
+            ],
+            'cccc' => [
+                'plainPassword' => '3333',
+                'sex' => 'f',
+            ],
+            'dddd' => [
+                'plainPassword' => '4444',
+                'sex' => 'f',
+            ],
+        ];
 
-        // grant owner access
-        $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($aclUser);
+        foreach($users as $username => $data) {
+            $user = new User();
+            $user->setUsername($username);
+            $user->setPassword($encoder->encodePassword($user, $data['plainPassword']));
+            $user->setSex($data['sex']);
 
-        $this->addReference('user', $user);
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->setReference('user', $user);
+
+            // creating the ACL
+            $userIdentity = ObjectIdentity::fromDomainObject($user);
+            $aclUser = $aclProvider->createAcl($userIdentity);
+
+            // retrieving the security identity of the currently logged-in user
+            $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+            // grant owner access
+            $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+            $aclProvider->updateAcl($aclUser);
+        }
     }
 
     public function getOrder()

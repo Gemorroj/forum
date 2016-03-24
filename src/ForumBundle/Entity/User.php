@@ -39,6 +39,12 @@ class User implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @var string
+     */
+    private $sex;
+    const SEX_MALE   = 'm';
+    const SEX_FEMALE = 'f';
 
     public function __construct()
     {
@@ -189,6 +195,30 @@ class User implements UserInterface
         $this->createdAt = new \DateTime();
 
         return $this;
+    }
+
+    /**
+     * Set sex
+     *
+     * @param string $sex
+     *
+     * @return User
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * Get sex
+     *
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
     }
 
     /**

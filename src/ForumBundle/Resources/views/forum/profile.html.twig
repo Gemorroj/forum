@@ -24,6 +24,18 @@
 
         {% endif %}
 
+        {# TODO: мб сделать "user.sex|фильтр" #}
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пол</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a">
+            {% if 'm' == user.sex %}
+                <span id="sex">Мужской</span>
+            {% elseif 'f' == user.sex %}
+                <span id="sex">Женский</span>
+            {% else %}
+                <span id="sex">Не указан</span>
+            {% endif %}
+        </div></div>
+
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Дата регистрации</div></div>
         <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>
 
