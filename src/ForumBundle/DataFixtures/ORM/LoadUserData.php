@@ -61,7 +61,9 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             $manager->persist($user);
             $manager->flush();
 
-            $this->setReference('user', $user);
+            if ('test' == $username) {
+                $this->setReference('user', $user);
+            }
 
             // creating the ACL
             $userIdentity = ObjectIdentity::fromDomainObject($user);
