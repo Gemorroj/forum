@@ -19,7 +19,7 @@
                 <div class="ui-bar ui-bar-a height">Пароль</div>
             </div>
             <div class="ui-block-b">
-                <div class="ui-bar ui-bar-a height">{{ form_row(userEditForm.plainPassword) }}</div>
+                <div class="ui-bar ui-bar-a height">{{ form_row(userEditForm.plainPassword, {'attr': {'data-mini': 'true'}}) }}</div>
             </div>
 
         {% endif %}
@@ -27,12 +27,16 @@
         {# TODO: мб сделать "user.sex|фильтр" #}
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пол</div></div>
         <div class="ui-block-b"><div class="ui-bar ui-bar-a">
-            {% if 'm' == user.sex %}
-                <span id="sex">Мужской</span>
-            {% elseif 'f' == user.sex %}
-                <span id="sex">Женский</span>
+            {% if app.user and is_granted('EDIT', user) %}
+                {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
             {% else %}
-                <span id="sex">Не указан</span>
+                {% if 'm' == user.sex %}
+                    <span id="sex">Мужской</span>
+                {% elseif 'f' == user.sex %}
+                    <span id="sex">Женский</span>
+                {% else %}
+                    <span id="sex">Не указан</span>
+                {% endif %}
             {% endif %}
         </div></div>
 
