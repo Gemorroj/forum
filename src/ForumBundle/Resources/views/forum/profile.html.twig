@@ -27,18 +27,18 @@
         {# TODO: мб сделать "user.sex|фильтр" #}
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пол</div></div>
         <div class="ui-block-b"><div class="ui-bar ui-bar-a">
-            {% if app.user and is_granted('EDIT', user) %}
-                {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
-            {% else %}
-                {% if 'm' == user.sex %}
-                    <span id="sex">Мужской</span>
-                {% elseif 'f' == user.sex %}
-                    <span id="sex">Женский</span>
+                {% if app.user and is_granted('EDIT', user) %}
+                    {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
                 {% else %}
-                    <span id="sex">Не указан</span>
+                    {% if constant('SEX_MALE', user) == user.sex %}
+                        <span id="sex">Мужской</span>
+                    {% elseif constant('SEX_FEMALE', user) == user.sex %}
+                        <span id="sex">Женский</span>
+                    {% else %}
+                        <span id="sex">Не указан</span>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div></div>
+            </div></div>
 
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Дата регистрации</div></div>
         <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>

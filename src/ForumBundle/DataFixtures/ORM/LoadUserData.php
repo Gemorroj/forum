@@ -36,19 +36,19 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             ],
             'aaaa' => [
                 'plainPassword' => '1111',
-                'sex' => 'm',
+                'sex' => User::SEX_MALE,
             ],
             'bbbb' => [
                 'plainPassword' => '2222',
-                'sex' => 'm',
+                'sex' => User::SEX_MALE,
             ],
             'cccc' => [
                 'plainPassword' => '3333',
-                'sex' => 'f',
+                'sex' => User::SEX_FEMALE,
             ],
             'dddd' => [
                 'plainPassword' => '4444',
-                'sex' => 'f',
+                'sex' => User::SEX_FEMALE,
             ],
         ];
 
