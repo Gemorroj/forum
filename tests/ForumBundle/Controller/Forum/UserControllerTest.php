@@ -57,4 +57,50 @@ class UserControllerTest extends ForumWebTestCase
 
         $testCountingUserTopicAndPosts($topics[1], $posts[1]);
     }
+
+    public function testEditProfileAsOwnerAndSexChoice()
+    {
+        // self::$client = User-Owner = test
+        $userAsOwner = 'test';
+        $sex = [
+            'before' => [
+                'choice' => 0,
+                'label' => 'Не указывать',
+            ],
+            'after' => [
+                'choice' => 1,
+                'label' => 'Мужской',
+            ],
+        ];
+
+        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $this->assertEquals($userAsOwner, $crawler->filter('div#profile_owner')->text());
+
+        $this->assertEquals($sex['before']['label'], $crawler->filter('option[selected]')->text());
+
+        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => $sex['after']['choice']]);
+
+        self::$client->submit($form);
+
+        $this->assertTrue(self::$client->getResponse()->isRedirection());
+
+        $crawler = self::$client->followRedirect();
+
+        $this->assertEquals($sex['after']['label'], $crawler->filter('option[selected]')->text());
+    }
+
+    public function testEditProfileAsUser()
+    {
+        //
+    }
+
+    public function testEditProfileAsGuest()
+    {
+        //
+    }
 }
