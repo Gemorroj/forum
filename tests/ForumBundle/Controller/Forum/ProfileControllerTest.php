@@ -5,7 +5,7 @@ namespace Tests\ForumBundle\Controller;
 use Tests\ForumBundle\ForumWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserControllerTest extends ForumWebTestCase
+class ProfileControllerTest extends ForumWebTestCase
 {
     public function testShow()
     {
@@ -96,7 +96,47 @@ class UserControllerTest extends ForumWebTestCase
 
     public function testEditProfileAsUser()
     {
-        //
+        // self::$client = User-Owner = test
+        $profileOwner = [
+            'id' => 2,
+            'username' => 'aaaa',
+        ];
+        $sex = [
+            'before' => [
+                'label' => 'Мужской',
+            ],
+            'after' => [
+                'label' => 'Мужской',
+            ],
+        ];
+
+        $checkProfileOwner = function ($period) use ($profileOwner, $sex) {
+            $uri = self::$container->get('router')->generate('user_show', ['id' => $profileOwner['id']]);
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
+            $this->assertEquals($sex[$period]['label'], $crawler->filter('span#sex')->text());
+        };
+
+        $checkProfileOwner('before');
+        // \Try change aaaa-profile by user-test
+        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => '2']); // Женский=2-inChoiceList
+        $action = self::$container->get('router')->generate('user_edit', ['id' => 2]);
+        $form->getNode()->setAttribute('action', $action);
+
+        self::$client->submit($form);
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, self::$client->getResponse()->getStatusCode());
+//        $this->assertTrue(self::$client->getResponse()->isRedirection());
+//        $crawler = self::$client->followRedirect();
+        $checkProfileOwner('after');
+        // \Try change aaaa-profile by user-test
     }
 
     public function testEditProfileAsGuest()
