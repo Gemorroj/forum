@@ -20,4 +20,20 @@ class PostRepository extends EntityRepository
             ->orderBy('p.id', 'DESC')
             ->getQuery();
     }
+
+    /**
+     * @param User $user
+     * @return integer
+     */
+    public function getCountUserPosts(User $user)
+    {
+        return $this->getEntityManager()
+        ->getRepository('ForumBundle:Post')
+        ->createQueryBuilder('p')
+        ->select('COUNT(p)')
+        ->where('p.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
 }

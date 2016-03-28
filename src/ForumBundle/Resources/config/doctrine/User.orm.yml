@@ -37,4 +37,10 @@ ForumBundle\Entity\User:
             type: datetime
             nullable: false
             column: created_at
+        sex:
+            type: string
+            nullable: true
+            columnDefinition: ENUM('m', 'f')
+            options:
+                default: null
     lifecycleCallbacks: { prePersist: [ setCreatedAtValue ] }

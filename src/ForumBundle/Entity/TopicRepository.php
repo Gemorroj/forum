@@ -20,4 +20,20 @@ class TopicRepository extends EntityRepository
             ->orderBy('t.id', 'DESC')
             ->getQuery();
     }
+
+    /**
+     * @param User $user
+     * @return integer
+     */
+    public function getCountUserTopics(User $user)
+    {
+        return $this->getEntityManager()
+            ->getRepository('ForumBundle:Topic')
+            ->createQueryBuilder('t')
+            ->select('COUNT(t)')
+            ->where('t.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

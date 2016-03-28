@@ -4,21 +4,71 @@ namespace ForumBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Entity\Forum;
+use ForumBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ForumSubscriber implements EventSubscriber
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
     /**
      * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {
         return array(
-            'postPersist',
+            //'preRemove',
             'postRemove',
+
+            //'prePersist',
+            'postPersist',
+
+            'preUpdate',
+            //'postUpdate',
+
+            //'postLoad',
+            //'loadClassMetadata',
+            //'onClassMetadataNotFound',
+
+            //'preFlush',
+            //'onFlush',
+            //'postFlush',
+
+            //'onClear',
         );
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param PreUpdateEventArgs $args
+     */
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        switch (true) {
+            case $entity instanceof User:
+                if ($entity->getPlainPassword()) {
+                    $this->encodePlainPassword($args);
+                    //$entity->setPlainPassword(null);
+                }
+                break;
+        }
     }
 
     /**
@@ -56,6 +106,20 @@ class ForumSubscriber implements EventSubscriber
                 $this->updateNumberOfTopicsOnForum($args, -1);
                 break;
         }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param PreUpdateEventArgs $args
+     */
+    private function encodePlainPassword(PreUpdateEventArgs $args)
+    {
+        /** @var User $user */
+        $user = $args->getEntity();
+        $password = $this->container->get('security.password_encoder')
+            ->encodePassword($user, $user->getPlainPassword());
+        $args->setNewValue('password', $password);
     }
 
     /**

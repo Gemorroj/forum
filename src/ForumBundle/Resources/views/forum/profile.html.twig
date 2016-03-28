@@ -1,0 +1,57 @@
+{% extends '@Forum/layout/layout.html.twig' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+
+    {% if app.user and is_granted('EDIT', user) %}
+        {{ form_start(userEditForm) }}
+    {% endif %}
+    <div class="ui-grid-a ui-corner-all">
+
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Логин</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="profile_owner">{{ user.username }}</div></div>
+
+        {% if app.user and is_granted('EDIT', user) %}
+
+            {# TODO: Выровнять блоки по высоте так, чтобы по вертикали текст был в центре. #}
+            <div class="ui-block-a">
+                <div class="ui-bar ui-bar-a height">Пароль</div>
+            </div>
+            <div class="ui-block-b">
+                <div class="ui-bar ui-bar-a height">{{ form_row(userEditForm.plainPassword, {'attr': {'data-mini': 'true'}}) }}</div>
+            </div>
+
+        {% endif %}
+
+        {# TODO: мб сделать "user.sex|фильтр" #}
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пол</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a">
+                {% if app.user and is_granted('EDIT', user) %}
+                    {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
+                {% else %}
+                    {% if constant('SEX_MALE', user) == user.sex %}
+                        <span id="sex">Мужской</span>
+                    {% elseif constant('SEX_FEMALE', user) == user.sex %}
+                        <span id="sex">Женский</span>
+                    {% else %}
+                        <span id="sex">Не указан</span>
+                    {% endif %}
+                {% endif %}
+            </div></div>
+
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Дата регистрации</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a">{{ user.createdAt|date }}</div></div>
+
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Открыто тем</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="count_user_topics">{{ countUserTopics }}</div></div>
+
+        <div class="ui-block-a"><div class="ui-bar ui-bar-a">Написано сообщений</div></div>
+        <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="count_user_posts">{{ countUserPosts }}</div></div>
+
+    </div>
+    {% if app.user and is_granted('EDIT', user)  %}
+        {{ form_end(userEditForm) }}
+    {% endif %}
+
+{% endblock %}

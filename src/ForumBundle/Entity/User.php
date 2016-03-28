@@ -27,6 +27,11 @@ class User implements UserInterface
     /**
      * @var string
      */
+    private $plainPassword;
+
+    /**
+     * @var string
+     */
     private $salt;
 
     /**
@@ -34,6 +39,12 @@ class User implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @var string
+     */
+    private $sex;
+    const SEX_MALE   = 'm';
+    const SEX_FEMALE = 'f';
 
     public function __construct()
     {
@@ -75,7 +86,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set password
+     * Set encoded password
      *
      * @param string $password
      *
@@ -89,13 +100,40 @@ class User implements UserInterface
     }
 
     /**
-     * Get password
+     * Get encoded password
      *
      * @return string
      */
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Set plain password
+     *
+     * @param string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        // Change some mapped values so preUpdate will get called.
+        $this->setPassword(null); // Just blank it out
+
+        return $this;
+    }
+
+    /**
+     * Get plain password
+     *
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
 
     /**
@@ -160,12 +198,34 @@ class User implements UserInterface
     }
 
     /**
+     * Set sex
+     *
+     * @param string $sex
+     *
+     * @return User
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * Get sex
+     *
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function eraseCredentials()
-    {
-    }
-
+    {}
 
     public function __toString()
     {

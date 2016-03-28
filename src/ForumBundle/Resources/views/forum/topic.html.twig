@@ -56,7 +56,7 @@
     <ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="a">
         {% for post in posts %}
             <li data-role="list-divider">
-                <p>{{ post.user.username }}: {{ post.createdAt|date }}</p>
+                <p><a href="{{ path('user_show', {'id': post.user.id }) }}">{{ post.user.username }}</a>: {{ post.createdAt|date }}</p>
                 {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
                     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
                         {% if is_granted('EDIT', post) %}
