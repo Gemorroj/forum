@@ -33,7 +33,7 @@
                     <h1>{{ title }}</h1>
                 {% endblock %}
                 {% if app.user %}
-                    <a href="{{ path('user_show', {'id': app.user.id}) }}" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-user ui-btn-icon-left ui-btn-a">{{ app.user.username }}</a>
+                    <a href="{{ path('profile_show', {'id': app.user.id}) }}" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-user ui-btn-icon-left ui-btn-a">{{ app.user.username }}</a>
                 {% else %}
                     <a href="#popupAuthorization" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Авторизация</a>
                 {% endif %}

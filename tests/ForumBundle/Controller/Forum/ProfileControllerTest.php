@@ -11,7 +11,7 @@ class ProfileControllerTest extends ForumWebTestCase
     {
         $text = 'test';
 
-        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
@@ -26,7 +26,7 @@ class ProfileControllerTest extends ForumWebTestCase
         $posts = ['25', '26'];
 
         $testCountingUserTopicAndPosts = function ($countTopics, $countPosts) {
-            $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+            $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
             $this->assertEquals($countTopics, $crawler->filter('div#count_user_topics')->text());
@@ -73,7 +73,7 @@ class ProfileControllerTest extends ForumWebTestCase
             ],
         ];
 
-        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
@@ -111,7 +111,7 @@ class ProfileControllerTest extends ForumWebTestCase
         ];
 
         $checkProfileOwner = function ($period) use ($profileOwner, $sex) {
-            $uri = self::$container->get('router')->generate('user_show', ['id' => $profileOwner['id']]);
+            $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
             $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
@@ -120,14 +120,14 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $checkProfileOwner('before');
         // \Try change aaaa-profile by user-test
-        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
-        $action = self::$container->get('router')->generate('user_edit', ['id' => 2]);
+        $action = self::$container->get('router')->generate('profile_edit', ['id' => 2]);
         $form->getNode()->setAttribute('action', $action);
 
         self::$client->submit($form);
@@ -159,7 +159,7 @@ class ProfileControllerTest extends ForumWebTestCase
         ];
 
         $checkProfileOwner = function ($period) use ($profileOwner, $sex) {
-            $uri = self::$container->get('router')->generate('user_show', ['id' => $profileOwner['id']]);
+            $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
             $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
@@ -168,7 +168,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $checkProfileOwner('before');
         // \Try change aaaa-profile by guest
-        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 

@@ -18,7 +18,7 @@ class ProfileController extends Controller
     public function showAction(User $user)
     {
         $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
-            'action' => $this->generateUrl('user_edit', [
+            'action' => $this->generateUrl('profile_edit', [
                 'id' => $user->getId(),
             ]),
         ]);
@@ -58,6 +58,6 @@ class ProfileController extends Controller
             }
         }
 
-        return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
     }
 }
