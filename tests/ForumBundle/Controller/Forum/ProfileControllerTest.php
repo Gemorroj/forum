@@ -144,7 +144,6 @@ class ProfileControllerTest extends ForumWebTestCase
         // self::$client = User-Owner = test
         // $client = Guest
         $client = static::createClient();
-        $container = $client->getContainer();
 
         $profileOwner = [
             'id' => 1,
@@ -168,7 +167,7 @@ class ProfileControllerTest extends ForumWebTestCase
         };
 
         $checkProfileOwner('before');
-        // \Try change aaaa-profile by user-test
+        // \Try change aaaa-profile by guest
         $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
@@ -185,6 +184,6 @@ class ProfileControllerTest extends ForumWebTestCase
         $this->assertEquals('Авторизация', $crawler->filter('div > h1')->text());
 
         $checkProfileOwner('after');
-        // \Try change aaaa-profile by user-test
+        // \Try change aaaa-profile by guest
     }
 }
