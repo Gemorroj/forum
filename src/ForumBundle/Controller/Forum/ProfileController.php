@@ -3,9 +3,9 @@
 namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Entity\User;
+use ForumBundle\Form\ProfileEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use ForumBundle\Form\UserEditType;
 
 class ProfileController extends Controller
 {
@@ -17,7 +17,7 @@ class ProfileController extends Controller
      */
     public function showAction(User $user)
     {
-        $userEditForm = $this->createForm(UserEditType::class, $user, [
+        $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
             'action' => $this->generateUrl('user_edit', [
                 'id' => $user->getId(),
             ]),
@@ -34,7 +34,7 @@ class ProfileController extends Controller
             'user' => $user,
             'countUserTopics' => $countUserTopics,
             'countUserPosts' => $countUserPosts,
-            'userEditForm' => $userEditForm->createView(),
+            'profileEditForm' => $profileEditForm->createView(),
         ]);
     }
 
@@ -42,7 +42,7 @@ class ProfileController extends Controller
     {
         $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
 
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(ProfileEditType::class, $user);
 
         $form->handleRequest($request);
 

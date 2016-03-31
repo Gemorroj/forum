@@ -83,7 +83,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals($sex['before']['label'], $crawler->filter('option[selected]')->text());
 
-        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => $sex['after']['choice']]);
+        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => $sex['after']['choice']]);
 
         self::$client->submit($form);
 
@@ -126,7 +126,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => '2']); // Женский=2-inChoiceList
+        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
         $action = self::$container->get('router')->generate('user_edit', ['id' => 2]);
         $form->getNode()->setAttribute('action', $action);
 
@@ -174,7 +174,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => '2']); // Женский=2-inChoiceList
+        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
 
         $client->submit($form);
 
