@@ -23,7 +23,7 @@ class ProfileControllerTest extends ForumWebTestCase
     public function testCountingUserTopicAndPosts()
     {
         $topics = ['2', '3'];
-        $posts = ['26', '27'];
+        $posts = ['25', '26'];
 
         $testCountingUserTopicAndPosts = function ($countTopics, $countPosts) {
             $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
@@ -141,6 +141,50 @@ class ProfileControllerTest extends ForumWebTestCase
 
     public function testEditProfileAsGuest()
     {
-        //
+        // self::$client = User-Owner = test
+        // $client = Guest
+        $client = static::createClient();
+        $container = $client->getContainer();
+
+        $profileOwner = [
+            'id' => 1,
+            'username' => 'test',
+        ];
+        $sex = [
+            'before' => [
+                'label' => 'Мужской',
+            ],
+            'after' => [
+                'label' => 'Мужской',
+            ],
+        ];
+
+        $checkProfileOwner = function ($period) use ($profileOwner, $sex) {
+            $uri = self::$container->get('router')->generate('user_show', ['id' => $profileOwner['id']]);
+            $crawler = self::$client->request('GET', $uri);
+            $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+            $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
+            $this->assertEquals($sex[$period]['label'], $crawler->filter('option[selected]')->text());
+        };
+
+        $checkProfileOwner('before');
+        // \Try change aaaa-profile by user-test
+        $uri = self::$container->get('router')->generate('user_show', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('user_edit_edit')->form(['user_edit[sex]' => '2']); // Женский=2-inChoiceList
+
+        $client->submit($form);
+
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $this->assertTrue($client->getResponse()->isRedirection());
+        $crawler = $client->followRedirect();
+        $this->assertEquals('Авторизация', $crawler->filter('div > h1')->text());
+
+        $checkProfileOwner('after');
+        // \Try change aaaa-profile by user-test
     }
 }

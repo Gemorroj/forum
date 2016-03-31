@@ -30,13 +30,15 @@
                 {% if app.user and is_granted('EDIT', user) %}
                     {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
                 {% else %}
-                    {% if constant('SEX_MALE', user) == user.sex %}
-                        <span id="sex">Мужской</span>
-                    {% elseif constant('SEX_FEMALE', user) == user.sex %}
-                        <span id="sex">Женский</span>
-                    {% else %}
-                        <span id="sex">Не указан</span>
-                    {% endif %}
+                    <span id="sex">
+                        {%- if constant('SEX_MALE', user) == user.sex -%}
+                            Мужской
+                        {%- elseif constant('SEX_FEMALE', user) == user.sex -%}
+                            Женский
+                        {%- else -%}
+                            Не указан
+                        {%- endif -%}
+                    </span>
                 {% endif %}
             </div></div>
 
