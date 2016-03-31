@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\UserEditType;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Профиль пользователя
