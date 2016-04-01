@@ -3,11 +3,11 @@
 namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Entity\User;
+use ForumBundle\Form\ProfileEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use ForumBundle\Form\UserEditType;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Профиль пользователя
@@ -17,8 +17,8 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        $userEditForm = $this->createForm(UserEditType::class, $user, [
-            'action' => $this->generateUrl('user_edit', [
+        $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
+            'action' => $this->generateUrl('profile_edit', [
                 'id' => $user->getId(),
             ]),
         ]);
@@ -34,7 +34,7 @@ class UserController extends Controller
             'user' => $user,
             'countUserTopics' => $countUserTopics,
             'countUserPosts' => $countUserPosts,
-            'userEditForm' => $userEditForm->createView(),
+            'profileEditForm' => $profileEditForm->createView(),
         ]);
     }
 
@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
 
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(ProfileEditType::class, $user);
 
         $form->handleRequest($request);
 
@@ -58,6 +58,6 @@ class UserController extends Controller
             }
         }
 
-        return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
     }
 }

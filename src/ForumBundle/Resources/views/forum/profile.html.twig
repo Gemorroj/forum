@@ -5,7 +5,7 @@
 {% block content %}
 
     {% if app.user and is_granted('EDIT', user) %}
-        {{ form_start(userEditForm) }}
+        {{ form_start(profileEditForm) }}
     {% endif %}
     <div class="ui-grid-a ui-corner-all">
 
@@ -19,7 +19,7 @@
                 <div class="ui-bar ui-bar-a height">Пароль</div>
             </div>
             <div class="ui-block-b">
-                <div class="ui-bar ui-bar-a height">{{ form_row(userEditForm.plainPassword, {'attr': {'data-mini': 'true'}}) }}</div>
+                <div class="ui-bar ui-bar-a height">{{ form_row(profileEditForm.plainPassword, {'attr': {'data-mini': 'true'}}) }}</div>
             </div>
 
         {% endif %}
@@ -28,15 +28,17 @@
         <div class="ui-block-a"><div class="ui-bar ui-bar-a">Пол</div></div>
         <div class="ui-block-b"><div class="ui-bar ui-bar-a">
                 {% if app.user and is_granted('EDIT', user) %}
-                    {{ form_row(userEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
+                    {{ form_row(profileEditForm.sex, {'attr': {'data-mini': 'true'}}) }}
                 {% else %}
-                    {% if constant('SEX_MALE', user) == user.sex %}
-                        <span id="sex">Мужской</span>
-                    {% elseif constant('SEX_FEMALE', user) == user.sex %}
-                        <span id="sex">Женский</span>
-                    {% else %}
-                        <span id="sex">Не указан</span>
-                    {% endif %}
+                    <span id="sex">
+                        {%- if constant('SEX_MALE', user) == user.sex -%}
+                            Мужской
+                        {%- elseif constant('SEX_FEMALE', user) == user.sex -%}
+                            Женский
+                        {%- else -%}
+                            Не указан
+                        {%- endif -%}
+                    </span>
                 {% endif %}
             </div></div>
 
@@ -51,7 +53,7 @@
 
     </div>
     {% if app.user and is_granted('EDIT', user)  %}
-        {{ form_end(userEditForm) }}
+        {{ form_end(profileEditForm) }}
     {% endif %}
 
 {% endblock %}
