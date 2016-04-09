@@ -2,34 +2,10 @@
 
 {% block title %}{{ forum.title }}{% endblock %}
 
-{% block javascripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('a.topic_delete_button').click(function () {
-                var $this = $(this);
-                var $deleteForm = $('#delete_popup').find('form');
-                $deleteForm.attr('action', $this.attr('data-url'));
-            });
-            $('a.topic_edit_button').click(function () {
-                var $this = $(this);
-                var $editForm = $('#edit_popup').find('form');
-                var refId = $this.data('ref');
-                $editForm.find('textarea').val($('#' + refId).text());
-                $editForm.attr('action', $this.attr('data-url'));
-            });
-            $("button[data-id='topic_delete_cancel']").click(function () {
-                $('#delete_popup').popup('close');
-            });
-            $("button[data-id='topic_edit_cancel']").click(function () {
-                $('#edit_popup').popup('close');
-            });
-        });
-    </script>
-{% endblock %}
 
 {% block content %}
     {% block popup %}
-        <div data-role="popup" id="delete_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="delete_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
                 <h1>Удалить тему?</h1>
             </div>
@@ -41,7 +17,7 @@
             </div>
         </div>
 
-        <div data-role="popup" id="edit_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="edit_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
                 <h1>Редактирование темы</h1>
             </div>
@@ -63,10 +39,10 @@
                 {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
                     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
                         {% if is_granted('EDIT', topic) %}
-                            <a data-url="{{ path('topic_edit', {'id': topic.id}) }}" data-ref="topic{{ topic.id }}" href="#edit_popup" data-rel="popup" data-transition="slideup" class="topic_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
+                            <a data-url="{{ path('topic_edit', {'id': topic.id}) }}" data-ref="topic{{ topic.id }}" href="#" class="topic_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
                         {% endif %}
                         {% if is_granted('DELETE', topic) %}
-                            <a data-url="{{ path('topic_delete', {'id': topic.id}) }}" href="#delete_popup" data-rel="popup" data-transition="slideup" class="topic_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
+                            <a data-url="{{ path('topic_delete', {'id': topic.id}) }}" href="#" class="topic_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
                         {% endif %}
                     </div>
                 {% endif %}

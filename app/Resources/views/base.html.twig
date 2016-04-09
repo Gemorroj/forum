@@ -11,31 +11,43 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     {# jquery #}
-    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
     {# jquery mobile #}
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/forum/css/core.css') }}" />
-    <script type="text/javascript" src="{{ asset('bundles/forum/js/core.js') }}"></script>
+    <script src="{{ asset('bundles/forum/js/core.js') }}"></script>
 
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}{% endblock %}
 </head>
 <body>
 {% block body %}
-    <div data-role="page" id="page">
+    <div data-role="page" id="{{ app.request.attributes.get('_route') }}">
         {% block page %}
 
             <div data-theme="b" data-role="header" data-position="fixed">
                 {% block header %}
                     <h1>{{ title }}</h1>
                 {% endblock %}
+
                 {% if app.user %}
                     <a href="{{ path('profile_show', {'id': app.user.id}) }}" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-btn-inline ui-icon-user ui-btn-icon-left ui-btn-a">{{ app.user.username }}</a>
                 {% else %}
-                    <a href="#popupAuthorization" data-rel="popup" data-position-to="window" class="ui-btn-right ui-btn ui-icon-lock ui-btn-icon-notext ui-shadow ui-corner-all" data-transition="pop">Авторизация</a>
+                    <a href="#" id="btn-authorization" class="ui-btn-right ui-btn ui-icon-lock ui-btn-icon-notext ui-shadow ui-corner-all">Авторизация</a>
+
+                    <div data-role="popup" id="popup-authorization" data-theme="a" class="ui-corner-all">
+                        <form action="{{ path('login_check') }}" method="post" data-ajax="false">
+                            <div style="text-align: center; padding:10px 20px;">
+                                <h3>Авторизация</h3>
+                                <input type="text" id="username" name="_username" placeholder="Пользователь" data-theme="a" />
+                                <input type="password" id="password" name="_password" placeholder="Пароль" data-theme="a" />
+                                <button id="login_btn" type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Готово</button>
+                            </div>
+                        </form>
+                    </div>
                 {% endif %}
             </div><!-- /header -->
 
@@ -53,17 +65,6 @@
                     <h4>Page Footer</h4>
                 {% endblock %}
             </div><!-- /footer -->
-
-            <div data-role="popup" id="popupAuthorization" data-theme="a" class="ui-corner-all">
-                <form action="{{ path('login_check') }}" method="post">
-                    <div style="text-align: center; padding:10px 20px;">
-                        <h3>Авторизация</h3>
-                        <input type="text" id="username" name="_username" placeholder="Пользователь" data-theme="a">
-                        <input type="password" id="password" name="_password" placeholder="Пароль" data-theme="a">
-                        <button id="login_btn" type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Готово</button>
-                    </div>
-                </form>
-            </div><!-- /popupAuthorization -->
         {% endblock %}
     </div><!-- /page -->
 
