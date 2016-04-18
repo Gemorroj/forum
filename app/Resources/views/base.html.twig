@@ -32,11 +32,9 @@
                 {% block header %}
                     <h1>{{ title }}</h1>
                 {% endblock %}
-                {% if app.user %}
-                    <a href="{{ path('logout') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-power ui-btn-icon-notext">{{ app.user.username }}</a>
-                {% else %}
-                    <a href="#popupAuthorization" data-rel="popup" data-position-to="window" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-lock ui-btn-icon-notext" data-transition="pop">Авторизация</a>
-                {% endif %}
+
+                <a href="{{ path('index') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-left ui-icon-home ui-btn-icon-notext">Главная страница</a>
+                <a href="#panel" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-user ui-btn-icon-notext">Панель</a>
             </div><!-- /header -->
 
             <div role="main" class="ui-content center-container">
@@ -54,16 +52,21 @@
                 {% endblock %}
             </div><!-- /footer -->
 
-            <div data-role="popup" id="popupAuthorization" data-theme="a" class="ui-corner-all">
-                <form action="{{ path('login_check') }}" method="post">
-                    <div style="text-align: center; padding:10px 20px;">
-                        <h3>Авторизация</h3>
-                        <input type="text" id="username" name="_username" placeholder="Пользователь" data-theme="a">
-                        <input type="password" id="password" name="_password" placeholder="Пароль" data-theme="a">
-                        <button id="login_btn" type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Готово</button>
-                    </div>
-                </form>
-            </div><!-- /popupAuthorization -->
+            <div id="panel" data-role="panel" data-display="overlay" data-position="right">
+                <div class="ui-panel-inner">
+                    <ul class="ui-listview ui-listview-inset ui-corner-all ui-shadow" data-role="listview" data-inset="true" data-divider-theme="b">
+                        <li  data-role="list-divider" class="ui-li-divider ui-bar-b ui-first-child">Панель</li>
+                        {% if app.user %}
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-gear" href="{{ path('profile_show', {'id': app.user.id}) }}">Профиль</a></li>
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-power" href="{{ path('logout') }}">Выйти</a></li>
+                        {% else %}
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-lock" href="{{ path('login_route') }}">Авторизация</a></li>
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-plus" href="#registration">Регистрация</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div><!-- /panel -->
+
         {% endblock %}
     </div><!-- /page -->
 
