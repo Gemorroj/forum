@@ -11,21 +11,21 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     {# jquery #}
-    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
     {# jquery mobile #}
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/forum/css/core.css') }}" />
-    <script type="text/javascript" src="{{ asset('bundles/forum/js/core.js') }}"></script>
+    <script src="{{ asset('bundles/forum/js/core.js') }}"></script>
 
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}{% endblock %}
 </head>
 <body>
 {% block body %}
-    <div data-role="page" id="page">
+    <div data-role="page" id="{{ app.request.attributes.get('_route') }}">
         {% block page %}
 
             <div data-theme="b" data-role="header" data-position="fixed">
