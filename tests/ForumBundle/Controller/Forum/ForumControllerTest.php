@@ -17,6 +17,6 @@ class ForumControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains($text, $crawler->filter('li')->last()->text());
+        $this->assertContains($text, $crawler->filter('li.topics')->last()->text());
     }
 }
