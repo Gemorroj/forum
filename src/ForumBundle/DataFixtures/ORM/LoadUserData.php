@@ -27,7 +27,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
     public function load(ObjectManager $manager)
     {
         $aclProvider = $this->container->get('security.acl.provider');
-        $encoder = $this->container->get('security.password_encoder');
 
         $users = [
             'test' => [
@@ -55,7 +54,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         foreach($users as $username => $data) {
             $user = new User();
             $user->setUsername($username);
-            $user->setPassword($encoder->encodePassword($user, $data['plainPassword']));
             $user->setSex($data['sex']);
 
             $manager->persist($user);

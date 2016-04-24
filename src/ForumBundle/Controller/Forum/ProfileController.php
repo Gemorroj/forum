@@ -55,8 +55,6 @@ class ProfileController extends Controller
 
                 /** @var User $user */
                 $user = $form->getData();
-                $encoder = $this->get('security.password_encoder');
-                $user->setPassword($encoder->encodePassword($user, $user->getPlainPassword()));
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
