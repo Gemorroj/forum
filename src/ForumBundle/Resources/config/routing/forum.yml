@@ -60,6 +60,12 @@ profile_show:
     requirements:
         id:   \d+
 
+# \Registration
+profile_new:
+    path: /registration
+    defaults: { _controller: ForumBundle:Forum/Profile:new }
+# /Registration
+
 profile_edit:
     path:     /profile{id}/edit
     defaults: { _controller: ForumBundle:Forum/Profile:edit }

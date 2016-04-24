@@ -24,3 +24,18 @@ ForumBundle\Entity\Post:
             - Length:
                 min: 2
                 minMessage: 'Сообщение должно содержать не менее {{ limit }} символа(ов)'
+
+ForumBundle\Entity\User:
+    properties:
+        username:
+            - NotBlank:
+                message: 'Логин не должен быть пустым'
+            - Length:
+                min: 3
+                minMessage: 'Логин должен содержать не менее {{ limit }} символа(ов)'
+        plainPassword:
+            - NotBlank:
+                message: 'Пароль не должен быть пустым'
+            - Length:
+                min: 8
+                minMessage: 'Пароль должен содержать не менее {{ limit }} символа(ов)'
