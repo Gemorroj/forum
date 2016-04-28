@@ -49,8 +49,8 @@ class ProfileNewType extends AbstractType
                 'label' => 'Пол',
                 'choices' => [
                     'Не указывать' => null,
-                    'Мужской' => 'm',
-                    'Женский' => 'f',
+                    'Мужской' => User::SEX_MALE,
+                    'Женский' => User::SEX_FEMALE,
                 ],
             ])
             ->add('new', SubmitType::class, [
@@ -66,6 +66,7 @@ class ProfileNewType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'validation_groups' => ['registration'],
         ]);
     }
 }

@@ -66,7 +66,9 @@ class ForumSubscriber implements EventSubscriber
 
         switch (true) {
             case $entity instanceof User:
-                $entity->setPassword($this->encodePlainPassword($entity));
+                if ($entity->getPlainPassword()) {
+                    $entity->setPassword($this->encodePlainPassword($entity));
+                }
                 break;
         }
     }
@@ -80,9 +82,9 @@ class ForumSubscriber implements EventSubscriber
 
         switch (true) {
             case $entity instanceof User:
-                // if ($args->hasChangedField('plainPassword')) {
+                if ($entity->getPlainPassword()) {
                     $args->setNewValue('password', $this->encodePlainPassword($entity));
-                // }
+                }
                 break;
         }
     }

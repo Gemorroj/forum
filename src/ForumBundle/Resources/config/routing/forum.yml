@@ -69,11 +69,13 @@ profile_new:
 profile_edit:
     path:     /profile{id}/edit
     defaults: { _controller: ForumBundle:Forum/Profile:edit }
+    methods:  [POST]
     requirements:
         id:   \d+
 
 profile_delete:
     path:     /profile{id}/delete
     defaults: { _controller: ForumBundle:Forum/Profile:delete }
+    methods:  [POST]
     requirements:
         id:   \d+

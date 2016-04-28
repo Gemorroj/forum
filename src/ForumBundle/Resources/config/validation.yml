@@ -30,12 +30,16 @@ ForumBundle\Entity\User:
         username:
             - NotBlank:
                 message: 'Логин не должен быть пустым'
+                groups: [registration]
             - Length:
                 min: 3
                 minMessage: 'Логин должен содержать не менее {{ limit }} символа(ов)'
+                groups: [registration]
         plainPassword:
             - NotBlank:
                 message: 'Пароль не должен быть пустым'
+                groups: [registration]
             - Length:
                 min: 8
                 minMessage: 'Пароль должен содержать не менее {{ limit }} символа(ов)'
+                groups: [profile_edit, registration]

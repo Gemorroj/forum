@@ -61,7 +61,10 @@ class ProfileControllerTest extends ForumWebTestCase
     public function testEditProfileAsOwnerAndSexChoice()
     {
         // self::$client = User-Owner = test
-        $userAsOwner = 'test';
+        $userAsOwner = [
+            'id' => 1,
+            'username' => 'test',
+        ];
         $sex = [
             'before' => [
                 'choice' => 0,
@@ -73,17 +76,20 @@ class ProfileControllerTest extends ForumWebTestCase
             ],
         ];
 
-        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => $userAsOwner['id']]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertEquals($userAsOwner, $crawler->filter('div#profile_owner')->text());
+        $this->assertEquals($userAsOwner['username'], $crawler->filter('div#profile_owner')->text());
 
         $this->assertEquals($sex['before']['label'], $crawler->filter('option[selected]')->text());
 
-        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => $sex['after']['choice']]);
+        $form = $crawler->selectButton('profile_edit_edit')->form([
+            'profile_edit[sex]' => 1,
+//            'profile_edit[plainPassword]' => 12345678,
+        ]);
 
         self::$client->submit($form);
 
@@ -126,8 +132,8 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
-        $action = self::$container->get('router')->generate('profile_edit', ['id' => 2]);
+        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => 2]); // Женский=2-inChoiceList
+        $action = self::$container->get('router')->generate('profile_edit', ['id' => $profileOwner['id']]);
         $form->getNode()->setAttribute('action', $action);
 
         self::$client->submit($form);
@@ -168,7 +174,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $checkProfileOwner('before');
         // \Try change aaaa-profile by guest
-        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
 
         $crawler = self::$client->request('GET', $uri);
 
@@ -185,5 +191,35 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $checkProfileOwner('after');
         // \Try change aaaa-profile by guest
+    }
+
+    public function testNew()
+    {
+        // \Guest registration
+        $client = static::createClient();
+        $container = self::$client->getContainer();
+        // /Guest
+
+        $user = [
+            'profile_new[username]' => 'php_unit',
+            'profile_new[plainPassword]' => 12345678,
+            'profile_new[sex]' => 1,
+        ];
+
+        $uri = $container->get('router')->generate('profile_new');
+
+        $crawler = $client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('profile_new_new')->form($user);
+
+        $client->submit($form);
+
+        $this->assertTrue($client->getResponse()->isRedirection());
+
+        $crawler = $client->followRedirect();
+
+        $this->assertContains($user['profile_new[username]'], $crawler->filter('div#profile_owner')->text());
     }
 }

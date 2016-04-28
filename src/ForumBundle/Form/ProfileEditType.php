@@ -20,17 +20,19 @@ class ProfileEditType extends AbstractType
     {
         $builder
             ->add('plainPassword', PasswordType::class, [
+                'required' => false,
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Пароль',
                 ]
             ])
             ->add('sex', ChoiceType::class, [
+                'required' => false,
                 'label' => false,
                 'choices' => [
                     'Не указывать' => null,
-                    'Мужской' => 'm',
-                    'Женский' => 'f',
+                    'Мужской' => User::SEX_MALE,
+                    'Женский' => User::SEX_FEMALE,
                 ],
             ])
             ->add('edit', SubmitType::class, [
@@ -46,6 +48,7 @@ class ProfileEditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'validation_groups' => ['profile_edit'],
         ]);
     }
 }

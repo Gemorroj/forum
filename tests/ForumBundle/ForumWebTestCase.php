@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DomCrawler\Crawler;
-use Tests\ForumBundle\Controller\SecurityControllerTest;
 
 abstract class ForumWebTestCase extends WebTestCase
 {
@@ -38,7 +37,7 @@ abstract class ForumWebTestCase extends WebTestCase
 
         $crawler = self::$client->request('GET', $uri);
 
-        $form = $crawler->selectButton('login_btn')->form(['_username' => 'test', '_password' => '1234']);
+        $form = $crawler->selectButton('login_btn')->form(['_username' => 'test', '_password' => '12345678']);
 
         self::$client->submit($form);
 
