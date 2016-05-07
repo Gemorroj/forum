@@ -1,0 +1,9 @@
+{% extends '@Forum/layout/layout.html.twig' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

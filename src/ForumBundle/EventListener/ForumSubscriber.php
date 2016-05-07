@@ -31,12 +31,15 @@ class ForumSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
+                // Один раз. Удаление объекта
             //'preRemove',
             'postRemove',
 
-            //'prePersist',
+                // Один раз. Создание объекта
+            'prePersist',
             'postPersist',
 
+                // Каждый раз. Изменение любого свойства объекта
             'preUpdate',
             //'postUpdate',
 
@@ -55,6 +58,22 @@ class ForumSubscriber implements EventSubscriber
 ////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * @param LifecycleEventArgs $args
+     */
+    public function prePersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        switch (true) {
+            case $entity instanceof User:
+                if ($entity->getPlainPassword()) {
+                    $entity->setPassword($this->encodePlainPassword($entity));
+                }
+                break;
+        }
+    }
+
+    /**
      * @param PreUpdateEventArgs $args
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -64,8 +83,7 @@ class ForumSubscriber implements EventSubscriber
         switch (true) {
             case $entity instanceof User:
                 if ($entity->getPlainPassword()) {
-                    $this->encodePlainPassword($args);
-                    //$entity->setPlainPassword(null);
+                    $args->setNewValue('password', $this->encodePlainPassword($entity));
                 }
                 break;
         }
@@ -111,15 +129,13 @@ class ForumSubscriber implements EventSubscriber
 ////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param PreUpdateEventArgs $args
+     * @param User $user
+     * @return string
      */
-    private function encodePlainPassword(PreUpdateEventArgs $args)
+    private function encodePlainPassword(User $user)
     {
-        /** @var User $user */
-        $user = $args->getEntity();
-        $password = $this->container->get('security.password_encoder')
+        return $this->container->get('security.password_encoder')
             ->encodePassword($user, $user->getPlainPassword());
-        $args->setNewValue('password', $password);
     }
 
     /**

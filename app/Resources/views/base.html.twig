@@ -61,7 +61,7 @@
                             <li><a class="ui-btn ui-btn-icon-left ui-icon-power" href="{{ path('logout') }}">Выйти</a></li>
                         {% else %}
                             <li><a class="ui-btn ui-btn-icon-left ui-icon-lock" href="{{ path('login_route') }}">Авторизация</a></li>
-                            <li><a class="ui-btn ui-btn-icon-left ui-icon-plus" href="#registration">Регистрация</a></li>
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-plus" href="{{ path('profile_new') }}">Регистрация</a></li>
                         {% endif %}
                     </ul>
                 </div>

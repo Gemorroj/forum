@@ -4,8 +4,12 @@ namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Entity\User;
 use ForumBundle\Form\ProfileEditType;
+use ForumBundle\Form\ProfileNewType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class ProfileController extends Controller
 {
@@ -35,6 +39,49 @@ class ProfileController extends Controller
             'countUserTopics' => $countUserTopics,
             'countUserPosts' => $countUserPosts,
             'profileEditForm' => $profileEditForm->createView(),
+        ]);
+    }
+
+    public function newAction(Request $request)
+    {
+        $form = $this->createForm(ProfileNewType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+
+                // If username unique
+
+                /** @var User $user */
+                $user = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+
+                // creating the ACL
+                $aclProvider = $this->get('security.acl.provider');
+                $userIdentity = ObjectIdentity::fromDomainObject($user);
+                $aclUser = $aclProvider->createAcl($userIdentity);
+
+                // retrieving the security identity of the currently logged-in user
+                $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+                // grant owner access
+                $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($aclUser);
+
+                return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/registration.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
