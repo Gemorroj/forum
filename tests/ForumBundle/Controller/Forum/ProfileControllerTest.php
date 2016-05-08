@@ -202,7 +202,8 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $user = [
             'profile_new[username]' => 'php_unit',
-            'profile_new[plainPassword]' => 12345678,
+            'profile_new[plainPassword][first]'  => 12345678,
+            'profile_new[plainPassword][second]' => 12345678,
             'profile_new[sex]' => 1,
         ];
 

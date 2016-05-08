@@ -6,6 +6,7 @@ use ForumBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,16 +22,18 @@ class ProfileNewType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'required' => true,
                 'label' => 'Имя пользователя',
                 'attr' => [
-                    'placeholder' => 'Пароль',
+                    'placeholder' => 'Имя',
                 ]
             ])
-            ->add('plainPassword', PasswordType::class, [
-                'label' => 'Пароль',
-                'attr' => [
-                    'placeholder' => 'Пароль',
-                ]
+            ->add('plainPassword', RepeatedType::class, [
+                'required' => true,
+                'type' => PasswordType::class,
+                'invalid_message' => 'Пароли должны совпадать!',
+                'first_options'  => ['label' => 'Пароль'],
+                'second_options' => ['label' => 'Повторить пароль'],
             ])
             /*
             ->add('plainPassword_confirm', PasswordType::class, [
