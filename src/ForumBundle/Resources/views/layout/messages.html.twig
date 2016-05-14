@@ -7,5 +7,5 @@
 {% endfor %}
 
 {% for notice in app.session.flashBag.get('notice') %}
-    <p class="ui-bar-a flash flash-notice">{{ flash_message }}</p>
+    <p class="ui-bar-a flash flash-notice">{{ notice }}</p>
 {% endfor %}

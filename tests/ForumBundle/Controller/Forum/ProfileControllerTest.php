@@ -76,26 +76,20 @@ class ProfileControllerTest extends ForumWebTestCase
             ],
         ];
 
-        $uri = self::$container->get('router')->generate('profile_show', ['id' => $userAsOwner['id']]);
+        $uri = self::$container->get('router')->generate('profile_edit', ['id' => $userAsOwner['id']]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertEquals($userAsOwner['username'], $crawler->filter('div#profile_owner')->text());
-
         $this->assertEquals($sex['before']['label'], $crawler->filter('option[selected]')->text());
 
-        $form = $crawler->selectButton('profile_edit_edit')->form([
+        $form = $crawler->selectButton('profile_edit_save')->form([
             'profile_edit[sex]' => 1,
 //            'profile_edit[plainPassword]' => 12345678,
         ]);
 
-        self::$client->submit($form);
-
-        $this->assertTrue(self::$client->getResponse()->isRedirection());
-
-        $crawler = self::$client->followRedirect();
+        $crawler = self::$client->submit($form);
 
         $this->assertEquals($sex['after']['label'], $crawler->filter('option[selected]')->text());
     }
@@ -120,19 +114,18 @@ class ProfileControllerTest extends ForumWebTestCase
             $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-            $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
             $this->assertEquals($sex[$period]['label'], $crawler->filter('span#sex')->text());
         };
 
         $checkProfileOwner('before');
         // \Try change aaaa-profile by user-test
-        $uri = self::$container->get('router')->generate('profile_show', ['id' => 1]);
+        $uri = self::$container->get('router')->generate('profile_edit', ['id' => 1]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => 2]); // Женский=2-inChoiceList
+        $form = $crawler->selectButton('profile_edit_save')->form(['profile_edit[sex]' => 2]); // Женский=2-inChoiceList
         $action = self::$container->get('router')->generate('profile_edit', ['id' => $profileOwner['id']]);
         $form->getNode()->setAttribute('action', $action);
 
@@ -165,22 +158,21 @@ class ProfileControllerTest extends ForumWebTestCase
         ];
 
         $checkProfileOwner = function ($period) use ($profileOwner, $sex) {
-            $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
+            $uri = self::$container->get('router')->generate('profile_edit', ['id' => $profileOwner['id']]);
             $crawler = self::$client->request('GET', $uri);
             $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-            $this->assertEquals($profileOwner['username'], $crawler->filter('div#profile_owner')->text());
             $this->assertEquals($sex[$period]['label'], $crawler->filter('option[selected]')->text());
         };
 
         $checkProfileOwner('before');
         // \Try change aaaa-profile by guest
-        $uri = self::$container->get('router')->generate('profile_show', ['id' => $profileOwner['id']]);
+        $uri = self::$container->get('router')->generate('profile_edit', ['id' => $profileOwner['id']]);
 
         $crawler = self::$client->request('GET', $uri);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('profile_edit_edit')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
+        $form = $crawler->selectButton('profile_edit_save')->form(['profile_edit[sex]' => '2']); // Женский=2-inChoiceList
 
         $client->submit($form);
 
@@ -213,7 +205,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
-        $form = $crawler->selectButton('profile_new_new')->form($user);
+        $form = $crawler->selectButton('profile_new_registration')->form($user);
 
         $client->submit($form);
 
@@ -222,5 +214,26 @@ class ProfileControllerTest extends ForumWebTestCase
         $crawler = $client->followRedirect();
 
         $this->assertContains($user['profile_new[username]'], $crawler->filter('div#profile_owner')->text());
+    }
+
+    public function testChangePassword()
+    {
+        $formData = [
+            'change_password[currentPlainPassword]'  => '12345678',
+            'change_password[plainPassword][first]'  => '11223344',
+            'change_password[plainPassword][second]' => '11223344',
+        ];
+
+        $uri = self::$container->get('router')->generate('change_password', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('change_password_save')->form($formData);
+
+        $crawler = self::$client->submit($form);
+
+        $this->assertEquals('Пароль успешно изменен', $crawler->filter('p.flash-notice')->text());
     }
 }

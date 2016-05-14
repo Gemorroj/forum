@@ -35,19 +35,6 @@ class ProfileNewType extends AbstractType
                 'first_options'  => ['label' => 'Пароль'],
                 'second_options' => ['label' => 'Повторить пароль'],
             ])
-            /*
-            ->add('plainPassword_confirm', PasswordType::class, [
-                'label' => 'Подтверждение пароля',
-                'attr' => [
-                    'placeholder' => 'Подтверждение пароля',
-                ]
-            ])
-            ->add('salt', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Защитный код',
-                ]
-            ])*/
             ->add('sex', ChoiceType::class, [
                 'label' => 'Пол',
                 'choices' => [
@@ -56,8 +43,8 @@ class ProfileNewType extends AbstractType
                     'Женский' => User::SEX_FEMALE,
                 ],
             ])
-            ->add('new', SubmitType::class, [
-                'label' => 'Готово',
+            ->add('registration', SubmitType::class, [
+                'label' => 'Создать профиль',
             ])
         ;
     }
