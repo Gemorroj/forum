@@ -42,4 +42,4 @@ ForumBundle\Entity\User:
             - Length:
                 min: 8
                 minMessage: 'Пароль должен содержать не менее {{ limit }} символа(ов)'
-                groups: [profile_edit, registration]
+                groups: [registration]

@@ -3,6 +3,7 @@
 namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Entity\User;
+use ForumBundle\Form\ChangePasswordType;
 use ForumBundle\Form\ProfileEditType;
 use ForumBundle\Form\ProfileNewType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -105,6 +106,41 @@ class ProfileController extends Controller
             }
         }
 
-        return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
+        return $this->render('@Forum/forum/profile.edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    public function changePasswordAction(Request $request, User $user)
+    {
+        $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
+
+        $form = $this->createForm(ChangePasswordType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $user->setPlainPassword(
+                    $form->get('plainPassword')->getData()
+                );
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFlash('notice', 'Пароль успешно изменен');
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('@Forum/forum/change_password.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 }
