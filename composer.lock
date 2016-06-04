@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac58af856e1574b1bd798b61c1339069",
-    "content-hash": "03c007d5fae09759d077fd0528b5134a",
+    "hash": "6759537be4a4ea8e76a95d36a4f1a1cd",
+    "content-hash": "774e93557181d5e35de243ca110fcdf6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2612,16 +2612,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "314f8c44019b4dfece2571b98938574e6342be59"
+                "reference": "0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/314f8c44019b4dfece2571b98938574e6342be59",
-                "reference": "314f8c44019b4dfece2571b98938574e6342be59",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3",
+                "reference": "0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3",
                 "shasum": ""
             },
             "require": {
@@ -2629,6 +2629,9 @@
                 "php": "^5.6 || ^7.0",
                 "phpunit/php-text-template": "^1.2",
                 "sebastian/exporter": "^1.2"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<5.4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.4"
@@ -2664,7 +2667,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-06-03 05:01:30"
+            "time": "2016-06-04 05:52:19"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
