@@ -26,6 +26,8 @@ class LoadPostData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function load(ObjectManager $manager)
     {
+        $aclProvider = $this->container->get('security.acl.provider');
+
         $user = $this->getReference('user');
         $topic = $this->getReference('topic');
         $countPosts = 25;
@@ -39,7 +41,6 @@ class LoadPostData extends AbstractFixture implements ContainerAwareInterface, O
             $manager->persist($post);
             $manager->flush();
 
-            $aclProvider = $this->container->get('security.acl.provider');
             $postIdentity = ObjectIdentity::fromDomainObject($post);
             $aclPost = $aclProvider->createAcl($postIdentity);
             $securityIdentity = UserSecurityIdentity::fromAccount($user);

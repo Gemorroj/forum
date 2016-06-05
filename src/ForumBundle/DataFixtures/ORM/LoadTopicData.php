@@ -26,6 +26,8 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function load(ObjectManager $manager)
     {
+        $aclProvider = $this->container->get('security.acl.provider');
+
         $forum = $this->getReference('forum');
         $user = $this->getReference('user');
 
@@ -43,7 +45,6 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
 
         $manager->flush();
 
-        $aclProvider = $this->container->get('security.acl.provider');
         $topic1Identity = ObjectIdentity::fromDomainObject($topic1);
         $topic2Identity = ObjectIdentity::fromDomainObject($topic2);
         $aclTopic1 = $aclProvider->createAcl($topic1Identity);
