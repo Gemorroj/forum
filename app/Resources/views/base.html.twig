@@ -33,8 +33,8 @@
                     <h1>{{ title }}</h1>
                 {% endblock %}
 
-                <a href="{{ path('index') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-left ui-icon-home ui-btn-icon-notext">Главная страница</a>
-                <a href="#panel" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-user ui-btn-icon-notext">Панель</a>
+                <a href="{{ path('index') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-home ui-btn-icon-notext">Главная страница</a>
+                <a href="#panel" class="ui-corner-all ui-shadow ui-btn ui-btn-left ui-icon-user ui-btn-icon-notext">Панель</a>
             </div><!-- /header -->
 
             <div role="main" class="ui-content center-container">
@@ -46,13 +46,27 @@
                 </fieldset>
             </div><!-- /content -->
 
-            <div data-theme="b" data-role="footer" data-position="fixed">
+            <div class="ui-footer" data-theme="b" data-role="footer" data-position="fixed">
                 {% block footer %}
-                    <h4>Page Footer</h4>
+                    <div data-role="navbar">
+                        <ul>
+                            {#<li>#}
+                            {#{% if 'index' == app.request.attributes.get('_route') %}#}
+                                {#<a data-icon="home" href="{{ path('index') }}">Главная</a>#}
+                            {#{% else %}#}
+                                {#<a data-icon="arrow-l" href="#back" title="Не работает ;(">Назад</a>#}
+                            {#{% endif %}#}
+                            {#</li>#}
+                            <li><a data-icon="eye"  href="{{ path('index') }}#Online">Онлайн: ~</a></li>
+                            <li><a data-icon="user" href="{{ path('profile_list', {'page': 1}) }}">Пользователи</a></li>
+                            <li><a data-icon="tag"  href="{{ path('index') }}#Uploads">Вложения</a></li>
+                        </ul>
+                    </div>
+                    <h1>&copy; &circledR; {{ forum_title }} (2016)</h1>
                 {% endblock %}
             </div><!-- /footer -->
 
-            <div id="panel" data-role="panel" data-display="overlay" data-position="right">
+            <div id="panel" data-role="panel" data-display="overlay" data-position="left">
                 <div class="ui-panel-inner">
                     <ul class="ui-listview ui-listview-inset ui-corner-all ui-shadow" data-role="listview" data-inset="true" data-divider-theme="b">
                         <li  data-role="list-divider" class="ui-li-divider ui-bar-b ui-first-child">Панель</li>

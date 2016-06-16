@@ -1,11 +1,14 @@
 {% extends '@Forum/layout/layout.html.twig' %}
 
 {% block content %}
-<ul data-role="listview" data-inset="true">
-    {% for forum in forums %}
-        <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
-    {% else %}
-        <li>Пусто</li>
-    {% endfor %}
-</ul>
+    <ul data-role="listview" data-inset="true">
+        {% for user in users %}
+            <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('profile_show', {'id': user.id} ) }}">{{ user.username }}<span class="ui-li-count">{{ user.createdAt|date }}</span></a></li>
+        {% else %}
+            <li>Пусто</li>
+        {% endfor %}
+    </ul>
+
+    {% include 'ForumBundle:layout:paginate.html.twig' with {'data': users} %}
+
 {% endblock %}

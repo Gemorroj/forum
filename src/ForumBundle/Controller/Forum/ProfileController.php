@@ -15,6 +15,24 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 class ProfileController extends Controller
 {
     /**
+     * @param int $page
+     * List of all users.
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($page)
+    {
+        $this->denyAccessUnlessGranted('VIEW', User::class, 'Вам отказано в доступе.');
+
+        $q = $this->getDoctrine()->getRepository('ForumBundle:User')->getListQuery();
+
+        $pager = $this->get('paginate')->paginate($q, $page);
+
+        return $this->render('@Forum/forum/profile.list.html.twig', [
+            'users' => $pager,
+        ]);
+    }
+
+    /**
      * Профиль пользователя
      *
      * @param User $user
@@ -22,6 +40,8 @@ class ProfileController extends Controller
      */
     public function showAction(User $user)
     {
+        $this->denyAccessUnlessGranted('VIEW', $user, 'Вам отказано в доступе.');
+
         $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
             'action' => $this->generateUrl('profile_edit', [
                 'id' => $user->getId(),
@@ -45,6 +65,8 @@ class ProfileController extends Controller
 
     public function newAction(Request $request)
     {
+//        $this->denyAccessUnlessGranted('CREATE', User::class, 'Вам отказано в доступе.');
+
         $form = $this->createForm(ProfileNewType::class);
 
         $form->handleRequest($request);
@@ -88,7 +110,7 @@ class ProfileController extends Controller
 
     public function editAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
+        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ProfileEditType::class, $user);
 
@@ -114,7 +136,7 @@ class ProfileController extends Controller
 
     public function changePasswordAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
+        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ChangePasswordType::class);
 

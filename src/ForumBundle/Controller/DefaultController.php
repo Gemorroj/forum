@@ -2,6 +2,7 @@
 
 namespace ForumBundle\Controller;
 
+use ForumBundle\Entity\Forum;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
@@ -11,6 +12,8 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('VIEW', Forum::class, 'Вам отказано в доступе.');
+
         $em = $this->getDoctrine()->getManager();
 
         $forums = $em->getRepository('ForumBundle:Forum')->findAll();

@@ -1,4 +1,5 @@
 ForumBundle\Entity\User:
+    repositoryClass: ForumBundle\Entity\UserRepository
     type: entity
     table: user
     uniqueConstraints:
