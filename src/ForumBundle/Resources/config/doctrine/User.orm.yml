@@ -21,6 +21,8 @@ ForumBundle\Entity\User:
             length: 255
             options:
                 fixed: false
+        roles:
+            type: array
         password:
             type: string
             nullable: false

@@ -30,9 +30,10 @@ class LoadPostData extends AbstractFixture implements ContainerAwareInterface, O
 
         $user = $this->getReference('user');
         $topic = $this->getReference('topic');
+
+        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
         $countPosts = 25;
-
-
         for ($i = 1; $i <= $countPosts; $i++) {
             $post = new Post();
             $post->setTopic($topic);
@@ -41,16 +42,14 @@ class LoadPostData extends AbstractFixture implements ContainerAwareInterface, O
             $manager->persist($post);
             $manager->flush();
 
-            $postIdentity = ObjectIdentity::fromDomainObject($post);
-            $aclPost = $aclProvider->createAcl($postIdentity);
-            $securityIdentity = UserSecurityIdentity::fromAccount($user);
-            $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+            $aclPost = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($post));
+            $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
             $aclProvider->updateAcl($aclPost);
         }
     }
 
     public function getOrder()
     {
-        return 4;
+        return 5;
     }
 }

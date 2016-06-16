@@ -31,35 +31,33 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
         $forum = $this->getReference('forum');
         $user = $this->getReference('user');
 
-        $topic1 = new Topic();
-        $topic1->setTitle('Test topic 1 in PHP forum');
-        $topic1->setForum($forum);
-        $topic1->setUser($user);
-        $manager->persist($topic1);
-
-        $topic2 = new Topic();
-        $topic2->setTitle('Test topic 2 in PHP forum');
-        $topic2->setForum($forum);
-        $topic2->setUser($user);
-        $manager->persist($topic2);
-
-        $manager->flush();
-
-        $topic1Identity = ObjectIdentity::fromDomainObject($topic1);
-        $topic2Identity = ObjectIdentity::fromDomainObject($topic2);
-        $aclTopic1 = $aclProvider->createAcl($topic1Identity);
-        $aclTopic2 = $aclProvider->createAcl($topic2Identity);
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
-        $aclTopic1->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclTopic2->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($aclTopic1);
-        $aclProvider->updateAcl($aclTopic2);
 
-        $this->addReference('topic', $topic1);
+        $topics = [
+            'Test topic 1 in PHP forum' => [],
+            'Test topic 2 in PHP forum' => [],
+        ];
+
+        foreach($topics as $topicTitle => $data) {
+            $topic = new Topic();
+            $topic->setTitle($topicTitle);
+            $topic->setForum($forum);
+            $topic->setUser($user);
+            $manager->persist($topic);
+            $manager->flush();
+
+            if ('Test topic 1 in PHP forum' == $topicTitle) {
+                $this->addReference('topic', $topic);
+            }
+
+            $aclTopic = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($topic));
+            $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
+            $aclProvider->updateAcl($aclTopic);
+        }
     }
 
     public function getOrder()
     {
-        return 3;
+        return 4;
     }
 }

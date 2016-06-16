@@ -2,10 +2,12 @@
 
 namespace ForumBundle\DataFixtures\ORM;
 
+
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\Forum;
+
 
 class LoadForumData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -13,23 +15,26 @@ class LoadForumData extends AbstractFixture implements OrderedFixtureInterface
     {
         $user = $this->getReference('user');
 
-        $forumPhp = new Forum();
-        $forumPhp->setTitle('PHP');
-        $forumPhp->setUser($user);
-        $manager->persist($forumPhp);
+        $forums = [
+            'PHP'   => [],
+            'MySQL' => [],
+        ];
 
-        $forumMysql = new Forum();
-        $forumMysql->setTitle('MySQL');
-        $forumMysql->setUser($user);
-        $manager->persist($forumMysql);
+        foreach($forums as $forumTitle => $data) {
+            $forum = new Forum();
+            $forum->setTitle($forumTitle);
+            $forum->setUser($user);
+            $manager->persist($forum);
+            $manager->flush();
 
-        $manager->flush();
-
-        $this->addReference('forum', $forumPhp);
+            if ('PHP' == $forumTitle) {
+                $this->setReference('forum', $forum);
+            }
+        }
     }
 
     public function getOrder()
     {
-        return 2;
+        return 3;
     }
 }
