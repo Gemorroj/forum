@@ -3,7 +3,9 @@
 {% block content %}
     <ul data-role="listview" data-inset="true">
         {% for user in users %}
-            <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('profile_show', {'id': user.id} ) }}">{{ user.username }}<span class="ui-li-count">{{ user.createdAt|date }}</span></a></li>
+            <li>
+                <a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('profile_show', {'id': user.id} ) }}"><span class="profile_owner">{{ user.username }}</span><span class="ui-li-count">{{ user.createdAt|date }}</span></a>
+            </li>
         {% else %}
             <li>Пусто</li>
         {% endfor %}

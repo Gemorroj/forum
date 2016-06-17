@@ -7,6 +7,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileControllerTest extends ForumWebTestCase
 {
+    public function testList()
+    {
+        $text = 'test';
+
+        $uri = self::$container->get('router')->generate('profile_list', ['page' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $this->assertContains($text, $crawler->filter('span.profile_owner')->last()->text());
+    }
+
     public function testShow()
     {
         $text = 'test';
