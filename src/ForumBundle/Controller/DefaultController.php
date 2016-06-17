@@ -12,7 +12,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $this->denyAccessUnlessGranted('VIEW', Forum::class, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted('VIEW', new Forum(), 'Вам отказано в доступе.');
 
         $em = $this->getDoctrine()->getManager();
 

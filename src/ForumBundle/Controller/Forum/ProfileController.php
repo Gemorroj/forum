@@ -24,7 +24,7 @@ class ProfileController extends Controller
      */
     public function listAction($page)
     {
-        $this->denyAccessUnlessGranted('VIEW', User::class, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted('VIEW', new User(), 'Вам отказано в доступе.');
 
         $q = $this->getDoctrine()->getRepository('ForumBundle:User')->getListQuery();
 

@@ -45,7 +45,7 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
 
         $classes = [
             'user' => [
-                'oid' => new ObjectIdentity(User::class, User::class),
+                'oid' => ObjectIdentity::fromDomainObject(new User()),
                 'mask' => [
                     'usr' => $usrMask->add(MaskBuilder::MASK_VIEW)->get(),
                     'adm' => $admMask->add(MaskBuilder::MASK_VIEW)->get(),
@@ -53,7 +53,7 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
                 ],
             ],
             'forum' => [
-                'oid' => new ObjectIdentity(Forum::class, Forum::class),
+                'oid' => ObjectIdentity::fromDomainObject(new Forum()),
                 'mask' => [
                     'usr' => $usrMask->get(),
                     'adm' => $admMask->get(),
@@ -61,7 +61,7 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
                 ],
             ],
             'topic' => [
-                'oid' => new ObjectIdentity(Topic::class, Topic::class),
+                'oid' => ObjectIdentity::fromDomainObject(new Topic()),
                 'mask' => [
                     'usr' => $usrMask->add(MaskBuilder::MASK_CREATE)->get(),
                     'adm' => $admMask->add(MaskBuilder::MASK_CREATE)->get(),
@@ -69,7 +69,7 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
                 ],
             ],
             'post' => [
-                'oid' => new ObjectIdentity(Post::class, Post::class),
+                'oid' => ObjectIdentity::fromDomainObject(new Post()),
                 'mask' => [
                     'usr' => $usrMask->get(),
                     'adm' => $admMask->add(MaskBuilder::MASK_EDIT)->get(),

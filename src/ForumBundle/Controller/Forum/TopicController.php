@@ -59,7 +59,7 @@ class TopicController extends Controller
      */
     public function newAction(Request $request, ForumEntity $forum)
     {
-        $this->denyAccessUnlessGranted('CREATE', Topic::class, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted('CREATE', new Topic(), 'Вам отказано в доступе.');
 
         $user = $this->getUser();
         $form = $this->createForm(TopicType::class);

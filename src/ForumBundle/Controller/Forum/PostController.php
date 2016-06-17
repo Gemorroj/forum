@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
-        $this->denyAccessUnlessGranted('CREATE', Post::class, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted('CREATE', new Post(), 'Вам отказано в доступе.');
         $user = $this->getUser();
 
         $form = $this->createForm(PostType::class);

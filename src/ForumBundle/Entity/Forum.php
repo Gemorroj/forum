@@ -1,11 +1,12 @@
 <?php
 
 namespace ForumBundle\Entity;
+use ForumBundle\Helper\DomainObject;
 
 /**
  * Forum
  */
-class Forum
+class Forum extends DomainObject
 {
     /**
      * @var integer
