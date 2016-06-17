@@ -6,7 +6,7 @@ security:
     providers:
         forum_provider:
             entity:
-                class: User
+                class: ForumBundle\Entity\User
                 property: username
 
     encoders:
