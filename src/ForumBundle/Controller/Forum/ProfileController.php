@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ProfileController extends Controller
 {
@@ -95,6 +98,9 @@ class ProfileController extends Controller
                 $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
                 $aclProvider->updateAcl($aclUser);
 
+                // Automatically Authenticating after Registration
+                $this->authenticateUser($user);
+
                 return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
@@ -106,6 +112,19 @@ class ProfileController extends Controller
         return $this->render('@Forum/forum/registration.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    private function authenticateUser(UserInterface $user)
+    {
+        $credentials = null;
+        $firewall    = 'main';
+
+        $token = new UsernamePasswordToken($user, $credentials, $firewall, $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', $token->serialize());
     }
 
     public function editAction(Request $request, User $user)
