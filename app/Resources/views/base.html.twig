@@ -30,7 +30,7 @@
 
             <div data-theme="b" data-role="header" data-position="fixed">
                 {% block header %}
-                    <h1>{{ title }}</h1>
+                    <h1 class="header_title">{{ title }}</h1>
                 {% endblock %}
 
                 <a href="{{ path('index') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-home ui-btn-icon-notext">Главная страница</a>
@@ -62,7 +62,7 @@
                             <li><a data-icon="tag"  href="{{ path('index') }}#Uploads">Вложения</a></li>
                         </ul>
                     </div>
-                    <h1>&copy; &circledR; {{ forum_title }} (2016)</h1>
+                    <h1 class="footer_title">&copy; &circledR; {{ forum_title }} (2016)</h1>
                 {% endblock %}
             </div><!-- /footer -->
 

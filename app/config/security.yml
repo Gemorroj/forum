@@ -6,7 +6,7 @@ security:
     providers:
         forum_provider:
             entity:
-                class: ForumBundle:User
+                class: User
                 property: username
 
     encoders:
@@ -41,6 +41,5 @@ security:
             allow_if_object_identity_unavailable: true
 
     role_hierarchy:
-        ROLE_USER:        []
         ROLE_ADMIN:       [ROLE_USER]
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

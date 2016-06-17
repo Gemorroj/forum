@@ -9,7 +9,7 @@ class ProfileControllerTest extends ForumWebTestCase
 {
     public function testList()
     {
-        $text = 'test';
+        $text = 'Список пользователей';
 
         $uri = self::$container->get('router')->generate('profile_list', ['page' => 1]);
 
@@ -17,7 +17,7 @@ class ProfileControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertContains($text, $crawler->filter('span.profile_owner')->last()->text());
+        $this->assertContains($text, $crawler->filter('h1.header_title')->text());
     }
 
     public function testShow()
