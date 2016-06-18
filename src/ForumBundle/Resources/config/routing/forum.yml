@@ -54,6 +54,12 @@ post_delete:
     requirements:
         id:   \d+
 
+profile_list:
+    path:     /profile/list/{page}
+    defaults: { _controller: ForumBundle:Forum/Profile:list }
+    requirements:
+        page: \d+
+
 profile_show:
     path:     /profile{id}
     defaults: { _controller: ForumBundle:Forum/Profile:show }

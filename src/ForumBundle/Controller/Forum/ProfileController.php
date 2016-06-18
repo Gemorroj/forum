@@ -11,9 +11,30 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ProfileController extends Controller
 {
+    /**
+     * @param int $page
+     * List of all users.
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($page)
+    {
+        $this->denyAccessUnlessGranted('VIEW', new User(), 'Вам отказано в доступе.');
+
+        $q = $this->getDoctrine()->getRepository('ForumBundle:User')->getListQuery();
+
+        $pager = $this->get('paginate')->paginate($q, $page);
+
+        return $this->render('@Forum/forum/profile.list.html.twig', [
+            'users' => $pager,
+        ]);
+    }
+
     /**
      * Профиль пользователя
      *
@@ -22,6 +43,8 @@ class ProfileController extends Controller
      */
     public function showAction(User $user)
     {
+        $this->denyAccessUnlessGranted('VIEW', $user, 'Вам отказано в доступе.');
+
         $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
             'action' => $this->generateUrl('profile_edit', [
                 'id' => $user->getId(),
@@ -45,6 +68,8 @@ class ProfileController extends Controller
 
     public function newAction(Request $request)
     {
+//        $this->denyAccessUnlessGranted('CREATE', User::class, 'Вам отказано в доступе.');
+
         $form = $this->createForm(ProfileNewType::class);
 
         $form->handleRequest($request);
@@ -73,6 +98,9 @@ class ProfileController extends Controller
                 $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
                 $aclProvider->updateAcl($aclUser);
 
+                // Automatically Authenticating after Registration
+                $this->authenticateUser($user);
+
                 return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
             } else {
                 foreach ($form->getErrors(true) as $error) {
@@ -86,9 +114,22 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * @param UserInterface $user
+     */
+    private function authenticateUser(UserInterface $user)
+    {
+        $credentials = null;
+        $firewall    = 'main';
+
+        $token = new UsernamePasswordToken($user, $credentials, $firewall, $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', $token->serialize());
+    }
+
     public function editAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
+        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ProfileEditType::class, $user);
 
@@ -114,7 +155,7 @@ class ProfileController extends Controller
 
     public function changePasswordAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Доступ запрещен. Авторизуйтесь для изменения профиля.');
+        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ChangePasswordType::class);
 

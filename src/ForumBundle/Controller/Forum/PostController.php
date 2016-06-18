@@ -27,10 +27,8 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
+        $this->denyAccessUnlessGranted('CREATE', new Post(), 'Вам отказано в доступе.');
         $user = $this->getUser();
-        if (!$this->isGranted('ROLE_USER', $user)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления сообщений.');
-        }
 
         $form = $this->createForm(PostType::class);
 
@@ -91,7 +89,7 @@ class PostController extends Controller
      */
     public function editAction(Request $request, Post $post)
     {
-        $this->denyAccessUnlessGranted('EDIT', $post, 'Доступ запрещен. Авторизуйтесь для изменения сообщений.');
+        $this->denyAccessUnlessGranted('EDIT', $post, 'Вам отказано в доступе.');
 
         $form = $this->createForm(PostEditType::class, $post);
 
@@ -119,7 +117,7 @@ class PostController extends Controller
      */
     public function deleteAction(Post $post)
     {
-        $this->denyAccessUnlessGranted('DELETE', $post, 'Доступ запрещен. Авторизуйтесь для удаления сообщений.');
+        $this->denyAccessUnlessGranted('DELETE', $post, 'Вам отказано в доступе.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);

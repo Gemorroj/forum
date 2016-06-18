@@ -64,21 +64,14 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
                 $this->setReference('user', $user);
             }
 
-            // creating the ACL
-            $userIdentity = ObjectIdentity::fromDomainObject($user);
-            $aclUser = $aclProvider->createAcl($userIdentity);
-
-            // retrieving the security identity of the currently logged-in user
-            $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-            // grant owner access
-            $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+            $aclUser = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($user));
+            $aclUser->insertObjectAce(UserSecurityIdentity::fromAccount($user), MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
             $aclProvider->updateAcl($aclUser);
         }
     }
 
     public function getOrder()
     {
-        return 1;
+        return 2;
     }
 }

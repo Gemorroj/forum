@@ -2,12 +2,13 @@
 
 namespace ForumBundle\Entity;
 
+use ForumBundle\Helper\DomainObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  */
-class User implements UserInterface
+class User extends DomainObject implements UserInterface
 {
     /**
      * @var integer
@@ -18,6 +19,11 @@ class User implements UserInterface
      * @var string
      */
     private $username;
+
+    /**
+     * @var array
+     */
+    private $roles = [];
 
     /**
      * @var string
@@ -237,6 +243,39 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        // TODO: Назначать ROLE_USER для пользователя в настройках
+        $this->roles[] = 'ROLE_USER';
+
+        return $this->roles;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+//    public function setRoles($roles)
+//    {
+//        return $this->roles = $roles;
+//    }
+
+    /**
+     * {@inheritdoc}
+     */
+//    public function promote($role)
+//    {
+//        $this->roles[] = $role;
+//
+//        return $this;
+//    }
+
+    /**
+     * {@inheritdoc}
+     */
+//    public function demote($role)
+//    {
+//        if(false !== ($key = array_search($role, $this->roles))) {
+//            unset($this->roles[$key]);
+//        }
+//
+//        return $this;
+//    }
 }

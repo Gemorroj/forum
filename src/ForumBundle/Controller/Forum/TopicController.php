@@ -27,6 +27,8 @@ class TopicController extends Controller
      */
     public function showAction(Topic $topic, $page)
     {
+        $this->denyAccessUnlessGranted('VIEW', $topic, 'Вам отказано в доступе.');
+
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
         $pager = $this->get('paginate')->paginate($q, $page);
@@ -57,11 +59,9 @@ class TopicController extends Controller
      */
     public function newAction(Request $request, ForumEntity $forum)
     {
-        $user = $this->getUser();
-        if (!$this->isGranted('ROLE_USER', $user)) {
-            throw $this->createAccessDeniedException('Доступ запрещен. Авторизуйтесь для добавления новых тем.');
-        }
+        $this->denyAccessUnlessGranted('CREATE', new Topic(), 'Вам отказано в доступе.');
 
+        $user = $this->getUser();
         $form = $this->createForm(TopicType::class);
 
         $form->handleRequest($request);
@@ -134,7 +134,7 @@ class TopicController extends Controller
      */
     public function editAction(Request $request, Topic $topic)
     {
-        $this->denyAccessUnlessGranted('EDIT', $topic, 'Доступ запрещен. Авторизуйтесь для изменения тем.');
+        $this->denyAccessUnlessGranted('EDIT', $topic, 'Вам отказано в доступе.');
 
         $form = $this->createForm(TopicEditType::class, $topic);
 
@@ -162,7 +162,7 @@ class TopicController extends Controller
      */
     public function deleteAction(Topic $topic)
     {
-        $this->denyAccessUnlessGranted('DELETE', $topic, 'Доступ запрещен. Авторизуйтесь для удаления тем.');
+        $this->denyAccessUnlessGranted('DELETE', $topic, 'Вам отказано в доступе.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($topic);

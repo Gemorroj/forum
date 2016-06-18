@@ -63,11 +63,6 @@ class Paginate
      */
     protected function normalizePage(Pagerfanta $pagerfanta, $page)
     {
-        $maxPage = $pagerfanta->getNbPages();
-        $minPage = 1;
-        $currentPage = $page < $minPage ? $minPage : $page;
-        $currentPage = $currentPage > $maxPage ? $maxPage : $currentPage;
-
-        return $currentPage;
+        return max(1, min($page, $pagerfanta->getNbPages()));
     }
 }

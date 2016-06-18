@@ -19,6 +19,8 @@ class ForumController extends Controller
      */
     public function showAction(ForumEntity $forum, $page)
     {
+        $this->denyAccessUnlessGranted('VIEW', $forum, 'Вам отказано в доступе.');
+
         $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery($forum);
 
         $pager = $this->get('paginate')->paginate($q, $page);
