@@ -3,6 +3,7 @@
 namespace ForumBundle\Controller\Forum;
 
 use ForumBundle\Form\PostEditType;
+use ForumBundle\Security\PostVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function newAction(Request $request, Topic $topic)
     {
-        $this->denyAccessUnlessGranted('CREATE', new Post(), 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(PostVoter::CREATE, new Post(), 'Вам отказано в доступе для создания постов.');
         $user = $this->getUser();
 
         $form = $this->createForm(PostType::class);
@@ -89,7 +90,7 @@ class PostController extends Controller
      */
     public function editAction(Request $request, Post $post)
     {
-        $this->denyAccessUnlessGranted('EDIT', $post, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(PostVoter::EDIT, $post, 'Вам отказано в доступе.');
 
         $form = $this->createForm(PostEditType::class, $post);
 
@@ -117,7 +118,7 @@ class PostController extends Controller
      */
     public function deleteAction(Post $post)
     {
-        $this->denyAccessUnlessGranted('DELETE', $post, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(PostVoter::DELETE, $post, 'Вам отказано в доступе.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);

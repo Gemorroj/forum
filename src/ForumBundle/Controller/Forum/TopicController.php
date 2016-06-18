@@ -5,6 +5,7 @@ namespace ForumBundle\Controller\Forum;
 use ForumBundle\Form\PostDeleteType;
 use ForumBundle\Form\PostEditType;
 use ForumBundle\Form\TopicEditType;
+use ForumBundle\Security\TopicVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Form\TopicType;
@@ -27,7 +28,7 @@ class TopicController extends Controller
      */
     public function showAction(Topic $topic, $page)
     {
-        $this->denyAccessUnlessGranted('VIEW', $topic, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(TopicVoter::VIEW, $topic, 'Вам отказано в доступе для просмотра топика "' . $topic->getTitle() . '".');
 
         $q = $this->getDoctrine()->getRepository('ForumBundle:Post')->getListQuery($topic);
 
@@ -59,7 +60,9 @@ class TopicController extends Controller
      */
     public function newAction(Request $request, ForumEntity $forum)
     {
-        $this->denyAccessUnlessGranted('CREATE', new Topic(), 'Вам отказано в доступе.');
+        $topic = new Topic();
+
+        $this->denyAccessUnlessGranted(TopicVoter::CREATE, $topic, 'Вам отказано в доступе для создания новых топиков.');
 
         $user = $this->getUser();
         $form = $this->createForm(TopicType::class);
@@ -69,7 +72,6 @@ class TopicController extends Controller
             if ($form->isValid()) {
 
                 $data = $form->getData();
-                $topic = new Topic();
                 $topic->setForum($forum);
                 $topic->setTitle($data['topic-title']);
                 $topic->setUser($user);
@@ -134,7 +136,7 @@ class TopicController extends Controller
      */
     public function editAction(Request $request, Topic $topic)
     {
-        $this->denyAccessUnlessGranted('EDIT', $topic, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(TopicVoter::EDIT, $topic, 'Вам отказано в доступе.');
 
         $form = $this->createForm(TopicEditType::class, $topic);
 
@@ -162,7 +164,7 @@ class TopicController extends Controller
      */
     public function deleteAction(Topic $topic)
     {
-        $this->denyAccessUnlessGranted('DELETE', $topic, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(TopicVoter::DELETE, $topic, 'Вам отказано в доступе.');
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($topic);

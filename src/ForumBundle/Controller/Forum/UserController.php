@@ -6,6 +6,7 @@ use ForumBundle\Entity\User;
 use ForumBundle\Form\ChangePasswordType;
 use ForumBundle\Form\ProfileEditType;
 use ForumBundle\Form\ProfileNewType;
+use ForumBundle\Security\UserVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ProfileController extends Controller
+class UserController extends Controller
 {
     /**
      * @param int $page
@@ -24,7 +25,7 @@ class ProfileController extends Controller
      */
     public function listAction($page)
     {
-        $this->denyAccessUnlessGranted('VIEW', new User(), 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, new User(), 'Вам отказано в доступе просмотра списка пользователей.');
 
         $q = $this->getDoctrine()->getRepository('ForumBundle:User')->getListQuery();
 
@@ -43,7 +44,7 @@ class ProfileController extends Controller
      */
     public function showAction(User $user)
     {
-        $this->denyAccessUnlessGranted('VIEW', $user, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user, 'Вам отказано в доступе просмотра профиля пользователя "' . $user->getUsername() . '".');
 
         $profileEditForm = $this->createForm(ProfileEditType::class, $user, [
             'action' => $this->generateUrl('profile_edit', [
@@ -68,7 +69,7 @@ class ProfileController extends Controller
 
     public function newAction(Request $request)
     {
-//        $this->denyAccessUnlessGranted('CREATE', User::class, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(UserVoter::CREATE, new User(), 'Вам отказано в доступе для создания новых пользователей.');
 
         $form = $this->createForm(ProfileNewType::class);
 
@@ -129,7 +130,7 @@ class ProfileController extends Controller
 
     public function editAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ProfileEditType::class, $user);
 
@@ -155,7 +156,7 @@ class ProfileController extends Controller
 
     public function changePasswordAction(Request $request, User $user)
     {
-        $this->denyAccessUnlessGranted('EDIT', $user, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user, 'Вам отказано в доступе.');
 
         $form = $this->createForm(ChangePasswordType::class);
 

@@ -72,6 +72,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function getOrder()
     {
-        return 2;
+        return 1;
     }
 }

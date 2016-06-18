@@ -2,13 +2,12 @@
 
 namespace ForumBundle\Entity;
 
-use ForumBundle\Helper\DomainObject;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  */
-class User extends DomainObject implements UserInterface
+class User implements UserInterface
 {
     /**
      * @var integer

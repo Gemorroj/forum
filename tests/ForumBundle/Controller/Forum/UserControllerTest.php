@@ -5,7 +5,7 @@ namespace Tests\ForumBundle\Controller;
 use Tests\ForumBundle\ForumWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProfileControllerTest extends ForumWebTestCase
+class UserControllerTest extends ForumWebTestCase
 {
     public function testList()
     {
@@ -233,8 +233,28 @@ class ProfileControllerTest extends ForumWebTestCase
     {
         $formData = [
             'change_password[currentPlainPassword]'  => '12345678',
-            'change_password[plainPassword][first]'  => '11223344',
-            'change_password[plainPassword][second]' => '11223344',
+            'change_password[plainPassword][first]'  => '87654321',
+            'change_password[plainPassword][second]' => '87654321',
+        ];
+
+        $uri = self::$container->get('router')->generate('change_password', ['id' => 1]);
+
+        $crawler = self::$client->request('GET', $uri);
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('change_password_save')->form($formData);
+
+        $crawler = self::$client->submit($form);
+
+        $this->assertEquals('Пароль успешно изменен', $crawler->filter('p.flash-notice')->text());
+
+
+        // возвращаем старвй пароль
+        $formData = [
+            'change_password[currentPlainPassword]'  => '87654321',
+            'change_password[plainPassword][first]'  => '12345678',
+            'change_password[plainPassword][second]' => '12345678',
         ];
 
         $uri = self::$container->get('router')->generate('change_password', ['id' => 1]);

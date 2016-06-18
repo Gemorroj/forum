@@ -5,6 +5,7 @@ namespace ForumBundle\Controller\Forum;
 use ForumBundle\Form\TopicDeleteType;
 use ForumBundle\Form\TopicEditType;
 use ForumBundle\Form\TopicType;
+use ForumBundle\Security\ForumVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ForumBundle\Entity\Forum as ForumEntity;
 
@@ -19,7 +20,7 @@ class ForumController extends Controller
      */
     public function showAction(ForumEntity $forum, $page)
     {
-        $this->denyAccessUnlessGranted('VIEW', $forum, 'Вам отказано в доступе.');
+        $this->denyAccessUnlessGranted(ForumVoter::VIEW, $forum, 'Вам отказано в доступе для просмотра форума "' . $forum->getTitle() . '".');
 
         $q = $this->getDoctrine()->getRepository('ForumBundle:Topic')->getListQuery($forum);
 

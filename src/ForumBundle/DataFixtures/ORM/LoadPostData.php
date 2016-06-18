@@ -50,6 +50,6 @@ class LoadPostData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function getOrder()
     {
-        return 5;
+        return 4;
     }
 }

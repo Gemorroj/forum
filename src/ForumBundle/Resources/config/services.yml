@@ -12,3 +12,31 @@ services:
         arguments: ["@service_container"]
         tags:
             - { name: doctrine.event_subscriber }
+
+    forum.topic_voter:
+        class: ForumBundle\Security\TopicVoter
+        arguments: ['@security.access.decision_manager']
+        tags:
+            - { name: security.voter }
+        public: false
+
+    forum.forum_voter:
+        class: ForumBundle\Security\ForumVoter
+        arguments: ['@security.access.decision_manager']
+        tags:
+            - { name: security.voter }
+        public: false
+
+    forum.post_voter:
+        class: ForumBundle\Security\PostVoter
+        arguments: ['@security.access.decision_manager']
+        tags:
+            - { name: security.voter }
+        public: false
+
+    forum.user_voter:
+        class: ForumBundle\Security\UserVoter
+        arguments: ['@security.access.decision_manager']
+        tags:
+            - { name: security.voter }
+        public: false

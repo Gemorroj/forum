@@ -56,37 +56,37 @@ post_delete:
 
 profile_list:
     path:     /profile/list/{page}
-    defaults: { _controller: ForumBundle:Forum/Profile:list }
+    defaults: { _controller: ForumBundle:Forum/User:list }
     requirements:
         page: \d+
 
 profile_show:
     path:     /profile{id}
-    defaults: { _controller: ForumBundle:Forum/Profile:show }
+    defaults: { _controller: ForumBundle:Forum/User:show }
     requirements:
         id:   \d+
 
 # \Registration
 profile_new:
     path: /registration
-    defaults: { _controller: ForumBundle:Forum/Profile:new }
+    defaults: { _controller: ForumBundle:Forum/User:new }
 # /Registration
 
 profile_edit:
     path:     /profile{id}/edit
-    defaults: { _controller: ForumBundle:Forum/Profile:edit }
+    defaults: { _controller: ForumBundle:Forum/User:edit }
     requirements:
         id:   \d+
 
 profile_delete:
     path:     /profile{id}/delete
-    defaults: { _controller: ForumBundle:Forum/Profile:delete }
+    defaults: { _controller: ForumBundle:Forum/User:delete }
     methods:  [POST]
     requirements:
         id:   \d+
 
 change_password:
     path:     /profile{id}/change_password
-    defaults: { _controller: ForumBundle:Forum/Profile:changePassword }
+    defaults: { _controller: ForumBundle:Forum/User:changePassword }
     requirements:
         id:   \d+
