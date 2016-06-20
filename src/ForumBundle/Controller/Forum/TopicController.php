@@ -13,9 +13,6 @@ use ForumBundle\Form\PostType;
 use ForumBundle\Entity\Forum as ForumEntity;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class TopicController extends Controller
 {
@@ -86,22 +83,6 @@ class TopicController extends Controller
                 $em->persist($post);
 
                 $em->flush();
-
-                // creating the ACL
-                $aclProvider = $this->get('security.acl.provider');
-                $topicIdentity = ObjectIdentity::fromDomainObject($topic);
-                $postIdentity = ObjectIdentity::fromDomainObject($post);
-                $aclTopic = $aclProvider->createAcl($topicIdentity);
-                $aclPost = $aclProvider->createAcl($postIdentity);
-
-                // retrieving the security identity of the currently logged-in user
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
-
-                // grant owner access
-                $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclPost->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($aclTopic);
-                $aclProvider->updateAcl($aclPost);
 
                 return $this->redirectToRoute('topic_show', ['id' => $topic->getId()]);
             } else {

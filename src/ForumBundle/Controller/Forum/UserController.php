@@ -9,12 +9,7 @@ use ForumBundle\Form\ProfileNewType;
 use ForumBundle\Security\UserVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends Controller
 {
@@ -87,18 +82,6 @@ class UserController extends Controller
                 $em->persist($user);
                 $em->flush();
 
-                // creating the ACL
-                $aclProvider = $this->get('security.acl.provider');
-                $userIdentity = ObjectIdentity::fromDomainObject($user);
-                $aclUser = $aclProvider->createAcl($userIdentity);
-
-                // retrieving the security identity of the currently logged-in user
-                $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-                // grant owner access
-                $aclUser->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($aclUser);
-
                 // Automatically Authenticating after Registration
                 $this->authenticateUser($user);
 
@@ -116,9 +99,9 @@ class UserController extends Controller
     }
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      */
-    private function authenticateUser(UserInterface $user)
+    private function authenticateUser(User $user)
     {
         $credentials = null;
         $firewall    = 'main';

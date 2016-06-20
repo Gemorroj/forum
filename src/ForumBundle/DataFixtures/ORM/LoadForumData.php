@@ -9,9 +9,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\Forum;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 
 class LoadForumData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
@@ -28,12 +25,7 @@ class LoadForumData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function load(ObjectManager $manager)
     {
-        $aclProvider = $this->container->get('security.acl.provider');
-
         $user = $this->getReference('user');
-
-        $roleSecurityIdentity = new RoleSecurityIdentity('ROLE_SUPER_ADMIN');
-
         $forums = [
             'PHP'   => [],
             'MySQL' => [],
@@ -49,10 +41,6 @@ class LoadForumData extends AbstractFixture implements ContainerAwareInterface, 
             if ('PHP' == $forumTitle) {
                 $this->setReference('forum', $forum);
             }
-
-            $aclForum = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($forum));
-            $aclForum->insertObjectAce($roleSecurityIdentity, MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
-            $aclProvider->updateAcl($aclForum);
         }
     }
 

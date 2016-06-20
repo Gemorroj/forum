@@ -9,9 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use ForumBundle\Entity\Topic;
 use ForumBundle\Entity\Post;
 use ForumBundle\Form\PostType;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 /**
  * Post controller.
@@ -46,18 +43,6 @@ class PostController extends Controller
                 $em->persist($post);
 
                 $em->flush();
-
-                // creating the ACL
-                $aclProvider = $this->get('security.acl.provider');
-                $objectIdentity = ObjectIdentity::fromDomainObject($post);
-                $acl = $aclProvider->createAcl($objectIdentity);
-
-                // retrieving the security identity of the currently logged-in user
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getUser());
-
-                // grant owner access
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());

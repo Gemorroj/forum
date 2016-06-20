@@ -8,9 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\Topic;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+
 
 class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -26,12 +24,8 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function load(ObjectManager $manager)
     {
-        $aclProvider = $this->container->get('security.acl.provider');
-
         $forum = $this->getReference('forum');
         $user = $this->getReference('user');
-
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
 
         $topics = [
             'Test topic 1 in PHP forum' => [],
@@ -49,10 +43,6 @@ class LoadTopicData extends AbstractFixture implements ContainerAwareInterface, 
             if ('Test topic 1 in PHP forum' == $topicTitle) {
                 $this->addReference('topic', $topic);
             }
-
-            $aclTopic = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($topic));
-            $aclTopic->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
-            $aclProvider->updateAcl($aclTopic);
         }
     }
 

@@ -35,9 +35,6 @@ security:
                 path:   /logout
                 target: /
 
-    acl:
-        connection: default
-
     access_decision_manager:
         strategy: affirmative
 

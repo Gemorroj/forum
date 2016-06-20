@@ -8,9 +8,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ForumBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -26,8 +23,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function load(ObjectManager $manager)
     {
-        $aclProvider = $this->container->get('security.acl.provider');
-
         $users = [
             'test' => [
                 'plainPassword' => '12345678',
@@ -63,10 +58,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             if ('test' == $username) {
                 $this->setReference('user', $user);
             }
-
-            $aclUser = $aclProvider->createAcl(ObjectIdentity::fromDomainObject($user));
-            $aclUser->insertObjectAce(UserSecurityIdentity::fromAccount($user), MaskBuilder::MASK_OWNER/*, 0, true, PermissionGrantingStrategy::ANY*/);
-            $aclProvider->updateAcl($aclUser);
         }
     }
 
