@@ -14,7 +14,11 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+            <file>tests/Forum/UserControllerTest.php</file>
+            <file>tests/Forum/ForumControllerTest.php</file>
+            <file>tests/Forum/TopicControllerTest.php</file>
+            <file>tests/Forum/PostControllerTest.php</file>
+            <file>tests/DefaultControllerTest.php</file>
         </testsuite>
     </testsuites>
 
