@@ -24,9 +24,7 @@ class User implements UserInterface
      * @var array
      */
     private $roles = [];
-    const DEFAULT_ROLE     = 'ROLE_USER';
-    const ROLE_ADMIN       = 'ROLE_ADMIN';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    const DEFAULT_ROLE = 'ROLE_USER';
 
     /**
      * @var string
