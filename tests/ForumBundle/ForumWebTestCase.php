@@ -87,9 +87,9 @@ abstract class ForumWebTestCase extends WebTestCase
     {
         return [
 //            ['username', 'password', 'sex', 'role'],
-            ['userAsRole',  12345678, 2, 'ROLE_USER'],
-//            ['userAsAdmin', 11111111, 1, 'ROLE_ADMIN'],
-//            ['userAsSuper', 22222222, 0, 'ROLE_SUPER_ADMIN'],
+            [sprintf('userAsRole%d', mt_rand(1000, 9999)),  12345678, 2, 'ROLE_USER'],
+//            [sprintf('userAsAdmin%d', mt_rand(1000, 9999)), 11111111, 1, 'ROLE_ADMIN'],
+//            [sprintf('userAsSuper%d', mt_rand(1000, 9999)), 22222222, 0, 'ROLE_SUPER_ADMIN'],
         ];
     }
 
