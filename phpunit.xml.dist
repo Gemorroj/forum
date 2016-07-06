@@ -16,10 +16,10 @@
         <testsuite name="Project Test Suite">
             <file>tests/ForumBundle/ForumWebTestCase.php</file>
             <file>tests/ForumBundle/Controller/Forum/UserControllerTest.php</file>
-            <file>tests/ForumBundle/Controller/DefaultControllerTest.php</file>
-            <file>tests/ForumBundle/Controller/Forum/ForumControllerTest.php</file>
-            <file>tests/ForumBundle/Controller/Forum/TopicControllerTest.php</file>
-            <file>tests/ForumBundle/Controller/Forum/PostControllerTest.php</file>
+            <!--<file>tests/ForumBundle/Controller/DefaultControllerTest.php</file>-->
+            <!--<file>tests/ForumBundle/Controller/Forum/ForumControllerTest.php</file>-->
+            <!--<file>tests/ForumBundle/Controller/Forum/TopicControllerTest.php</file>-->
+            <!--<file>tests/ForumBundle/Controller/Forum/PostControllerTest.php</file>-->
         </testsuite>
     </testsuites>
 
