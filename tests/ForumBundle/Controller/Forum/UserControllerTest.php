@@ -5,10 +5,16 @@ namespace Tests\ForumBundle\Controller;
 use Tests\ForumBundle\ForumWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Данный тест включает тестирование всех действий контроллера.
+ * Гость, в случае успешной регистрации, переходит на страницу своего профиля, после чего данная страница будет являться
+ * отправной точкой для тестирования остальных страниц.
+ */
 class UserControllerTest extends ForumWebTestCase
 {
     /**
-     * Гость, в случае успешной регистрации, будет перенаправлен на страницу своего профиля.
+     * Гость, в случае успешной регистрации, будет перенаправлен на страницу своего профиля (отправная точка).
+     *
      * @param string $username
      * @param string|integer $password
      * @param integer $sex
@@ -17,9 +23,10 @@ class UserControllerTest extends ForumWebTestCase
      */
     public function testNew($username, $password, $sex, $role)
     {
-        $uri = self::$container->get('router')->generate('profile_new');
-
-        self::$crawler = self::$client->request('GET', $uri);
+        self::$crawler = self::$client->request(
+            'GET',
+            self::$container->get('router')->generate('profile_new')
+        );
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
@@ -39,8 +46,8 @@ class UserControllerTest extends ForumWebTestCase
     }
 
     /**
-     * Пользователь, находящийся в своем профиле и кликая кнопку "Смена пароля", переходит на страницу изменения
-     * пароля, после чего меняет его.
+     * Пользователь, кликая кнопку "Смена пароля", переходит на страницу изменения пароля, после чего меняет его.
+     *
      * @param string $message
      * @param string $oldPassword
      * @param string $newPassword
@@ -67,41 +74,81 @@ class UserControllerTest extends ForumWebTestCase
     }
 
     /**
-     * Пользователь, находящийся на странице своего профиля и кликая кнопку "Пользователи", переходит на
-     * страницу списка всех пользователей форума.
+     * Пользователь, кликая кнопку "Пользователи", переходит на страницу списка всех пользователей форума.
+     *
      * @depends testChangePassword
      */
     public function testList()
     {
         $text = 'Список пользователей';
 
-        self::$crawler = self::$client->click(
+        $crawler = self::$client->click(
             self::$crawler->selectLink('Пользователи')->link()
         );
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $this->assertEquals($text, self::$crawler->filter('h1.header_title')->text());
+        $this->assertEquals($text, $crawler->filter('h1.header_title')->text());
     }
 
     /**
-     * Пользователь, находящийся на странице списка всех пользователей форума и кликая кнопку "Пользователи",
-     * переходит на страницу первого попавшегося пользователя в этом списке.
+     * Пользователь, кликая кнопку "Пользователи", переходит на страницу профиля первого попавшегося пользователя в этом
+     * списке.
+     *
      * @depends testList
      */
     public function testShow()
     {
-        $link = self::$crawler->filter('ul > *')->children()->first()->link();
-        self::$crawler = self::$client->click($link);
+        $crawler = self::$client->click(
+            self::$crawler->selectLink('Пользователи')->link()
+        );
+
+        $link = $crawler->filter('ul > li')->children()->first()->link();
+        $crawler = self::$client->click($link);
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $this->assertEquals(
             $link->getNode()->firstChild->textContent,
-            self::$crawler->filter('div#profile_owner')->text()
+            $crawler->filter('div#profile_owner')->text()
         );
     }
-//
+
+    /**
+     * Пользователь, кликая кнопку "Редактировать профиль", приступает к редактированию своего профиля.
+     * Обновляется ($crawler) страница профиля пользователя.
+     *
+     * @param integer $key
+     * @param string $value
+     * @dataProvider genderProvider
+     * @depends testShow
+     */
+    public function testEdit($key, $value)
+    {
+        $checkSex = function () {
+            return self::$crawler->filter('span#sex')->text();
+        };
+
+        $beforeSex = $checkSex();
+
+        $crawler = self::$client->click(
+            self::$crawler->selectLink('Редактировать профиль')->link()
+        );
+
+        $form = $crawler->selectButton('profile_edit_save')->form([
+            'profile_edit[sex]' => $key,
+        ]);
+
+        self::$crawler = self::$client->click(
+            self::$client->submit($form)
+                ->selectLink('Профиль')
+                ->link()
+        ); // Обновление страницы профиля пользователя
+
+        $this->assertNotEquals($value, $beforeSex);
+        $this->assertEquals($value, $checkSex());
+    }
+
 //    public function testCountingUserTopicAndPosts()
 //    {
 //        $topics = ['2', '3'];
@@ -138,42 +185,6 @@ class UserControllerTest extends ForumWebTestCase
 //        // \Add topic with post
 //
 //        $testCountingUserTopicAndPosts($topics[1], $posts[1]);
-//    }
-//
-//    public function testEditProfileAsOwnerAndSexChoice()
-//    {
-//        // self::$client = User-Owner = test
-//        $userAsOwner = [
-//            'id' => 1,
-//            'username' => 'test',
-//        ];
-//        $sex = [
-//            'before' => [
-//                'choice' => 0,
-//                'label' => 'Не указывать',
-//            ],
-//            'after' => [
-//                'choice' => 1,
-//                'label' => 'Мужской',
-//            ],
-//        ];
-//
-//        $uri = self::$container->get('router')->generate('profile_edit', ['id' => $userAsOwner['id']]);
-//
-//        $crawler = self::$client->request('GET', $uri);
-//
-//        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-//
-//        $this->assertEquals($sex['before']['label'], $crawler->filter('option[selected]')->text());
-//
-//        $form = $crawler->selectButton('profile_edit_save')->form([
-//            'profile_edit[sex]' => 1,
-////            'profile_edit[plainPassword]' => 12345678,
-//        ]);
-//
-//        $crawler = self::$client->submit($form);
-//
-//        $this->assertEquals($sex['after']['label'], $crawler->filter('option[selected]')->text());
 //    }
 //
 //    public function testEditProfileAsUser()

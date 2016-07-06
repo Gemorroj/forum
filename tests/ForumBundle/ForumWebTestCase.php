@@ -60,10 +60,10 @@ abstract class ForumWebTestCase extends WebTestCase
     public function genderProvider()
     {
         return [
-//            ['beforeKey', 'beforeValue', 'afterKey', 'afterValue'],
-            [0, 'Не указан', 1, 'Мужской'],
-            [1, 'Мужской',   2, 'Женский'],
-            [2, 'Женский',   0, 'Не указан'],
+//            ['key', 'value'],
+            [2, 'Женский'],
+            [1, 'Мужской'],
+            [0, 'Не указан'],
         ];
     }
 
