@@ -10,13 +10,19 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class ForumWebTestCase extends WebTestCase
 {
     /**
-     * @var Container
-     */
-    protected static $container;
-    /**
      * @var Client
      */
     protected static $client;
+
+    /**
+     * @var Container
+     */
+    protected static $container;
+
+    /**
+     * @var Crawler
+     */
+    protected static $crawler;
 
 
     protected function setUp()
@@ -24,7 +30,7 @@ abstract class ForumWebTestCase extends WebTestCase
         if (!self::$container) {
             self::$client = static::createClient();
             self::$container = self::$client->getContainer();
-            self::loginAsUser();
+//            self::loginAsUser();
         }
     }
 
@@ -49,21 +55,79 @@ abstract class ForumWebTestCase extends WebTestCase
 
 
     /**
-     * @return Crawler
-     * @throws \Exception
+     * Change tracking
      */
-    protected static function loginAsAdmin()
+    public function genderProvider()
     {
-        throw new \Exception('Not implemented');
+        return [
+//            ['beforeKey', 'beforeValue', 'afterKey', 'afterValue'],
+            [0, 'Не указан', 1, 'Мужской'],
+            [1, 'Мужской',   2, 'Женский'],
+            [2, 'Женский',   0, 'Не указан'],
+        ];
+    }
+
+    /**
+     * Change tracking
+     */
+    public function passwordProvider()
+    {
+        return [
+//            ['message', 'oldPassword', 'newPassword'],
+            ['Пароль успешно изменен', 12345678, 87654321],
+            ['Пароль успешно изменен', 87654321, 12345678],
+        ];
     }
 
 
     /**
-     * @return Crawler
-     * @throws \Exception
+     * Fixture
      */
-    protected static function loginAsAnon()
+    public function userProvider()
     {
-        throw new \Exception('Not implemented');
+        return [
+//            ['username', 'password', 'sex', 'role'],
+            ['userAsRole',  12345678, 2, 'ROLE_USER'],
+//            ['userAsAdmin', 11111111, 1, 'ROLE_ADMIN'],
+//            ['userAsSuper', 22222222, 0, 'ROLE_SUPER_ADMIN'],
+        ];
+    }
+
+    /**
+     * Fixture
+     */
+    public function forumProvider()
+    {
+        return [
+//            ['forumTitle'],
+            ['PHP'],
+            ['MySQL'],
+        ];
+    }
+
+    /**
+     * Fixture
+     */
+    public function topicProvider()
+    {
+        return [
+//            ['topicTitle', 'forumTitle'],
+            ['Topic1', 'PHP'],
+            ['Topic2', 'MySQL'],
+        ];
+    }
+
+    /**
+     * Fixture
+     */
+    public function postProvider()
+    {
+        return [
+//        ['postText', 'topicTitle'],
+            ['Text #1', 'Topic1'],
+            ['Text #2', 'Topic1'],
+            ['Text #3', 'Topic2'],
+            ['Text #4', 'Topic2'],
+        ];
     }
 }
