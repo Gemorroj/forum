@@ -94,7 +94,7 @@ abstract class ForumWebTestCase extends WebTestCase
     }
 
     /**
-     * Fixture
+     * Data availability
      */
     public function forumProvider()
     {
@@ -110,11 +110,16 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     public function topicProvider()
     {
-        return [
-//            ['topicTitle', 'forumTitle'],
-            ['Topic1', 'PHP'],
-            ['Topic2', 'MySQL'],
-        ];
+        $data = [];
+
+        for ($i = 0, $j = rand(5, 15); $i < $j; $i++) {
+            $data[$i] = [
+                'topic' => ['title' => sprintf('Topic #%d', $i)],
+                'post'  => ['text'  => 'Post, written on create topic.'],
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -122,12 +127,14 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     public function postProvider()
     {
-        return [
-//        ['postText', 'topicTitle'],
-            ['Text #1', 'Topic1'],
-            ['Text #2', 'Topic1'],
-            ['Text #3', 'Topic2'],
-            ['Text #4', 'Topic2'],
-        ];
+        $data = [];
+
+        for ($i = 0, $j = rand(5, 15); $i < $j; $i++) {
+            $data[$i] = [
+                'post' => ['text' => sprintf('Post #%d', $i)],
+            ];
+        }
+
+        return $data;
     }
 }
