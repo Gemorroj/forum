@@ -30,6 +30,8 @@ class DefaultControllerTest extends ForumWebTestCase
                 if ($forum == $domElement->current()->textContent) {
                     $isFound = true;
                     break;
+                } else {
+                    $isFound = false;
                 }
                 $domElement->next();
             }
