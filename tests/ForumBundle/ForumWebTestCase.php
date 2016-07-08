@@ -24,6 +24,11 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     protected static $crawler;
 
+    /**
+     * @var array
+     */
+    protected static $data;
+
 
     protected function setUp()
     {
@@ -110,16 +115,19 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     public function topicProvider()
     {
-        $data = [];
+        if (! isset(self::$data['topics']) || empty(self::$data['topics'])) {
+            self::$data['topics'] = [];
 
-        for ($i = 0, $j = rand(5, 15); $i < $j; $i++) {
-            $data[$i] = [
-                'topic' => ['title' => sprintf('Topic #%d', $i)],
-                'post'  => ['text'  => 'Post, written on create topic.'],
-            ];
+            // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
+            for ($i = 0, $j = rand(1, 9); $i < $j; $i++) {
+                self::$data['topics'][$i] = [
+                    'topic' => ['title' => sprintf('Topic #%d', mt_rand(1000, 9999))],
+                    'post'  => ['text'  => 'Post, written on create topic.'],
+                ];
+            }
         }
 
-        return $data;
+        return self::$data['topics'];
     }
 
     /**
@@ -127,14 +135,28 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     public function postProvider()
     {
-        $data = [];
+        if (! isset(self::$data['posts']) || empty(self::$data['posts'])) {
+            self::$data['posts'] = [];
 
-        for ($i = 0, $j = rand(5, 15); $i < $j; $i++) {
-            $data[$i] = [
-                'post' => ['text' => sprintf('Post #%d', $i)],
-            ];
+            // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
+            for ($i = 0, $j = rand(1, 9); $i < $j; $i++) {
+                self::$data['posts'][$i] = [
+                    'post' => ['text' => sprintf('Post #%d', mt_rand(1000, 9999))],
+                ];
+            }
         }
 
-        return $data;
+        return self::$data['posts'];
     }
+
+    /**
+     * TODO: Поиск записей по всем доступным страницам.
+     */
+//    protected function pagination($crawler)
+//    {
+//        $crawler = self::$client->click(
+//            self::$crawler->selectLink('След.')->link()
+//        );
+//        return $crawler;
+//    }
 }

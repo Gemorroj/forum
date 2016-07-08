@@ -1,16 +1,18 @@
 {% extends '@Forum/layout/layout.html.twig' %}
 
 {% block content %}
-<ul data-role="listview" data-inset="true">
+<ul class="forum_list" data-role="listview" data-inset="true">
     {% for forum in forums %}
-        <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">
-            <span class="forum_title">{{ forum.title }}</span>
-            <span class="ui-li-count">
-                <span class="count_topics">{{ forum.countTopics }}</span> / <span class="count_posts">{{ forum.countPosts }}</span>
-            </span>
-        </a></li>
+        <li class="forum">
+            <a class="forum_link ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">
+                <span class="forum_title">{{ forum.title }}</span>
+                <span class="ui-li-count">
+                    <span class="forum_count_topics">{{ forum.countTopics }}</span> / <span class="forum_count_posts">{{ forum.countPosts }}</span>
+                </span>
+            </a>
+        </li>
     {% else %}
-        <li class="no_content">Пусто</li>
+        <li class="empty">Пусто</li>
     {% endfor %}
 </ul>
 {% endblock %}
