@@ -84,6 +84,6 @@ class PostVoter extends Voter
             return true;
         }
 
-        return $this->decisionManager->decide($token, array('ROLE_USER'));
+        return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
     }
 }
