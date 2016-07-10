@@ -13,6 +13,27 @@ $document.on("pagecreate", function (e) {
 });
 
 
+// topic_options
+$document.on("pagecreate", "#forum_show", function (e) {
+    var $container = $(e.target);
+    $container.find("a.options").click(function() {
+        var $this = $(this);
+        var $item = $container.find('#' + $this.data('ref')); // Не знаю как вытащить Child
+        var $div = $item.find('div');
+        // if ('true' == $item.isCollapsed) {
+        if ($div.hasClass('ui-collapsible-content-collapsed') || 'true' == $div.attr('aria-hidden')) {
+            // $div.trigger('expanded');
+            $div.removeClass('ui-collapsible-content-collapsed');
+            $div.attr('aria-hidden', 'false');
+        } else {
+            // $div.trigger('collapsed');
+            $div.addClass('ui-collapsible-content-collapsed');
+            $div.attr('aria-hidden', 'true');
+        }
+    });
+});
+
+
 // topic
 $document.on("pagecreate", "#topic_show", function () {
     var $container = $(this);

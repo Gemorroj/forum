@@ -82,8 +82,9 @@ class UserControllerTest extends ForumWebTestCase
     {
         $text = 'Список пользователей';
 
-        $crawler = self::$client->click(
-            self::$crawler->selectLink('Пользователи')->link()
+        $crawler = self::$client->request(
+            'GET',
+            self::$container->get('router')->generate('profile_list', ['page' => 1])
         );
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
