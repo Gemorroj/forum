@@ -34,7 +34,7 @@
                 {% endblock %}
 
                 <a href="{{ path('index') }}" class="ui-corner-all ui-shadow ui-btn ui-btn-right ui-icon-home ui-btn-icon-notext">Главная страница</a>
-                <a href="#panel" class="ui-corner-all ui-shadow ui-btn ui-btn-left ui-icon-user ui-btn-icon-notext">Панель</a>
+                <a href="#panel" class="ui-corner-all ui-shadow ui-btn ui-btn-left ui-icon-bars ui-btn-icon-notext">Панель</a>
             </div><!-- /header -->
 
             <div role="main" class="ui-content center-container">
@@ -48,20 +48,6 @@
 
             <div class="ui-footer" data-theme="b" data-role="footer" data-position="fixed">
                 {% block footer %}
-                    <div data-role="navbar">
-                        <ul>
-                            {#<li>#}
-                            {#{% if 'index' == app.request.attributes.get('_route') %}#}
-                                {#<a data-icon="home" href="{{ path('index') }}">Главная</a>#}
-                            {#{% else %}#}
-                                {#<a data-icon="arrow-l" href="#back" title="Не работает ;(">Назад</a>#}
-                            {#{% endif %}#}
-                            {#</li>#}
-                            <li><a data-icon="eye"  href="{{ path('index') }}#Online">Онлайн: ~</a></li>
-                            <li><a data-icon="user" href="{{ path('profile_list', {'page': 1}) }}">Пользователи</a></li>
-                            <li><a data-icon="tag"  href="{{ path('index') }}#Uploads">Вложения</a></li>
-                        </ul>
-                    </div>
                     <h1 class="footer_title">&copy; &circledR; {{ forum_title }} (2016)</h1>
                 {% endblock %}
             </div><!-- /footer -->
@@ -71,7 +57,8 @@
                     <ul class="ui-listview ui-listview-inset ui-corner-all ui-shadow" data-role="listview" data-inset="true" data-divider-theme="b">
                         <li  data-role="list-divider" class="ui-li-divider ui-bar-b ui-first-child">Панель</li>
                         {% if app.user %}
-                            <li><a class="ui-btn ui-btn-icon-left ui-icon-gear" href="{{ path('profile_show', {'id': app.user.id}) }}">Профиль</a></li>
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-mail" href="#pm">Сообщения <span class="ui-li-count">+1</span></a></li>
+                            <li><a class="ui-btn ui-btn-icon-left ui-icon-user" href="{{ path('profile_show', {'id': app.user.id}) }}">Профиль</a></li>
                             <li><a class="ui-btn ui-btn-icon-left ui-icon-power" href="{{ path('logout') }}">Выйти</a></li>
                         {% else %}
                             <li><a class="ui-btn ui-btn-icon-left ui-icon-lock" href="{{ path('login_route') }}">Авторизация</a></li>

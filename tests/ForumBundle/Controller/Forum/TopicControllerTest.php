@@ -68,7 +68,7 @@ class TopicControllerTest extends ForumWebTestCase
         );
 
         $topicTitle = $crawler->filter('.topic_title')->first()->text(); // First topic in list on first page
-        $action = $crawler->filter('a.topic_edit_button')->eq(0)->attr('data-url'); // First topic...
+        $action = $crawler->filter('a.topic_management_button')->eq(0)->attr('data-edit'); // First topic...
 
         $form = $crawler->selectButton('topic_edit_edit')->form([
             'topic_edit[title]' => $topicTitle . '_changed_',

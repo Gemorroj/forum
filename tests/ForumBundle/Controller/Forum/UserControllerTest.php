@@ -101,8 +101,16 @@ class UserControllerTest extends ForumWebTestCase
     public function testShow()
     {
         $crawler = self::$client->click(
-            self::$crawler->selectLink('Пользователи')->link()
+            self::$crawler->selectLink('Главная страница')->link()
         );
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $crawler = self::$client->click(
+            $crawler->selectLink('Пользователей')->link()
+        );
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $link = $crawler->filter('ul > li')->children()->first()->link();
         $crawler = self::$client->click($link);

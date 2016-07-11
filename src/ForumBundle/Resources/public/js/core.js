@@ -1,40 +1,25 @@
 "use strict";
 
+
 var $document = $(document);
 
+// http://stackoverflow.com/questions/18429655/jquery-mobile-open-popup-from-popup
+$.mobile.switchPopup = function(sourceElement, destinationElement, onswitched) {
+    var afterClose = function() {
+        destinationElement.popup("open", {"transition": "slideup"});
+        sourceElement.off("popupafterclose", afterClose);
 
-// авторизация
-$document.on("pagecreate", function (e) {
-    var $container = $(e.target);
-
-    $container.find("#btn-authorization").click(function () {
-        $container.find("#popup-authorization").popup("open", {"transition": "pop", "positionTo": "window"});
-    });
-});
-
-
-// topic_options
-$document.on("pagecreate", "#forum_show", function (e) {
-    var $container = $(e.target);
-    $container.find("a.options").click(function() {
-        var $this = $(this);
-        var $item = $container.find('#' + $this.data('ref')); // Не знаю как вытащить Child
-        var $div = $item.find('div');
-        // if ('true' == $item.isCollapsed) {
-        if ($div.hasClass('ui-collapsible-content-collapsed') || 'true' == $div.attr('aria-hidden')) {
-            // $div.trigger('expanded');
-            $div.removeClass('ui-collapsible-content-collapsed');
-            $div.attr('aria-hidden', 'false');
-        } else {
-            // $div.trigger('collapsed');
-            $div.addClass('ui-collapsible-content-collapsed');
-            $div.attr('aria-hidden', 'true');
+        if (onswitched && typeof onswitched === "function"){
+            onswitched();
         }
-    });
-});
+    };
+
+    sourceElement.on("popupafterclose", afterClose);
+    sourceElement.popup("close");
+};
 
 
-// topic
+// topic_show
 $document.on("pagecreate", "#topic_show", function () {
     var $container = $(this);
     var $editTopicPopup = $container.find('#edit_topic_popup');
@@ -63,30 +48,33 @@ $document.on("pagecreate", "#topic_show", function () {
 });
 
 
-// topics
+// forum_show
 $document.on("pagecreate", "#forum_show", function () {
     var $container = $(this);
-    var $editTopicsPopup = $container.find('#edit_topics_popup');
-    var $deleteTopicsPopup = $container.find('#delete_topics_popup');
+    var $topicManagementButton = $container.find('a.topic_management_button');
+    var $topicManagementPopup  = $container.find('#topic_management_popup');
+    var $topicEditPopup        = $container.find('#topic_edit_popup');
+    var $topicDeletePopup      = $container.find('#topic_delete_popup');
 
-    $container.find('a.topic_delete_button').click(function () {
-        $deleteTopicsPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $deleteForm = $deleteTopicsPopup.find('form');
-        $deleteForm.attr('action', $this.attr('data-url'));
+    $topicManagementButton.click(function () {
+        $topicManagementPopup.popup('open', {"transition": "slideup"});
     });
     $container.find('a.topic_edit_button').click(function () {
-        $editTopicsPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $editForm = $editTopicsPopup.find('form');
-        var refId = $this.data('ref');
-        $editForm.find('textarea').val($container.find('#' + refId).text());
-        $editForm.attr('action', $this.attr('data-url'));
+        $.mobile.switchPopup($topicManagementPopup, $topicEditPopup, false);
+        var $editForm = $topicEditPopup.find('form');
+        var refId = $topicManagementButton.data('ref');
+        $editForm.find('textarea').val($container.find('#' + refId).find('span.topic_title').text());
+        $editForm.attr('action', $topicManagementButton.attr('data-edit'));
     });
-    $container.find("button[data-id='topic_delete_cancel']").click(function () {
-        $deleteTopicsPopup.popup('close');
+    $container.find('a.topic_delete_button').click(function () {
+        $.mobile.switchPopup($topicManagementPopup, $topicDeletePopup, false);
+        var $deleteForm = $topicDeletePopup.find('form');
+        $deleteForm.attr('action', $topicManagementButton.attr('data-delete'));
     });
     $container.find("button[data-id='topic_edit_cancel']").click(function () {
-        $editTopicsPopup.popup('close');
+        $topicEditPopup.popup('close');
+    });
+    $container.find("button[data-id='topic_delete_cancel']").click(function () {
+        $topicDeletePopup.popup('close');
     });
 });

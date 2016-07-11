@@ -2,64 +2,23 @@
 
 {% block title %}{{ forum.title }}{% endblock %}
 
-{% block stylesheets %}
-<style type="text/css">
-/* Basic settings */
-.ui-li-static.ui-collapsible {
-    padding: 0;
-}
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview,
-.ui-li-static.ui-collapsible > .ui-collapsible-heading {
-    margin: 0;
-}
-.ui-li-static.ui-collapsible > .ui-collapsible-content {
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: 0;
-    border-bottom-width: 0;
-}
-/* collapse vertical borders */
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-last-child,
-.ui-li-static.ui-collapsible.ui-collapsible-collapsed > .ui-collapsible-heading > a.ui-btn {
-    border-bottom-width: 0;
-}
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child,
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child > a.ui-btn,
-.ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn {
-    border-top-width: 0;
-}
-/* Remove right borders */
-.ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > .ui-li-static,
-.ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li > a.ui-btn,
-.ui-li-static.ui-collapsible > .ui-collapsible-content {
-    border-right-width: 0;
-}
-/* Remove left borders */
-/* Here, we need class ui-listview-outer to identify the outermost listview */
-.ui-listview-outer > .ui-li-static.ui-collapsible .ui-li-static.ui-collapsible.ui-collapsible,
-.ui-listview-outer > .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
-.ui-li-static.ui-collapsible > .ui-collapsible-content {
-    border-left-width: 0;
-}
-</style>
-{% endblock %}
-
 {% block content %}
     {% block popup %}
-        <div data-role="popup" id="delete_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="topic_management_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
-                <h1>Удалить тему?</h1>
+                <h1>Управление</h1>
             </div>
             <div role="main" class="ui-content">
-                <p>Вы уверенны что хотите удалить эту тему?</p>
-                {{ form_start(topicDeleteForm) }}
-                {{ form_widget(topicDeleteForm) }}
-                {{ form_end(topicDeleteForm) }}
+                {#{% if is_granted('EDIT', topic) %}#}
+                <a class="topic_edit_button ui-btn ui-icon-edit ui-btn-icon-left" href="#">Редактировать</a>
+                {#{% endif %}#}
+                {#{% if is_granted('DELETE', topic) %}#}
+                <a class="topic_delete_button ui-btn ui-icon-delete ui-btn-icon-left" href="#">Удалить</a>
+                {#{% endif %}#}
             </div>
         </div>
 
-        <div data-role="popup" id="edit_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="topic_edit_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
                 <h1>Редактирование темы</h1>
             </div>
@@ -69,36 +28,35 @@
                 {{ form_end(topicEditForm) }}
             </div>
         </div>
+
+        <div data-role="popup" id="topic_delete_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+            <div data-role="header" data-theme="a">
+                <h1>Удаление темы</h1>
+            </div>
+            <div role="main" class="ui-content">
+                <p>Вы уверенны что хотите удалить эту тему?</p>
+                {{ form_start(topicDeleteForm) }}
+                {{ form_widget(topicDeleteForm) }}
+                {{ form_end(topicDeleteForm) }}
+            </div>
+        </div>
     {% endblock %}
 
-    <ul class="topic_list ui-listview-outer" data-role="listview" data-inset="true" data-split-icon="gear">
+    <ul class="topic_list" data-role="listview" data-inset="true" data-split-icon="gear">
         {% for topic in topics %}
             <li class="topic" id="topic{{ topic.id }}">
                 <a class="topic_link" href="{{ path('topic_show', {'id': topic.id} ) }}">
                     <span class="topic_title">{{ topic.title }}</span>
                     <span class="topic_count_posts ui-li-count">{{ topic.countPosts }}</span>
                     {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
-                        <a class="options" data-ref="options{{ topic.id }}" href="#options{{ topic.id }}">Options</a>
+                        <a class="topic_management_button"
+                           data-edit="{{ path('topic_edit', {'id': topic.id}) }}"
+                           data-delete="{{ path('topic_delete', {'id': topic.id}) }}"
+                           data-ref="topic{{ topic.id }}"
+                           href="#">Management</a>
                     {% endif %}
                 </a>
             </li>
-            {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
-                <li id="options{{ topic.id }}" data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false">
-                    {#<h2>Управление темой</h2>#}
-                    <ul data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
-                        {% if is_granted('EDIT', topic) %}
-                            <li>
-                                <a data-url="{{ path('topic_edit', {'id': topic.id}) }}" data-ref="topic{{ topic.id }}" href="#" class="topic_edit_button">Редактировать</a>
-                            </li>
-                        {% endif %}
-                        {% if is_granted('DELETE', topic) %}
-                            <li>
-                                <a data-url="{{ path('topic_delete', {'id': topic.id}) }}" href="#" class="topic_delete_button">Удалить</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </li>
-            {% endif %}
         {% else %}
             <li class="empty">Пусто</li>
         {% endfor %}

@@ -2,6 +2,7 @@
 
 {% block content %}
 <ul class="forum_list" data-role="listview" data-inset="true">
+    <li data-role="list-divider">Форумы</li>
     {% for forum in forums %}
         <li class="forum">
             <a class="forum_link ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">
@@ -14,5 +15,13 @@
     {% else %}
         <li class="empty">Пусто</li>
     {% endfor %}
+</ul>
+
+<ul class="info" data-role="listview" data-inset="true">
+    <li data-role="list-divider">Информация</li>
+    <li>Тем <span class="ui-li-count">Отк.: 10 / Зак.: 15 / Всего: 25</span></li>
+    <li>Сообщений <span class="ui-li-count">99</span></li>
+    <li><a class="ui-btn ui-btn-icon-left ui-icon-user" href="{{ path('profile_list', {'page': 1}) }}">Пользователей <span class="ui-li-count">99 / 5</span></a></li>
+    <li><a class="ui-btn ui-btn-icon-left ui-icon-eye" href="#guests">Гостей <span class="ui-li-count">9</span></a></li>
 </ul>
 {% endblock %}
