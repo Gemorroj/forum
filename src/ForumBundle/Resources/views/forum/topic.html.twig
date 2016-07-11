@@ -2,10 +2,34 @@
 
 {% block title %}{{ topic.forum.title }} / {{ topic.title }}{% endblock %}
 
-
 {% block content %}
     {% block popup %}
-        <div data-role="popup" id="delete_topic_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="post_management_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+            <div data-role="header" data-theme="a">
+                <h1>Управление</h1>
+            </div>
+            <div role="main" class="ui-content">
+                {#{% if is_granted('EDIT', post) %}#}
+                <a class="post_edit_button ui-btn ui-icon-edit ui-btn-icon-left" href="#">Редактировать</a>
+                {#{% endif %}#}
+                {#{% if is_granted('DELETE', post) %}#}
+                <a class="post_delete_button ui-btn ui-icon-delete ui-btn-icon-left" href="#">Удалить</a>
+                {#{% endif %}#}
+            </div>
+        </div>
+
+        <div data-role="popup" id="post_edit_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+            <div data-role="header" data-theme="a">
+                <h1>Редактирование сообщения</h1>
+            </div>
+            <div role="main" class="ui-content">
+                {{ form_start(postEditForm) }}
+                {{ form_widget(postEditForm) }}
+                {{ form_end(postEditForm) }}
+            </div>
+        </div>
+
+        <div data-role="popup" id="post_delete_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
                 <h1>Удаление сообщения</h1>
             </div>
@@ -16,34 +40,22 @@
                 {{ form_end(postDeleteForm) }}
             </div>
         </div>
-
-        <div data-role="popup" id="edit_topic_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
-            <div data-role="header" data-theme="a">
-                <h1>Редактирование сообщения</h1>
-            </div>
-            <div role="main" class="ui-content">
-                {{ form_start(postEditForm) }}
-                    {{ form_widget(postEditForm) }}
-                {{ form_end(postEditForm) }}
-            </div>
-        </div>
     {% endblock %}
 
-    <ul class="post_list" data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="a">
+    <ul class="post_list" data-role="listview" data-inset="true" data-split-icon="gear">
         {% for post in posts %}
-            <li class="post" data-role="list-divider">
-                <span data-role="controlgroup" data-type="horizontal" data-mini="true">
-                    <a class="post_author_link ui-btn ui-icon-user ui-btn-icon-left" href="{{ path('profile_show', {'id': post.user.id }) }}"><span class="post_author">{{ post.user.username }}</span></a>
+            <li class="post" data-theme="b">
+                <a class="post_author_link" href="{{ path('profile_show', {'id': post.user.id }) }}">
+                    <span class="post_author">{{ post.user.username }}</span>
                     <span class="post_date ui-li-count">{{ post.createdAt|date }}</span>
-                {% if app.user and (is_granted('DELETE', post) or is_granted('EDIT', post)) %}
-                    {% if is_granted('EDIT', post) %}
-                        <a data-url="{{ path('post_edit', {'id': post.id}) }}" data-ref="post{{ post.id }}" href="#" class="post_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
+                    {% if app.user and (is_granted('EDIT', post) or is_granted('DELETE', post)) %}
+                        <a class="post_management_button"
+                           data-edit="{{ path('post_edit', {'id': post.id}) }}"
+                           data-delete="{{ path('post_delete', {'id': post.id}) }}"
+                           data-ref="post{{ post.id }}"
+                           href="#">Управление</a>
                     {% endif %}
-                    {% if is_granted('DELETE', post) %}
-                        <a data-url="{{ path('post_delete', {'id': post.id}) }}" href="#" class="post_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
-                    {% endif %}
-                {% endif %}
-                </span>
+                </a>
             </li>
             <li class="post_text" id="post{{ post.id }}">{{ post.text }}</li>
         {% else %}
