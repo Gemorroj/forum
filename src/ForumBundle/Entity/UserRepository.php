@@ -4,10 +4,9 @@ namespace ForumBundle\Entity;
 
 
 use Doctrine\ORM\EntityRepository;
-//use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
 
-class UserRepository extends EntityRepository// implements UserLoaderInterface
+class UserRepository extends EntityRepository
 {
     /**
      * @return \Doctrine\ORM\Query
@@ -19,5 +18,18 @@ class UserRepository extends EntityRepository// implements UserLoaderInterface
             ->createQueryBuilder('u')
             ->orderBy('u.createdAt', 'DESC')
             ->getQuery();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getCountUsers()
+    {
+        return $this->getEntityManager()
+            ->getRepository('ForumBundle:User')
+            ->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

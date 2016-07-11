@@ -19,9 +19,9 @@
 
 <ul class="info" data-role="listview" data-inset="true">
     <li data-role="list-divider">Информация</li>
-    <li>Тем <span class="ui-li-count">Отк.: 10 / Зак.: 15 / Всего: 25</span></li>
-    <li>Сообщений <span class="ui-li-count">99</span></li>
-    <li><a class="ui-btn ui-btn-icon-left ui-icon-user" href="{{ path('profile_list', {'page': 1}) }}">Пользователей <span class="ui-li-count">99 / 5</span></a></li>
-    <li><a class="ui-btn ui-btn-icon-left ui-icon-eye" href="#guests">Гостей <span class="ui-li-count">9</span></a></li>
+    <li><b>Тем</b> <span class="statistics-of-topics ui-li-count">{{ statistics.countTopics }}</span></li>
+    <li><b>Сообщений</b> <span class="statistics-of-posts ui-li-count">{{ statistics.countPosts }}</span></li>
+    <li><a class="ui-btn ui-icon-false" href="{{ path('profile_list', {'page': 1}) }}">Пользователей <span class="statistics-of-users ui-li-count">{{ countUsers }}</span></a></li>
+    {#<li><a class="ui-btn ui-btn-icon-left ui-icon-eye" href="#guests">Гостей <span class="ui-li-count">9</span></a></li>#}
 </ul>
 {% endblock %}
