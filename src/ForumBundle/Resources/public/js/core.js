@@ -32,8 +32,9 @@ $document.on("pagecreate", "#topic_show", function () {
     var $postEditButton       = $container.find('a.post_edit_button');
     var $postDeleteButton     = $container.find('a.post_delete_button');
 
-    var $postEditCancelButton   = $container.find("button[data-id='post_edit_cancel']");
-    var $postDeleteCancelButton = $container.find("button[data-id='post_delete_cancel']");
+    var $postManagementCancelButton = $postManagementPopup.find('a.post_management_cancel');
+    var $postEditCancelButton       = $container.find("button[data-id='post_edit_cancel']");
+    var $postDeleteCancelButton     = $container.find("button[data-id='post_delete_cancel']");
 
     $postManagementButton.click(function () {
         $postManagementPopup.popup('open', {"transition": "slideup"});
@@ -53,6 +54,9 @@ $document.on("pagecreate", "#topic_show", function () {
         var $deleteForm = $postDeletePopup.find('form');
 
         $deleteForm.attr('action', $postManagementButton.attr('data-delete'));
+    });
+    $postManagementCancelButton.click(function () {
+        $postManagementPopup.popup('close');
     });
     $postEditCancelButton.click(function () {
         $postEditPopup.popup('close');
@@ -75,8 +79,9 @@ $document.on("pagecreate", "#forum_show", function () {
     var $topicEditButton       = $container.find('a.topic_edit_button');
     var $topicDeleteButton     = $container.find('a.topic_delete_button');
 
-    var $topicEditCancelButton   = $container.find("button[data-id='topic_edit_cancel']");
-    var $topicDeleteCancelButton = $container.find("button[data-id='topic_delete_cancel']");
+    var $topicManagementCancelButton = $topicManagementPopup.find('a.topic_management_cancel');
+    var $topicEditCancelButton       = $container.find("button[data-id='topic_edit_cancel']");
+    var $topicDeleteCancelButton     = $container.find("button[data-id='topic_delete_cancel']");
 
     $topicManagementButton.click(function () {
         $topicManagementPopup.popup('open', {"transition": "slideup"});
@@ -96,6 +101,9 @@ $document.on("pagecreate", "#forum_show", function () {
         var $deleteForm = $topicDeletePopup.find('form');
 
         $deleteForm.attr('action', $topicManagementButton.attr('data-delete'));
+    });
+    $topicManagementCancelButton.click(function () {
+        $topicManagementPopup.popup('close');
     });
     $topicEditCancelButton.click(function () {
         $topicEditPopup.popup('close');
