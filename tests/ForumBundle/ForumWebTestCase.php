@@ -113,7 +113,7 @@ abstract class ForumWebTestCase extends WebTestCase
     /**
      * Fixture
      */
-    public function topicAddProvider()
+    public function topicProvider()
     {
         if (! isset(self::$data['topics']) || empty(self::$data['topics'])) {
             self::$data['topics'] = [];
@@ -128,14 +128,6 @@ abstract class ForumWebTestCase extends WebTestCase
         }
 
         return self::$data['topics'];
-    }
-
-    /**
-     * Fixture
-     */
-    public function topicShowProvider()
-    {
-        return array_reverse(self::$data['topics']);
     }
 
     /**
@@ -164,14 +156,14 @@ abstract class ForumWebTestCase extends WebTestCase
      */
     protected function pagination($crawler)
     {
-        $nextPage = $crawler->selectButton('След.');
-        if ($nextPage && $nextPage->getNode(0) && false === mb_stripos(
+        $nextPageCrawler = $crawler->selectLink('След.');
+        if ($nextPageCrawler && $nextPageCrawler->getNode(0) && false === mb_stripos(
+            $nextPageCrawler->getNode(0)->getAttribute('class'),
             'ui-disabled',
-            $nextPage->getNode(0)->getAttribute('class'),
             null,
             'UTF-8'
         )) {
-            return self::$client->click($nextPage->link());
+            return self::$client->click($nextPageCrawler->link());
         }
 
         return false;

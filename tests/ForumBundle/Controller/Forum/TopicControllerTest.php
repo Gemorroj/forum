@@ -10,7 +10,7 @@ class TopicControllerTest extends ForumWebTestCase
     /**
      * @param array $topic
      * @param array $post
-     * @dataProvider topicAddProvider
+     * @dataProvider topicProvider
      */
     public function testAdd($topic, $post)
     {
@@ -35,7 +35,7 @@ class TopicControllerTest extends ForumWebTestCase
 
     /**
      * @param array $topic
-     * @dataProvider topicShowProvider
+     * @dataProvider topicProvider
      * @depends testAdd
      */
     public function testShow($topic)
