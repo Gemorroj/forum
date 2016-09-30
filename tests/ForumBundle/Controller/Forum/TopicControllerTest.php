@@ -10,7 +10,7 @@ class TopicControllerTest extends ForumWebTestCase
     /**
      * @param array $topic
      * @param array $post
-     * @dataProvider topicProvider
+     * @dataProvider topicAddProvider
      */
     public function testAdd($topic, $post)
     {
@@ -35,7 +35,7 @@ class TopicControllerTest extends ForumWebTestCase
 
     /**
      * @param array $topic
-     * @dataProvider topicProvider
+     * @dataProvider topicShowProvider
      * @depends testAdd
      */
     public function testShow($topic)
@@ -44,17 +44,27 @@ class TopicControllerTest extends ForumWebTestCase
             self::$crawler->filter('a.forum_link')->first()->link()
         );
 
-        $isFound = false;
-        $domElement = $crawler->filter('.topic_title')->getIterator();
-        while ($domElement->valid()) {
-            if ($topic['title'] == $domElement->current()->textContent) {
-                $isFound = true;
-                break;
-            } else {
-                $isFound = false;
+        $search = function ($crawler, $topic) {
+            $domElement = $crawler->filter('.topic_title')->getIterator();
+            while ($domElement->valid()) {
+                if ($topic['title'] == $domElement->current()->textContent) {
+                    return true;
+                }
+                $domElement->next();
             }
-            $domElement->next();
+            return false;
+        };
+
+        $isFound = false;
+        while (true) {
+            if (true === $isFound || false === $crawler) {
+                break;
+            }
+
+            $isFound = $search($crawler, $topic);
+            $crawler = self::pagination($crawler);
         }
+
         $this->assertTrue($isFound);
     }
 
@@ -85,6 +95,9 @@ class TopicControllerTest extends ForumWebTestCase
         $this->assertContains('_changed_', $crawler->filter('.topic_title')->first()->text()); // First topic...
     }
 
+    /**
+     * @depends testShow
+     */
 //    public function testDelete()
 //    {
 //        $uri = self::$container->get('router')->generate('forum_show', ['id' => 1, 'page' => 1]);

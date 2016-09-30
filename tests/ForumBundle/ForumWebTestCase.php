@@ -113,13 +113,13 @@ abstract class ForumWebTestCase extends WebTestCase
     /**
      * Fixture
      */
-    public function topicProvider()
+    public function topicAddProvider()
     {
         if (! isset(self::$data['topics']) || empty(self::$data['topics'])) {
             self::$data['topics'] = [];
 
             // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
-            for ($i = 0, $j = rand(1, 9); $i < $j; $i++) {
+            for ($i = 0, $j = rand(15, 25); $i < $j; $i++) {
                 self::$data['topics'][$i] = [
                     'topic' => ['title' => sprintf('Topic #%d', mt_rand(1000, 9999))],
                     'post'  => ['text'  => 'Post, written on create topic.'],
@@ -128,6 +128,14 @@ abstract class ForumWebTestCase extends WebTestCase
         }
 
         return self::$data['topics'];
+    }
+
+    /**
+     * Fixture
+     */
+    public function topicShowProvider()
+    {
+        return array_reverse(self::$data['topics']);
     }
 
     /**
@@ -150,13 +158,22 @@ abstract class ForumWebTestCase extends WebTestCase
     }
 
     /**
+     * @param Crawler $crawler
+     * @return boolean|Crawler
      * TODO: Поиск записей по всем доступным страницам.
      */
-//    protected function pagination($crawler)
-//    {
-//        $crawler = self::$client->click(
-//            self::$crawler->selectLink('След.')->link()
-//        );
-//        return $crawler;
-//    }
+    protected function pagination($crawler)
+    {
+        $nextPage = $crawler->selectButton('След.');
+        if ($nextPage && $nextPage->getNode(0) && false === mb_stripos(
+            'ui-disabled',
+            $nextPage->getNode(0)->getAttribute('class'),
+            null,
+            'UTF-8'
+        )) {
+            return self::$client->click($nextPage->link());
+        }
+
+        return false;
+    }
 }
