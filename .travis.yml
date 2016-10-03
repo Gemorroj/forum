@@ -22,6 +22,7 @@ cache:
 
 before_install:
   - composer self-update
+  - composer update
   - cp app/config/parameters.yml.travis app/config/parameters.yml
   - mysql -e 'CREATE DATABASE IF NOT EXISTS forum_test'
   - php bin/console doctrine:schema:create --env=test
