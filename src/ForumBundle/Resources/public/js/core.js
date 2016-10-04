@@ -1,71 +1,114 @@
 "use strict";
 
+
 var $document = $(document);
 
 
-// авторизация
-$document.on("pagecreate", function (e) {
-    var $container = $(e.target);
+// http://stackoverflow.com/questions/18429655/jquery-mobile-open-popup-from-popup
+$.mobile.switchPopup = function(sourceElement, destinationElement, onswitched) {
+    var afterClose = function() {
+        destinationElement.popup("open", {"transition": "slideup"});
+        sourceElement.off("popupafterclose", afterClose);
 
-    $container.find("#btn-authorization").click(function () {
-        $container.find("#popup-authorization").popup("open", {"transition": "pop", "positionTo": "window"});
-    });
-});
+        if (onswitched && typeof onswitched === "function"){
+            onswitched();
+        }
+    };
+
+    sourceElement.on("popupafterclose", afterClose);
+    sourceElement.popup("close");
+};
 
 
-// topic
+// topic_show
 $document.on("pagecreate", "#topic_show", function () {
     var $container = $(this);
-    var $editTopicPopup = $container.find('#edit_topic_popup');
-    var $deleteTopicPopup = $container.find('#delete_topic_popup');
 
-    $container.find('a.post_delete_button').click(function () {
-        $deleteTopicPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $deleteForm = $deleteTopicPopup.find('form');
-        $deleteForm.attr('action', $this.attr('data-url'));
+    var $postManagementPopup = $container.find('#post_management_popup');
+    var $postEditPopup       = $container.find('#post_edit_popup');
+    var $postDeletePopup     = $container.find('#post_delete_popup');
+
+    var $postManagementButton = $container.find('a.post_management_button');
+    var $postEditButton       = $container.find('a.post_edit_button');
+    var $postDeleteButton     = $container.find('a.post_delete_button');
+
+    var $postManagementCancelButton = $postManagementPopup.find('a.post_management_cancel');
+    var $postEditCancelButton       = $container.find("button[data-id='post_edit_cancel']");
+    var $postDeleteCancelButton     = $container.find("button[data-id='post_delete_cancel']");
+
+    $postManagementButton.click(function () {
+        $postManagementPopup.popup('open', {"transition": "slideup"});
     });
-    $container.find('a.post_edit_button').click(function () {
-        $editTopicPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $editForm = $editTopicPopup.find('form');
-        var refId = $this.data('ref');
+    $postEditButton.click(function () {
+        $.mobile.switchPopup($postManagementPopup, $postEditPopup, false);
+
+        var refId     = $postManagementButton.data('ref');
+        var $editForm = $postEditPopup.find('form');
+
         $editForm.find('textarea').val($container.find('#' + refId).text());
-        $editForm.attr('action', $this.attr('data-url'));
+        $editForm.attr('action', $postManagementButton.attr('data-edit'));
     });
-    $container.find("button[data-id='post_delete_cancel']").click(function () {
-        $deleteTopicPopup.popup('close');
+    $postDeleteButton.click(function () {
+        $.mobile.switchPopup($postManagementPopup, $postDeletePopup, false);
+
+        var $deleteForm = $postDeletePopup.find('form');
+
+        $deleteForm.attr('action', $postManagementButton.attr('data-delete'));
     });
-    $container.find("button[data-id='post_edit_cancel']").click(function () {
-        $editTopicPopup.popup('close');
+    $postManagementCancelButton.click(function () {
+        $postManagementPopup.popup('close');
+    });
+    $postEditCancelButton.click(function () {
+        $postEditPopup.popup('close');
+    });
+    $postDeleteCancelButton.click(function () {
+        $postDeletePopup.popup('close');
     });
 });
 
 
-// topics
+// forum_show
 $document.on("pagecreate", "#forum_show", function () {
     var $container = $(this);
-    var $editTopicsPopup = $container.find('#edit_topics_popup');
-    var $deleteTopicsPopup = $container.find('#delete_topics_popup');
 
-    $container.find('a.topic_delete_button').click(function () {
-        $deleteTopicsPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $deleteForm = $deleteTopicsPopup.find('form');
-        $deleteForm.attr('action', $this.attr('data-url'));
+    var $topicManagementPopup = $container.find('#topic_management_popup');
+    var $topicEditPopup       = $container.find('#topic_edit_popup');
+    var $topicDeletePopup     = $container.find('#topic_delete_popup');
+
+    var $topicManagementButton = $container.find('a.topic_management_button');
+    var $topicEditButton       = $container.find('a.topic_edit_button');
+    var $topicDeleteButton     = $container.find('a.topic_delete_button');
+
+    var $topicManagementCancelButton = $topicManagementPopup.find('a.topic_management_cancel');
+    var $topicEditCancelButton       = $container.find("button[data-id='topic_edit_cancel']");
+    var $topicDeleteCancelButton     = $container.find("button[data-id='topic_delete_cancel']");
+
+    $topicManagementButton.click(function () {
+        $topicManagementPopup.popup('open', {"transition": "slideup"});
     });
-    $container.find('a.topic_edit_button').click(function () {
-        $editTopicsPopup.popup('open', {"transition": "slideup"});
-        var $this = $(this);
-        var $editForm = $editTopicsPopup.find('form');
-        var refId = $this.data('ref');
-        $editForm.find('textarea').val($container.find('#' + refId).text());
-        $editForm.attr('action', $this.attr('data-url'));
+    $topicEditButton.click(function () {
+        $.mobile.switchPopup($topicManagementPopup, $topicEditPopup, false);
+
+        var refId     = $topicManagementButton.data('ref');
+        var $editForm = $topicEditPopup.find('form');
+
+        $editForm.find('textarea').val($container.find('#' + refId).find('span.topic_title').text());
+        $editForm.attr('action', $topicManagementButton.attr('data-edit'));
     });
-    $container.find("button[data-id='topic_delete_cancel']").click(function () {
-        $deleteTopicsPopup.popup('close');
+    $topicDeleteButton.click(function () {
+        $.mobile.switchPopup($topicManagementPopup, $topicDeletePopup, false);
+
+        var $deleteForm = $topicDeletePopup.find('form');
+
+        $deleteForm.attr('action', $topicManagementButton.attr('data-delete'));
     });
-    $container.find("button[data-id='topic_edit_cancel']").click(function () {
-        $editTopicsPopup.popup('close');
+    $topicManagementCancelButton.click(function () {
+        $topicManagementPopup.popup('close');
+    });
+    $topicEditCancelButton.click(function () {
+        $topicEditPopup.popup('close');
+    });
+    $topicDeleteCancelButton.click(function () {
+        $topicDeletePopup.popup('close');
     });
 });

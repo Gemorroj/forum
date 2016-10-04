@@ -15,6 +15,10 @@ div.center-container {
     margin: 0 auto;
 }
 
+.long-description {
+    white-space: normal !important;
+}
+
 .flash {
     border-radius: 4px;
     padding: 4px;

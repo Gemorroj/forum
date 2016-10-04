@@ -2,6 +2,7 @@
 
 namespace ForumBundle\Controller\Forum;
 
+use ForumBundle\Model\ChangePassword;
 use ForumBundle\Entity\User;
 use ForumBundle\Form\ChangePasswordType;
 use ForumBundle\Form\ProfileEditType;
@@ -141,15 +142,14 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted(UserVoter::EDIT, $user, 'Вам отказано в доступе.');
 
-        $form = $this->createForm(ChangePasswordType::class);
+        $changePassword = new ChangePassword();
+        $form = $this->createForm(ChangePasswordType::class, $changePassword);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $user->setPlainPassword(
-                    $form->get('plainPassword')->getData()
-                );
+                $user->setPlainPassword($changePassword->getPlainPassword());
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);

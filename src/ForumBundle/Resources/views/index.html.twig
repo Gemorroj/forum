@@ -1,11 +1,27 @@
 {% extends '@Forum/layout/layout.html.twig' %}
 
 {% block content %}
-<ul data-role="listview" data-inset="true">
+<ul class="forum_list" data-role="listview" data-inset="true">
+    <li data-role="list-divider">Форумы</li>
     {% for forum in forums %}
-        <li><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">{{ forum.title }}<span class="ui-li-count">{{ forum.countTopics }} / {{ forum.countPosts }}</span></a></li>
+        <li class="forum">
+            <a class="forum_link ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('forum_show', {'id': forum.id} ) }}">
+                <span class="forum_title">{{ forum.title }}</span>
+                <span class="ui-li-count">
+                    <span class="forum_count_topics">{{ forum.countTopics }}</span> / <span class="forum_count_posts">{{ forum.countPosts }}</span>
+                </span>
+            </a>
+        </li>
     {% else %}
-        <li>Пусто</li>
+        <li class="empty">Пусто</li>
     {% endfor %}
+</ul>
+
+<ul class="info" data-role="listview" data-inset="true">
+    <li data-role="list-divider">Информация</li>
+    <li><b>Тем</b> <span class="statistics-of-topics ui-li-count">{{ statistics.countTopics }}</span></li>
+    <li><b>Сообщений</b> <span class="statistics-of-posts ui-li-count">{{ statistics.countPosts }}</span></li>
+    <li><a class="ui-btn ui-icon-false" href="{{ path('profile_list', {'page': 1}) }}">Пользователей <span class="statistics-of-users ui-li-count">{{ countUsers }}</span></a></li>
+    {#<li><a class="ui-btn ui-btn-icon-left ui-icon-eye" href="#guests">Гостей <span class="ui-li-count">9</span></a></li>#}
 </ul>
 {% endblock %}

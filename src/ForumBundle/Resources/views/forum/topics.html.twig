@@ -2,22 +2,24 @@
 
 {% block title %}{{ forum.title }}{% endblock %}
 
-
 {% block content %}
     {% block popup %}
-        <div data-role="popup" id="delete_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="topic_management_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
-                <h1>Удалить тему?</h1>
+                <h1>Управление</h1>
             </div>
             <div role="main" class="ui-content">
-                <p>Вы уверенны что хотите удалить эту тему?</p>
-                {{ form_start(topicDeleteForm) }}
-                {{ form_widget(topicDeleteForm) }}
-                {{ form_end(topicDeleteForm) }}
+                {#{% if is_granted('EDIT', topic) %}#}
+                <a class="topic_edit_button ui-btn ui-icon-edit ui-btn-icon-left" href="#">Редактировать</a>
+                {#{% endif %}#}
+                {#{% if is_granted('DELETE', topic) %}#}
+                <a class="topic_delete_button ui-btn ui-icon-delete ui-btn-icon-left" href="#">Удалить</a>
+                {#{% endif %}#}
+                <a class="topic_management_cancel ui-btn ui-icon-back ui-btn-icon-left" href="#">Отмена</a>
             </div>
         </div>
 
-        <div data-role="popup" id="edit_topics_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+        <div data-role="popup" id="topic_edit_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
             <div data-role="header" data-theme="a">
                 <h1>Редактирование темы</h1>
             </div>
@@ -27,28 +29,37 @@
                 {{ form_end(topicEditForm) }}
             </div>
         </div>
+
+        <div data-role="popup" id="topic_delete_popup" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+            <div data-role="header" data-theme="a">
+                <h1>Удаление темы</h1>
+            </div>
+            <div role="main" class="ui-content">
+                <p>Вы уверенны что хотите удалить эту тему?</p>
+                {{ form_start(topicDeleteForm) }}
+                {{ form_widget(topicDeleteForm) }}
+                {{ form_end(topicDeleteForm) }}
+            </div>
+        </div>
     {% endblock %}
 
-    <ul data-role="listview" data-inset="true">
+    <ul class="topic_list" data-role="listview" data-inset="true" data-split-icon="gear">
         {% for topic in topics %}
-            <li class="topics" id="topic{{ topic.id }}">
-                <a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-r" href="{{ path('topic_show', {'id': topic.id} ) }}">
-                    <span id="topic{{ topic.id }}">{{ topic.title }}</span>
-                    <span class="ui-li-count">{{ topic.countPosts }}</span>
+            <li class="topic" id="topic{{ topic.id }}">
+                <a class="topic_link" href="{{ path('topic_show', {'id': topic.id} ) }}">
+                    <span class="topic_title">{{ topic.title }}</span>
+                    <span class="topic_count_posts ui-li-count">{{ topic.countPosts }}</span>
+                    {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
+                        <a class="topic_management_button"
+                           data-edit="{{ path('topic_edit', {'id': topic.id}) }}"
+                           data-delete="{{ path('topic_delete', {'id': topic.id}) }}"
+                           data-ref="topic{{ topic.id }}"
+                           href="#">Управление</a>
+                    {% endif %}
                 </a>
-                {% if app.user and (is_granted('DELETE', topic) or is_granted('EDIT', topic)) %}
-                    <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-                        {% if is_granted('EDIT', topic) %}
-                            <a data-url="{{ path('topic_edit', {'id': topic.id}) }}" data-ref="topic{{ topic.id }}" href="#" class="topic_edit_button ui-btn ui-icon-edit ui-btn-icon-notext">Редактировать</a>
-                        {% endif %}
-                        {% if is_granted('DELETE', topic) %}
-                            <a data-url="{{ path('topic_delete', {'id': topic.id}) }}" href="#" class="topic_delete_button ui-btn ui-icon-delete ui-btn-icon-notext">Удалить</a>
-                        {% endif %}
-                    </div>
-                {% endif %}
             </li>
         {% else %}
-            <li>Пусто</li>
+            <li class="empty">Пусто</li>
         {% endfor %}
     </ul>
     {% include 'ForumBundle:layout:paginate.html.twig' with {'data': topics} %}

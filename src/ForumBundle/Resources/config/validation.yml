@@ -43,3 +43,17 @@ ForumBundle\Entity\User:
                 min: 8
                 minMessage: 'Пароль должен содержать не менее {{ limit }} символа(ов)'
                 groups: [registration]
+
+ForumBundle\Model\ChangePassword:
+    properties:
+        currentPlainPassword:
+            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
+                message: 'Введите действующий пароль!'
+        plainPassword:
+            - NotBlank:
+                message: 'Пароль не должен быть пустым'
+                groups: [registration]
+            - Length:
+                min: 8
+                minMessage: 'Пароль должен содержать не менее {{ limit }} символа(ов)'
+                groups: [registration]

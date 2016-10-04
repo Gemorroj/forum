@@ -2,8 +2,6 @@
 
 namespace ForumBundle\Controller;
 
-use ForumBundle\Entity\Forum;
-use ForumBundle\Security\ForumVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
@@ -15,10 +13,16 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $forums = $em->getRepository('ForumBundle:Forum')->findAll();
+        $forumRepository = $em->getRepository('ForumBundle:Forum');
+        $forums = $forumRepository->findAll();
+        $statistics = $forumRepository->getStatistics();
+
+        $countUsers = $em->getRepository('ForumBundle:User')->getCountUsers();
 
         return $this->render('@Forum/index.html.twig', [
             'forums' => $forums,
+            'countUsers' => $countUsers,
+            'statistics' => $statistics,
         ]);
     }
 }

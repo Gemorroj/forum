@@ -2,6 +2,7 @@
 
 namespace ForumBundle\Entity;
 
+
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -23,6 +24,7 @@ class User implements UserInterface
      * @var array
      */
     private $roles = [];
+    const DEFAULT_ROLE = 'ROLE_USER';
 
     /**
      * @var string
@@ -243,38 +245,19 @@ class User implements UserInterface
     public function getRoles()
     {
         // TODO: Назначать ROLE_USER для пользователя в настройках
-        $this->roles[] = 'ROLE_USER';
+        $this->roles[] = self::DEFAULT_ROLE;
 
         return $this->roles;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $roles
+     * @return User
      */
-//    public function setRoles($roles)
-//    {
-//        return $this->roles = $roles;
-//    }
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
 
-    /**
-     * {@inheritdoc}
-     */
-//    public function promote($role)
-//    {
-//        $this->roles[] = $role;
-//
-//        return $this;
-//    }
-
-    /**
-     * {@inheritdoc}
-     */
-//    public function demote($role)
-//    {
-//        if(false !== ($key = array_search($role, $this->roles))) {
-//            unset($this->roles[$key]);
-//        }
-//
-//        return $this;
-//    }
+        return $this;
+    }
 }
