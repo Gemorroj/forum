@@ -62,7 +62,7 @@ class TopicControllerTest extends ForumWebTestCase
             }
 
             $isFound = $search($crawler, $topic);
-            $crawler = self::pagination($crawler);
+            $crawler = $isFound ? false : self::pagination($crawler);
         }
 
         $this->assertTrue($isFound);
@@ -96,7 +96,7 @@ class TopicControllerTest extends ForumWebTestCase
     }
 
     /**
-     * @depends testShow
+     * @depends testEdit
      */
 //    public function testDelete()
 //    {

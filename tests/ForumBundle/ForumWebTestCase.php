@@ -154,7 +154,7 @@ abstract class ForumWebTestCase extends WebTestCase
      * @return boolean|Crawler
      * TODO: Поиск записей по всем доступным страницам.
      */
-    protected function pagination($crawler)
+    protected function pagination(Crawler $crawler)
     {
         $nextPageCrawler = $crawler->selectLink('След.');
         if ($nextPageCrawler && $nextPageCrawler->getNode(0) && false === mb_stripos(
