@@ -133,6 +133,17 @@ abstract class ForumWebTestCase extends WebTestCase
     /**
      * Fixture
      */
+    public function topicFixtureProvider()
+    {
+        return [
+            ['topic' => ['title' => 'Test topic 1 in PHP forum']],
+            ['topic' => ['title' => 'Test topic 2 in PHP forum']],
+        ];
+    }
+
+    /**
+     * Fixture
+     */
     public function postProvider()
     {
         if (! isset(self::$data['posts']) || empty(self::$data['posts'])) {
