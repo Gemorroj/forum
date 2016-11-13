@@ -54,34 +54,45 @@ class ForumVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
+    /**
+     * Просматривать могут: ВСЕ
+     */
     private function canView(Forum $forum, TokenInterface $token)
     {
         return true;
     }
 
+    /**
+     * Редактировать могут: Администратор
+     */
     private function canEdit(Forum $forum, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
         }
-        return $token->getUser() === $forum->getUser();
+
+        return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
     }
 
+    /**
+     * Создавать могут: Администратор
+     */
     private function canCreate(Forum $forum, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
         }
+
         return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
     }
 
+    /**
+     * Удалять могут: Администратор
+     */
     private function canDelete(Forum $forum, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
-        }
-        if ($token->getUser() === $forum->getUser()) {
-            return true;
         }
 
         return $this->decisionManager->decide($token, array('ROLE_ADMIN'));

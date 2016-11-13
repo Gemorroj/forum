@@ -53,28 +53,47 @@ class UserVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
+    /**
+     * Просматривать могут: ВСЕ
+     */
     private function canView(User $user, TokenInterface $token)
     {
         return true;
     }
 
+    /**
+     * Редактировать могут: Пользователь-Владелец, Администратор
+     */
     private function canEdit(User $user, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
         }
-        return $token->getUser() === $user;
+        if ($token->getUser() === $user) {
+            return true;
+        }
+
+        return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
     }
 
+    /**
+     * Создавать могут: ВСЕ
+     */
     private function canCreate(User $user, TokenInterface $token)
     {
         return true;
     }
 
+    /**
+     * Удалять могут: Пользователь-Владелец, Администратор
+     */
     private function canDelete(User $user, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
+        }
+        if ($token->getUser() === $user) {
+            return true;
         }
 
         return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
