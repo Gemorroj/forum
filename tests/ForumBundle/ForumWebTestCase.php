@@ -141,7 +141,7 @@ abstract class ForumWebTestCase extends WebTestCase
             // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
             for ($i = 0, $j = rand(1, 9); $i < $j; $i++) {
                 self::$data['posts'][$i] = [
-                    'post' => ['text' => sprintf('Post #%d', mt_rand(1000, 9999))],
+                    'post' => ['text' => sprintf('Post%d #%d', $i+1, mt_rand(1000, 9999))],
                 ];
             }
         }
