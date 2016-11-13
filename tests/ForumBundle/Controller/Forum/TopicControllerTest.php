@@ -18,6 +18,8 @@ class TopicControllerTest extends ForumWebTestCase
             self::$crawler->filter('a.forum_link')->first()->link()
         );
 
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
         $form = $crawler->selectButton('topic_post_submit')->form([
             'topic[topic-title]' => $topic['title'],
             'topic[post][text]'  => $post['text'],
@@ -43,6 +45,8 @@ class TopicControllerTest extends ForumWebTestCase
         $crawler = self::$client->click(
             self::$crawler->filter('a.forum_link')->first()->link()
         );
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
         $search = function ($crawler, $topic) {
             $domElement = $crawler->filter('.topic_title')->getIterator();
@@ -77,7 +81,9 @@ class TopicControllerTest extends ForumWebTestCase
             self::$crawler->filter('a.forum_link')->first()->link()
         );
 
-        $topicTitle = $crawler->filter('.topic_title')->first()->text(); // First topic in list on first page
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $topicTitle = $crawler->filter('.topic_title')->eq(0)->text(); // First topic in list on first page
         $action = $crawler->filter('a.topic_management_button')->eq(0)->attr('data-edit'); // First topic...
 
         $form = $crawler->selectButton('topic_edit_edit')->form([
@@ -92,33 +98,33 @@ class TopicControllerTest extends ForumWebTestCase
 
         $crawler = self::$client->followRedirect();
 
-        $this->assertContains('_changed_', $crawler->filter('.topic_title')->first()->text()); // First topic...
+        $this->assertContains('_changed_', $crawler->filter('.topic_title')->eq(0)->text()); // First topic...
     }
 
     /**
      * @depends testEdit
      */
-//    public function testDelete()
-//    {
-//        $uri = self::$container->get('router')->generate('forum_show', ['id' => 1, 'page' => 1]);
-//
-//        $crawler = self::$client->request('GET', $uri);
-//
-//        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
-//
-//        $topicText = $crawler->filter('span')->eq(2)->text(); // Second topic in list on first page
-//        $action = $crawler->filter('a.topic_delete_button')->eq(1)->attr('data-url'); // Second topic...
-//
-//        $form = $crawler->selectButton('topic_delete_delete')->form();
-//
-//        $form->getNode()->setAttribute('action', $action);
-//
-//        self::$client->submit($form);
-//
-//        $this->assertTrue(self::$client->getResponse()->isRedirection());
-//
-//        $crawler = self::$client->followRedirect();
-//
-//        $this->assertNotContains($topicText, $del = $crawler->filter('span')->eq(2)->text()); // Second topic...
-//    }
+    public function testDelete()
+    {
+        $crawler = self::$client->click(
+            self::$crawler->filter('a.forum_link')->first()->link()
+        );
+
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
+
+        $topicText = $crawler->filter('.topic_title')->eq(1)->text(); // Second topic in list on first page
+        $action = $crawler->filter('a.topic_management_button')->eq(1)->attr('data-delete'); // Second topic...
+
+        $form = $crawler->selectButton('topic_delete_delete')->form();
+
+        $form->getNode()->setAttribute('action', $action);
+
+        self::$client->submit($form);
+
+        $this->assertTrue(self::$client->getResponse()->isRedirection());
+
+        $crawler = self::$client->followRedirect();
+
+        $this->assertNotContains($topicText, $del = $crawler->filter('.topic_title')->eq(1)->text()); // Second topic...
+    }
 }
