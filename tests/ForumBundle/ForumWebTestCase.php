@@ -121,13 +121,24 @@ abstract class ForumWebTestCase extends WebTestCase
             // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
             for ($i = 0, $j = rand(15, 25); $i < $j; $i++) {
                 self::$data['topics'][$i] = [
-                    'topic' => ['title' => sprintf('Topic #%d', mt_rand(1000, 9999))],
+                    'topic' => ['title' => sprintf('Topic%d #%d', $i+1, mt_rand(1000, 9999))],
                     'post'  => ['text'  => 'Post, written on create topic.'],
                 ];
             }
         }
 
         return self::$data['topics'];
+    }
+
+    /**
+     * Fixture
+     */
+    public function topicFixtureProvider()
+    {
+        return [
+            ['topic' => ['title' => 'Test topic 1 in PHP forum']],
+            ['topic' => ['title' => 'Test topic 2 in PHP forum']],
+        ];
     }
 
     /**
@@ -141,7 +152,7 @@ abstract class ForumWebTestCase extends WebTestCase
             // В пределах одной страницы. TODO: реализовать возможность перехода по страницам для поиска(?)
             for ($i = 0, $j = rand(1, 9); $i < $j; $i++) {
                 self::$data['posts'][$i] = [
-                    'post' => ['text' => sprintf('Post #%d', mt_rand(1000, 9999))],
+                    'post' => ['text' => sprintf('Post%d #%d', $i+1, mt_rand(1000, 9999))],
                 ];
             }
         }
@@ -154,7 +165,7 @@ abstract class ForumWebTestCase extends WebTestCase
      * @return boolean|Crawler
      * TODO: Поиск записей по всем доступным страницам.
      */
-    protected function pagination($crawler)
+    protected function pagination(Crawler $crawler)
     {
         $nextPageCrawler = $crawler->selectLink('След.');
         if ($nextPageCrawler && $nextPageCrawler->getNode(0) && false === mb_stripos(

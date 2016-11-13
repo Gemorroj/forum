@@ -54,27 +54,44 @@ class PostVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
+    /**
+     * Просматривать могут: ВСЕ
+     */
     private function canView(Post $post, TokenInterface $token)
     {
         return true;
     }
 
+    /**
+     * Редактировать могут: Пользователь-Владелец, Администратор
+     */
     private function canEdit(Post $post, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
         }
-        return $token->getUser() === $post->getUser();
+        if ($token->getUser() === $post->getUser()) {
+            return true;
+        }
+
+        return $this->decisionManager->decide($token, array('ROLE_ADMIN'));
     }
 
+    /**
+     * Создавать могут: Пользователь, Администратор
+     */
     private function canCreate(Post $post, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
             return false;
         }
+
         return $this->decisionManager->decide($token, array('ROLE_USER'));
     }
 
+    /**
+     * Удалять могут: Пользователь-Владелец, Администратор
+     */
     private function canDelete(Post $post, TokenInterface $token)
     {
         if (!($token->getUser() instanceof User)) {
