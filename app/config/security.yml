@@ -1,5 +1,5 @@
 # To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
+# http://symfony.com/doc/current/security.html
 security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
