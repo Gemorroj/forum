@@ -43,7 +43,7 @@ ForumBundle\Entity\Forum:
     manyToOne:
         user:
             targetEntity: User
-            cascade: { remove, persist }
+            cascade: [ remove, persist ]
             fetch: LAZY
             mappedBy: null
             inversedBy: null

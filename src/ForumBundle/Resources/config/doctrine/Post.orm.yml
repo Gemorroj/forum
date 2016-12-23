@@ -32,7 +32,7 @@ ForumBundle\Entity\Post:
     manyToOne:
         topic:
             targetEntity: Topic
-            cascade: { remove, persist }
+            cascade: [ remove, persist ]
             fetch: LAZY
             mappedBy: null
             inversedBy: null
@@ -45,7 +45,7 @@ ForumBundle\Entity\Post:
             orphanRemoval: false
         user:
             targetEntity: User
-            cascade: { remove, persist }
+            cascade: [ remove, persist ]
             fetch: LAZY
             mappedBy: null
             inversedBy: null
