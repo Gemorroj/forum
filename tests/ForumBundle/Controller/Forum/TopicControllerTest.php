@@ -2,6 +2,7 @@
 
 namespace Tests\ForumBundle\Controller;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Tests\ForumBundle\ForumWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -48,7 +49,7 @@ class TopicControllerTest extends ForumWebTestCase
 
         $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
-        $search = function ($crawler, $topic) {
+        $search = function (Crawler $crawler, array $topic) {
             $domElement = $crawler->filter('.topic_title')->getIterator();
             while ($domElement->valid()) {
                 if ($topic['title'] == $domElement->current()->textContent) {

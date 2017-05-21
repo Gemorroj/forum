@@ -21,7 +21,7 @@ class DefaultControllerTest extends ForumWebTestCase
 
         $isFound = false;
         try {
-            if ('Пусто' == self::$crawler->filter('ul.forum_list > li.empty')->text()) {
+            if ('Пусто' === self::$crawler->filter('ul.forum_list > li.empty')->text()) {
                 $isFound = true;
             }
         } catch (\InvalidArgumentException $e) {
