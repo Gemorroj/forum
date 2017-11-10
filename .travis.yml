@@ -2,30 +2,31 @@ language: php
 
 php:
     - 7.1
+    - 7.2
     - nightly
 
 env:
+    matrix:
+        - DEPENDENCIES="high"
+        - DEPENDENCIES="low"
     global:
+        - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
         - SYMFONY_ENV=test
 
 services:
     - mysql
 
-cache:
-    directories:
-        - vendor
-        - $HOME/.composer/cache/files
-        - php-$MIN_PHP
-
 before_install:
-  - composer self-update
-  - cp app/config/parameters.yml.travis app/config/parameters.yml
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum_test'
+    - composer self-update
+    - composer clear-cache
+    - cp app/config/parameters.yml.travis app/config/parameters.yml
+    - mysql -e 'CREATE DATABASE IF NOT EXISTS forum_test'
 
 install:
-  - composer install --no-interaction
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console doctrine:fixtures:load -n --env=test
+    - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS; fi
+    - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS --prefer-lowest; fi
+    - php bin/console doctrine:schema:create --env=test
+    - php bin/console doctrine:fixtures:load -n --env=test
 
 before_script:
     - chmod 755 bin/console
